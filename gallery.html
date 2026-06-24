@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery — Infinite African Safaris</title>
+  <meta name="description" content="Photographs from the dunes, the ocean and the desert — Sandwich Harbour, Pelican Point seals, flamingos, sunsets and the wildlife of Namibia's Atlantic coast." />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 90 44'%3E%3Cpath d='M22,22 C22,8 4,8 4,22 C4,36 22,36 22,22 Z M45,22 C45,8 64,8 64,22 C64,36 45,36 45,22 C45,8 27,8 27,22' fill='none' stroke='%23141312' stroke-width='3'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Outfit:wght@300;400;500;600;700&family=Tangerine:wght@700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <!-- ============ NAV ============ -->
+  <header class="nav" id="nav">
+    <a href="index.html" class="nav__brand" aria-label="Infinite African Safaris — home">
+      <span class="nav__emblem" aria-hidden="true">
+        <img src="https://kbmgpqwmgthswjkfmqfe.supabase.co/storage/v1/object/public/Infinite/small%20logo.png" alt="" class="nav__emblemimg"
+             onerror="this.closest('.nav__brand').classList.add('mark-missing')" />
+        <svg class="nav__emblemsvg" viewBox="0 0 100 50"><path d="M50,25 C50,8 25,8 25,25 C25,42 50,42 50,25 C50,8 75,8 75,25 C75,42 50,42 50,25" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>
+      </span>
+      <span class="nav__word"><strong>INFINITE</strong><em>African Safaris</em></span>
+    </a>
+    <nav class="nav__links" id="navLinks" aria-label="Primary">
+      <a href="index.html#about">About</a>
+      <a href="safaris.html">Safaris</a>
+      <a href="gallery.html" aria-current="page">Gallery</a>
+      <a href="contact.html" class="nav__cta">Plan a trip</a>
+    </nav>
+    <div class="nav__tools">
+      <div class="cur" id="curSwitch" role="group" aria-label="Currency">
+        <button data-cur="NAD" class="cur__btn is-active">N$</button>
+        <button data-cur="EUR" class="cur__btn">€</button>
+        <button data-cur="USD" class="cur__btn">$</button>
+      </div>
+      <button class="nav__burger" id="burger" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- ============ PAGE HEADER ============ -->
+    <header class="pagehead">
+      <div class="pagehead__inner">
+        <p class="pagehead__crumb"><a href="index.html">Home</a> · Gallery</p>
+        <h1>The <em>gallery</em></h1>
+        <p>Where the dunes meet the ocean. A few frames from the trail — tap any photo to view it large.</p>
+      </div>
+    </header>
+
+    <!-- ============ GALLERY GRID ============ -->
+    <section class="gallery section">
+      <div class="gallery__grid" id="galleryGrid"><!-- injected --></div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="megafoot" id="contact">
+    <div class="skyline" aria-hidden="true">
+      <img class="skyline__herd" src="assets/img/elephants.png" alt="" loading="lazy" />
+    </div>
+    <div class="mf-cols">
+      <div class="mf-col mf-col--brand">
+        <p class="mf-word"><strong>INFINITE</strong> AFRICAN SAFARIS</p>
+        <p class="mf-tag">Adventure. Nature. Ocean. Memories. <em>All in one.</em></p>
+        <div class="footer__social" id="footerSocial"><!-- injected --></div>
+      </div>
+      <nav class="mf-col" aria-label="Footer">
+        <h4>Explore</h4>
+        <a href="index.html#about">About</a>
+        <a href="safaris.html">Our safaris</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="contact.html">Plan a trip</a>
+      </nav>
+      <div class="mf-col">
+        <h4>Find us</h4>
+        <a href="tel:+264817269221">+264 81 726 9221</a>
+        <a href="mailto:info@infiniteafricansafaris.com">info@infiniteafricansafaris.com</a>
+        <a href="https://www.google.com/maps/search/Flamingo+Villas+Walvis+Bay+Namibia" target="_blank" rel="noopener">Flamingo Villas, Walvis Bay</a>
+        <p>P.O. Box 4145, Namibia</p>
+      </div>
+      <div class="mf-col">
+        <h4>Registered &amp; insured</h4>
+        <p>Company Reg. 2026/04002</p>
+        <p>VAT Reg. 16132448</p>
+        <p>NTB Reg. TSO01779</p>
+      </div>
+    </div>
+    <div class="mf-bottom">
+      <p>© <span id="year"></span> Infinite African Safaris CC · NTB Registered Tour Operator · Walvis Bay, Namibia</p>
+      <button class="totop" id="toTop" aria-label="Back to top">
+        <svg viewBox="0 0 100 50" aria-hidden="true"><path d="M50,25 C50,8 25,8 25,25 C25,42 50,42 50,25 C50,8 75,8 75,25 C75,42 50,42 50,25" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></svg>
+        <span>Top</span>
+      </button>
+    </div>
+  </footer>
+
+  <a class="fab" href="https://wa.me/264817269221?text=Hi%20Infinite%20African%20Safaris%2C%20I'd%20love%20to%20plan%20a%20tour." target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3C9 3 3.5 8.5 3.5 15.5c0 2.4.7 4.7 1.9 6.7L3 29l7-1.8c1.9 1 4 1.6 6.1 1.6 7 0 12.5-5.5 12.5-12.5S23 3 16 3zm0 22.7c-1.9 0-3.7-.5-5.3-1.5l-.4-.2-4.1 1.1 1.1-4-.3-.4a10.1 10.1 0 01-1.6-5.5C5.5 9.8 10.2 5.2 16 5.2S26.5 9.8 26.5 15.5 21.8 25.7 16 25.7z"/></svg>
+  </a>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox__close" id="lbClose" aria-label="Close">✕</button>
+    <button class="lightbox__nav lightbox__nav--prev" id="lbPrev" aria-label="Previous">‹</button>
+    <figure class="lightbox__fig" id="lbFig"></figure>
+    <button class="lightbox__nav lightbox__nav--next" id="lbNext" aria-label="Next">›</button>
+  </div>
+
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer></script>
+  <script src="assets/js/data.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
+</body>
+</html>

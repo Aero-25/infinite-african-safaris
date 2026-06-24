@@ -81,6 +81,7 @@ const EXTRAS = [
 
 /* --- Gallery tiles --------------------------------------------------- */
 const GALLERY = [
+  ...HERO_POOL.map(h => ({ img:h.url, label:h.cap })),
   { img:IMG("1516026672322-bc52d61a55d5"), label:"The endless desert" },
   { img:IMG("1502784444187-359ac186c5bb"), label:"Kayaking the seals" },
   { img:IMG("1559827260-dc66d52bef19"),    label:"Marine cruise" },

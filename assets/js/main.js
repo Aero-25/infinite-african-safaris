@@ -60,10 +60,44 @@
               <b data-nad="${t.adult ?? ""}">${fmt(t.adult)}</b>
               <small>${t.adult == null ? "tailored quote" : "per adult · child " + fmt(t.child)}</small>
             </div>
-            <a class="card__add" href="#builder" data-add="${t.id}">Add +</a>
+            <a class="card__add" href="contact.html?tour=${t.id}">Book</a>
           </div>
         </div>
       </article>`).join("");
+  }
+
+  /* RENDER: full safaris grid (safaris.html) */
+  const safariGrid = $("#safariGrid");
+  if (safariGrid) {
+    const CAT = {
+      "sh-half":"desert","sh-sunset":"desert","sh-full":"desert","sh-private":"desert",
+      "moon":"desert","sossus":"desert","spitz":"desert","sh-dune":"combo",
+      "cruise":"ocean","kayak":"ocean","fishing":"ocean","cruise-sh":"combo","kayak-sh":"combo",
+    };
+    safariGrid.innerHTML = TOURS.map(t => `
+      <article class="card" data-cat="${CAT[t.id] || "desert"}">
+        <div class="card__scene">${scene(t.scene, t.img)}</div>
+        <div class="card__body">
+          <div class="card__meta"><span>◷ ${t.hours}</span><span>min ${t.min}</span></div>
+          <h3>${t.name}</h3>
+          <p>${t.blurb}</p>
+          <div class="card__foot">
+            <div class="card__price">
+              <b data-nad="${t.adult ?? ""}">${fmt(t.adult)}</b>
+              <small>${t.adult == null ? "tailored quote" : "per adult · child " + fmt(t.child)}</small>
+            </div>
+            <a class="card__add" href="contact.html?tour=${t.id}">Book</a>
+          </div>
+        </div>
+      </article>`).join("");
+
+    const fbar = $("#filterBar");
+    fbar?.addEventListener("click", (e) => {
+      const b = e.target.closest("button"); if (!b) return;
+      const f = b.dataset.filter;
+      $$("#filterBar button").forEach(x => x.classList.toggle("is-active", x === b));
+      $$(".card", safariGrid).forEach(c => c.classList.toggle("is-hidden", f !== "all" && c.dataset.cat !== f));
+    });
   }
 
   /* RENDER: rates table */
@@ -86,15 +120,80 @@
       <figure class="gtile" data-lb="${i}">${scene(g.scene, g.img)}<span>${g.label}</span></figure>`).join("");
   }
 
-  /* RENDER: reviews */
-  const revEl = $("#reviewsTrack");
-  if (revEl) {
-    revEl.innerHTML = REVIEWS.map(r => `
-      <blockquote class="rev">
-        <div class="rev__stars">${"★".repeat(r.stars)}</div>
-        <p class="rev__text">“${r.text}”</p>
-        <footer class="rev__by"><b>${r.name}</b> <span>· ${r.from}</span></footer>
+  /* RENDER: reviews — live spotlight */
+  const rvSlides = $("#rvSlides"), rvDots = $("#rvDots");
+  if (rvSlides && rvDots) {
+    const initial = (s) => (s.match(/\b\w/g) || []).slice(0, 2).join("").toUpperCase();
+    rvSlides.innerHTML = REVIEWS.map((r, i) => `
+      <blockquote class="rv__slide${i === 0 ? " is-active" : ""}">
+        <div class="rv__s-stars">${"★".repeat(r.stars)}</div>
+        <p class="rv__text">“${r.text}”</p>
+        <footer class="rv__by">
+          <span class="rv__avatar">${initial(r.name)}</span>
+          <span class="rv__who"><b>${r.name}</b><span>${r.from}</span></span>
+        </footer>
       </blockquote>`).join("");
+    rvDots.innerHTML = REVIEWS.map((_, i) =>
+      `<button role="tab" aria-label="Review ${i + 1}" class="${i === 0 ? "is-active" : ""}" data-rv="${i}"></button>`).join("");
+
+    const slides = $$(".rv__slide", rvSlides);
+    const dots = $$("button", rvDots);
+    const bar = $("#rvBar");
+    const DUR = 6000;
+    let cur = 0, timer = null, paused = false;
+
+    const restartBar = () => {
+      if (!bar) return;
+      bar.classList.remove("run"); void bar.offsetWidth; // reflow to restart
+      if (!reduce && !paused) bar.classList.add("run");
+    };
+    const show = (i) => {
+      cur = (i + slides.length) % slides.length;
+      slides.forEach((s, k) => s.classList.toggle("is-active", k === cur));
+      dots.forEach((d, k) => d.classList.toggle("is-active", k === cur));
+      restartBar();
+    };
+    const next = () => show(cur + 1);
+    const start = () => { if (reduce) return; clearInterval(timer); timer = setInterval(() => { if (!paused) next(); }, DUR); restartBar(); };
+
+    $("#rvNext")?.addEventListener("click", () => { next(); start(); });
+    $("#rvPrev")?.addEventListener("click", () => { show(cur - 1); start(); });
+    dots.forEach(d => d.addEventListener("click", () => { show(+d.dataset.rv); start(); }));
+
+    const stage = $("#rvStage");
+    stage?.addEventListener("pointerenter", () => { paused = true; bar?.classList.remove("run"); });
+    stage?.addEventListener("pointerleave", () => { paused = false; restartBar(); });
+    // swipe
+    let sx = null;
+    stage?.addEventListener("pointerdown", (e) => { sx = e.clientX; });
+    stage?.addEventListener("pointerup", (e) => {
+      if (sx == null) return;
+      const dx = e.clientX - sx; sx = null;
+      if (Math.abs(dx) > 50) { dx < 0 ? next() : show(cur - 1); start(); }
+    });
+    start();
+  }
+
+  /* count-up animation (data-to) for the review score + total */
+  const upEls = $$("[data-to]");
+  if (upEls.length) {
+    const upIO = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el = e.target, end = parseFloat(el.dataset.to);
+        const dec = (el.dataset.to.indexOf(".") > -1) ? 1 : 0;
+        const dur = 1400, t0 = performance.now();
+        const run = (t) => {
+          const p = Math.min(1, (t - t0) / dur);
+          const v = (end * (1 - Math.pow(1 - p, 3))).toFixed(dec);
+          el.textContent = v;
+          if (p < 1) requestAnimationFrame(run);
+        };
+        requestAnimationFrame(run);
+        upIO.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+    upEls.forEach(el => upIO.observe(el));
   }
 
   /* RENDER: policies */
@@ -125,7 +224,16 @@
 
   /* interest select in contact form */
   const interest = $("#interestSelect");
-  if (interest) TOURS.forEach(t => interest.insertAdjacentHTML("beforeend", `<option value="${t.name}">${t.name}</option>`));
+  if (interest) {
+    TOURS.forEach(t => interest.insertAdjacentHTML("beforeend", `<option value="${t.name}">${t.name}</option>`));
+    const wanted = new URLSearchParams(location.search).get("tour");
+    const tw = wanted && TOURS.find(t => t.id === wanted);
+    if (tw) {
+      interest.value = tw.name;
+      const note = $("#contactPreface");
+      if (note) note.textContent = `You're enquiring about “${tw.name}”. Add your details and we'll confirm everything by WhatsApp or email.`;
+    }
+  }
 
   /* =================================================================
      CURRENCY switching
@@ -175,7 +283,7 @@
     const sizeUp = () => {
       const pw = parseFloat(getComputedStyle(cyl).getPropertyValue("--pw")) || 240;
       // radius so panels tile the cylinder with a comfortable gap
-      radius = Math.round((pw / 2) / Math.tan((Math.PI / N)) * 1.25);
+      radius = Math.round((pw / 2) / Math.tan((Math.PI / N)) * 1.5);
       panels.forEach(p => { p.el.style.transform = `rotateY(${p.angle}deg) translateZ(${radius}px)`; });
     };
     sizeUp();
@@ -254,8 +362,8 @@
   stagger(".cards--rail .card", 70);
   stagger(".why article", 70);
   stagger(".gallery__grid .gtile", 60);
-  stagger(".reviews__track .rev", 70);
   stagger(".policy__grid .pol", 50);
+  stagger(".safari-grid .card", 60);
 
   /* 3D tilt on cards */
   if (!reduce && matchMedia("(pointer:fine)").matches) {

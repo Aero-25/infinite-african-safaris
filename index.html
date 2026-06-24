@@ -45,9 +45,9 @@
 
     <nav class="nav__links" id="navLinks" aria-label="Primary">
       <a href="#about">About</a>
-      <a href="#experiences">Safaris</a>
-      <a href="#curate">Curate</a>
-      <a href="#contact" class="nav__cta">Plan a trip</a>
+      <a href="safaris.html">Safaris</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="contact.html" class="nav__cta">Plan a trip</a>
     </nav>
 
     <div class="nav__tools">
@@ -74,7 +74,6 @@
         <div class="cyl__fade cyl__fade--r" aria-hidden="true"></div>
       </div>
 
-      <a href="#about" class="hero__cue" aria-label="Scroll down"><span></span></a>
     </section>
 
     <!-- ============ ABOUT ============ -->
@@ -141,16 +140,38 @@
       </div>
     </section>
 
-    <!-- ============ REVIEWS ============ -->
+    <!-- ============ REVIEWS — live spotlight ============ -->
     <section class="reviews section" id="reviews">
-      <div class="section__head">
-        <div data-reveal>
-          <p class="eyebrow">— Reviews</p>
-          <h2 class="h2">Loved by travellers</h2>
+      <div class="rv">
+        <aside class="rv__aside" data-reveal>
+          <p class="eyebrow"><span class="rv__pulse" aria-hidden="true"></span> Live reviews</p>
+          <h2 class="h2">Loved by<br>travellers</h2>
+          <div class="rv__score">
+            <b class="rv__num" id="rvNum" data-to="4.9">0.0</b>
+            <div class="rv__rating">
+              <div class="rv__stars" aria-hidden="true">★★★★★</div>
+              <span class="rv__from">from <b id="rvTotal" data-to="240">0</b>+ happy travellers</span>
+            </div>
+          </div>
+          <div class="rv__badges">
+            <a class="rv__badge" href="#" data-social="google"><b>Google</b><span>★ 4.9</span></a>
+            <a class="rv__badge" href="#" data-social="getyourguide"><b>GetYourGuide</b><span>★ 5.0</span></a>
+          </div>
+        </aside>
+
+        <div class="rv__stage" id="rvStage" data-reveal>
+          <svg class="rv__quote" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.2 6C6.3 7.4 4.5 10 4.5 13.3c0 2.7 1.6 4.7 4 4.7 2 0 3.6-1.5 3.6-3.6 0-2-1.4-3.4-3.2-3.4-.4 0-.9.1-1 .1.3-1.5 1.8-3.2 3.6-4.1L9.2 6zm9 0c-2.9 1.4-4.7 4-4.7 7.3 0 2.7 1.6 4.7 4 4.7 2 0 3.6-1.5 3.6-3.6 0-2-1.4-3.4-3.2-3.4-.4 0-.9.1-1 .1.3-1.5 1.8-3.2 3.6-4.1L18.2 6z"/></svg>
+          <div class="rv__slides" id="rvSlides"><!-- injected --></div>
+          <div class="rv__controls">
+            <div class="rv__dots" id="rvDots" role="tablist" aria-label="Choose a review"></div>
+            <div class="rv__arrows">
+              <button class="rv__arrow" id="rvPrev" aria-label="Previous review">←</button>
+              <button class="rv__arrow" id="rvNext" aria-label="Next review">→</button>
+            </div>
+          </div>
+          <div class="rv__progress" aria-hidden="true"><span id="rvBar"></span></div>
         </div>
-        <a class="section__note section__note--link" href="#contact" data-reveal>Find us on Google &amp; GetYourGuide →</a>
       </div>
-      <div class="reviews__track" id="reviewsTrack" data-reveal><!-- injected --></div>
     </section>
 
     <!-- ============ VIDEO ============ -->
@@ -187,10 +208,10 @@
       </div>
       <nav class="mf-col" aria-label="Footer">
         <h4>Explore</h4>
-        <a href="#about">About</a>
-        <a href="#experiences">Our safaris</a>
-        <a href="#curate">Curate a tour</a>
-        <a href="#film">Showreel</a>
+        <a href="index.html#about">About</a>
+        <a href="safaris.html">Our safaris</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="contact.html">Plan a trip</a>
       </nav>
       <div class="mf-col">
         <h4>Find us</h4>
