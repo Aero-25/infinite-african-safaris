@@ -536,13 +536,16 @@
 
   /* burger */
   const burger = $("#burger"), links = $("#navLinks");
-  burger?.addEventListener("click", () => {
-    const open = links.classList.toggle("is-open");
-    burger.setAttribute("aria-expanded", open);
-  });
-  $$("#navLinks a").forEach(a => a.addEventListener("click", () => {
-    links.classList.remove("is-open"); burger.setAttribute("aria-expanded", false);
-  }));
+  const setMenu = (open) => {
+    links.classList.toggle("is-open", open);
+    nav.classList.toggle("is-menu", open);
+    burger.setAttribute("aria-expanded", String(open));
+    document.documentElement.style.overflow = open ? "hidden" : "";
+    if (lenis) open ? lenis.stop() : lenis.start();
+  };
+  burger?.addEventListener("click", () => setMenu(!links.classList.contains("is-open")));
+  $$("#navLinks a").forEach(a => a.addEventListener("click", () => setMenu(false)));
+  addEventListener("keydown", (e) => { if (e.key === "Escape" && links.classList.contains("is-open")) setMenu(false); });
 
   /* counters */
   const counters = $$("[data-count]");
