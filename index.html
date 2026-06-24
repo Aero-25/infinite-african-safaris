@@ -46,7 +46,7 @@
     <nav class="nav__links" id="navLinks" aria-label="Primary">
       <a href="#about">About</a>
       <a href="#experiences">Safaris</a>
-      <a href="#reviews">Reviews</a>
+      <a href="#curate">Curate</a>
       <a href="#contact" class="nav__cta">Plan a trip</a>
     </nav>
 
@@ -108,14 +108,6 @@
         </div>
       </div>
 
-      <div class="why" data-reveal>
-        <article><i class="why__i" data-i="local"></i><h3>Local expertise</h3><p>Born-and-raised guides who read the tide, the light and the dunes.</p></article>
-        <article><i class="why__i" data-i="heart"></i><h3>Friendly service</h3><p>Professional, warm and patient — from your first message to the last photo.</p></article>
-        <article><i class="why__i" data-i="family"></i><h3>Family friendly</h3><p>Child rates, gentle pacing and experiences the whole family remembers.</p></article>
-        <article><i class="why__i" data-i="access"></i><h3>Disability friendly</h3><p>Accessible tours arranged on request — tell us what you need.</p></article>
-        <article><i class="why__i" data-i="group"></i><h3>Small groups</h3><p>Minimum two guests, never crowded. Space to breathe and to see.</p></article>
-        <article><i class="why__i" data-i="star"></i><h3>Unforgettable</h3><p>Dunes into the sea, seals at your kayak, stars over the moon valley.</p></article>
-      </div>
     </section>
 
     <!-- ============ OUR SAFARIS (rail) + RATES ============ -->
@@ -134,19 +126,6 @@
 
       <div class="cards cards--rail" id="tourCards"><!-- injected --></div>
 
-      <details class="rates" data-reveal>
-        <summary>View full 2026 rate card &amp; catering</summary>
-        <div class="rates__inner">
-          <table class="rates__table" id="ratesTable">
-            <thead><tr><th>Tour / activity</th><th>Adult</th><th>Child <span>(4–12)</span></th><th>Duration</th><th>Min</th></tr></thead>
-            <tbody><!-- injected --></tbody>
-          </table>
-          <div class="rates__catering">
-            <h4>Catering included <span>· half-day, full-day &amp; combo tours</span></h4>
-            <ul><li>Snack platter</li><li>Cold drinks</li><li>Bottled water</li><li>Sparkling wine</li></ul>
-          </div>
-        </div>
-      </details>
     </section>
 
     <!-- ============ CURATE YOUR OWN TOUR (pinned bg) ============ -->
@@ -205,76 +184,53 @@
       </div>
     </section>
 
-    <!-- ============ REVIEWS ============ -->
-    <section class="reviews section" id="reviews">
-      <div class="section__head">
-        <div data-reveal>
-          <p class="eyebrow">— Reviews</p>
-          <h2 class="h2">Loved by travellers</h2>
-        </div>
-        <a class="section__note section__note--link" href="#contact" data-reveal>Leave us a review →</a>
-      </div>
-      <div class="reviews__track" id="reviewsTrack" data-reveal><!-- injected --></div>
-      <p class="reviews__cta" data-reveal>
-        Find us on <a href="#" data-social="google">Google</a> and <a href="#" data-social="getyourguide">GetYourGuide</a>.
-      </p>
-    </section>
-
   <!-- ============ NEXT-LEVEL FOOTER : THE DEPARTURE LOUNGE ============ -->
   <footer class="megafoot" id="contact">
     <!-- elephant silhouette skyline -->
     <div class="skyline" aria-hidden="true">
       <svg viewBox="0 0 1440 230" preserveAspectRatio="xMidYMax slice">
         <defs>
+          <!-- African elephant, facing right, feet on y=0 -->
           <g id="ele">
             <!-- legs -->
-            <rect x="18" y="-54" width="19" height="56" rx="4"/>
-            <rect x="46" y="-54" width="19" height="56" rx="4"/>
-            <rect x="82" y="-54" width="19" height="56" rx="4"/>
-            <rect x="106" y="-54" width="19" height="56" rx="4"/>
-            <!-- body -->
-            <path d="M14,-78 C14,-112 44,-128 74,-126 C104,-124 120,-104 120,-80 L120,-50 L14,-50 Z"/>
-            <!-- head -->
-            <ellipse cx="124" cy="-86" rx="27" ry="31"/>
-            <!-- ear -->
-            <ellipse cx="110" cy="-94" rx="21" ry="25"/>
-            <!-- trunk -->
-            <path d="M146,-98 C164,-74 160,-32 146,-4" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round"/>
+            <rect x="22" y="-60" width="24" height="62" rx="9"/>
+            <rect x="56" y="-60" width="24" height="62" rx="9"/>
+            <rect x="96" y="-60" width="24" height="62" rx="9"/>
+            <rect x="128" y="-60" width="24" height="62" rx="9"/>
+            <!-- rounded body -->
+            <ellipse cx="86" cy="-96" rx="78" ry="50"/>
+            <!-- shoulder/head mass -->
+            <ellipse cx="158" cy="-100" rx="40" ry="44"/>
+            <!-- big ear -->
+            <ellipse cx="132" cy="-108" rx="28" ry="33" transform="rotate(-8 132 -108)"/>
+            <!-- trunk hanging to the ground -->
+            <path d="M190,-118 C210,-104 206,-74 200,-46 C196,-26 192,-12 196,4" fill="none" stroke="currentColor" stroke-width="22" stroke-linecap="round"/>
             <!-- tusk -->
-            <path d="M142,-58 C150,-49 154,-40 150,-31" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+            <path d="M178,-64 C188,-54 190,-44 185,-34" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
             <!-- tail -->
-            <path d="M14,-92 C5,-80 6,-66 13,-54" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+            <path d="M11,-110 C-1,-94 0,-74 12,-58" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
           </g>
+          <!-- acacia tree -->
           <g id="tree">
-            <rect x="-5" y="-70" width="10" height="70"/>
-            <ellipse cx="0" cy="-78" rx="74" ry="15"/>
-            <ellipse cx="-28" cy="-86" rx="44" ry="12"/>
-            <ellipse cx="32" cy="-84" rx="40" ry="12"/>
+            <path d="M0,2 L0,-56" stroke="currentColor" stroke-width="10" fill="none" stroke-linecap="round"/>
+            <path d="M0,-38 L-36,-66 M0,-44 L34,-64 M0,-52 L0,-74" stroke="currentColor" stroke-width="5" fill="none"/>
+            <ellipse cx="0" cy="-74" rx="80" ry="14"/>
+            <ellipse cx="-34" cy="-82" rx="46" ry="11"/>
+            <ellipse cx="38" cy="-80" rx="40" ry="11"/>
           </g>
         </defs>
-        <circle class="sky-sun" cx="980" cy="196" r="76"/>
-        <rect x="0" y="178" width="1440" height="60"/>
-        <path class="bird" d="M250 66 q9 -9 18 0 q9 -9 18 0"/>
-        <path class="bird" d="M312 54 q7 -7 14 0 q7 -7 14 0"/>
-        <path class="bird" d="M1150 70 q8 -8 16 0 q8 -8 16 0"/>
-        <use href="#tree" transform="translate(300,178) scale(1.0)"/>
-        <use href="#tree" transform="translate(1080,178) scale(.9)"/>
-        <use href="#ele" transform="translate(120,178) scale(.72)"/>
-        <use href="#ele" transform="translate(455,178) scale(1.16)"/>
-        <use href="#ele" transform="translate(660,178) scale(.86)"/>
-        <use href="#ele" transform="translate(870,178) scale(1.05)"/>
-        <use href="#ele" transform="translate(1240,178) scale(.74)"/>
+        <rect x="0" y="180" width="1440" height="70"/>
+        <path class="bird" d="M250 70 q9 -9 18 0 q9 -9 18 0"/>
+        <path class="bird" d="M312 58 q7 -7 14 0 q7 -7 14 0"/>
+        <path class="bird" d="M1150 74 q8 -8 16 0 q8 -8 16 0"/>
+        <use href="#tree" transform="translate(330,180) scale(1.0)"/>
+        <use href="#tree" transform="translate(1170,180) scale(.88)"/>
+        <use href="#ele" transform="translate(96,180) scale(.66)"/>
+        <use href="#ele" transform="translate(470,180) scale(1.05)"/>
+        <use href="#ele" transform="translate(730,180) scale(.8)"/>
+        <use href="#ele" transform="translate(940,180) scale(.98)"/>
+        <use href="#ele" transform="translate(1320,180) scale(.66)"/>
       </svg>
-    </div>
-
-    <!-- kinetic marquee -->
-    <div class="kinetic" aria-hidden="true">
-      <div class="kinetic__row" id="kineticRow">
-        <span>Explore Namibia</span><i>∞</i><span>Infinite African Safaris</span><i>∞</i>
-        <span>Adventure · Nature · Ocean · Memories</span><i>∞</i>
-        <span>Explore Namibia</span><i>∞</i><span>Infinite African Safaris</span><i>∞</i>
-        <span>Adventure · Nature · Ocean · Memories</span><i>∞</i>
-      </div>
     </div>
 
     <!-- oversized CTA -->
@@ -327,8 +283,8 @@
         <h4>Explore</h4>
         <a href="#about">About</a>
         <a href="#experiences">Our safaris</a>
+        <a href="#curate">Curate a tour</a>
         <a href="#film">Showreel</a>
-        <a href="#reviews">Reviews</a>
       </nav>
       <div class="mf-col">
         <h4>Find us</h4>

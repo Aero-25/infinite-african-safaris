@@ -128,7 +128,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 }
 .nav.is-stuck{ background:rgba(250,245,236,.88); backdrop-filter:blur(14px); box-shadow:0 1px 0 var(--line); padding-top:.6rem; padding-bottom:.6rem; }
 .nav__brand{ display:flex; align-items:center; gap:.7rem; z-index:2; }
-.nav__emblem{ width:54px; color:var(--ink); transition:color .4s; }
+.nav__emblem{ width:clamp(86px,9vw,118px); color:var(--ink); transition:color .4s; }
 .nav__emblem svg{ width:100%; height:auto; display:block; }
 .nav__emblemimg{ width:100%; height:auto; display:block; }
 .nav__emblem .nav__emblemsvg{ display:none; }
@@ -239,7 +239,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 
 /* text-free hero — the photo wall is the whole stage */
 .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
-.hero--bare{ justify-content:center; padding-block:clamp(84px,11vh,120px) 0; }
+.hero--bare{ justify-content:flex-start; min-height:auto; padding-block:clamp(76px,9vh,104px) clamp(24px,5vh,48px); }
 .hero--bare .cyl{ margin-top:0; }
 @media (min-width:1025px){ .hero--bare .cyl{ --pw:400px; --ph:565px; min-height:clamp(460px,70vh,780px); } }
 .hero__cue{
@@ -706,6 +706,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
   .mf-cta__big{ font-size:clamp(1.8rem,9vw,3rem); }
   .cyl{ --pw:215px; --ph:305px; min-height:380px; perspective:1100px; }
   .hero__links{ gap:1.4rem; }
+  .nav__emblem{ width:64px; }
 }
 @media (max-width:480px){
   .why{ grid-template-columns:1fr; }
