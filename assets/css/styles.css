@@ -128,7 +128,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 }
 .nav.is-stuck{ background:rgba(250,245,236,.88); backdrop-filter:blur(14px); box-shadow:0 1px 0 var(--line); padding-top:.6rem; padding-bottom:.6rem; }
 .nav__brand{ display:flex; align-items:center; gap:.7rem; z-index:2; }
-.nav__emblem{ width:clamp(86px,9vw,118px); color:var(--ink); transition:color .4s; }
+.nav__emblem{ width:clamp(118px,12vw,162px); margin-block:clamp(-20px,-1.5vw,-12px); color:var(--ink); transition:color .4s; }
 .nav__emblem svg{ width:100%; height:auto; display:block; }
 .nav__emblemimg{ width:100%; height:auto; display:block; }
 .nav__emblem .nav__emblemsvg{ display:none; }
@@ -190,7 +190,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
   position:relative; z-index:2; width:100%; flex:1;
   min-height:clamp(420px,64vh,720px);
   margin-top:clamp(10px,2vh,30px);
-  perspective:2600px; perspective-origin:50% 46%;
+  perspective:3400px; perspective-origin:50% 48%;
   display:flex; align-items:center; justify-content:center;
   touch-action:pan-y; cursor:grab;
 }
@@ -237,9 +237,9 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 
 /* text-free hero — the photo wall is the whole stage */
 .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
-.hero--bare{ justify-content:flex-start; min-height:100svh; padding-block:clamp(112px,15vh,164px) clamp(40px,8vh,90px); }
+.hero--bare{ justify-content:flex-start; min-height:100svh; padding-block:clamp(112px,15vh,164px) clamp(40px,8vh,90px); padding-inline:0; }
 .hero--bare .cyl{ margin-top:0; }
-@media (min-width:1025px){ .hero--bare .cyl{ --pw:330px; --ph:470px; min-height:clamp(440px,66vh,720px); } }
+@media (min-width:1025px){ .hero--bare .cyl{ --pw:360px; --ph:540px; min-height:clamp(520px,76vh,860px); } }
 .hero__cue{
   position:absolute; bottom:24px; left:50%; transform:translateX(-50%); z-index:5;
   width:26px; height:42px; border:1.5px solid var(--khaki); border-radius:100px;
@@ -596,8 +596,8 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .megafoot{ background:var(--char); color:var(--sand); padding-bottom:1.4rem; overflow:hidden; }
 
 /* elephant family silhouette — feet sit on the dark footer edge */
-.skyline{ background:var(--paper); display:flex; justify-content:center; align-items:flex-end; padding:clamp(26px,4.5vw,60px) var(--pad) 0; line-height:0; }
-.skyline__herd{ width:min(1100px,92%); height:auto; display:block; filter:brightness(0) saturate(0); }
+.skyline{ background:var(--paper); display:flex; justify-content:center; align-items:flex-end; padding:clamp(22px,3.5vw,48px) clamp(8px,2vw,28px) 0; line-height:0; }
+.skyline__herd{ width:min(1360px,96%); height:auto; display:block; filter:brightness(0) saturate(0); margin-bottom:-3px; }
 
 /* kinetic marquee */
 .kinetic{ border-block:1px solid rgba(255,255,255,.1); padding:1.3rem 0; overflow:hidden; }
@@ -685,22 +685,39 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 /* =====================================================================
    CURATE YOUR OWN TOUR — pinned background
    ===================================================================== */
-.curate{
-  position:relative; isolation:isolate; color:var(--paper); text-align:center;
-  padding:clamp(6rem,18vh,12rem) var(--pad);
-  background-image:url("https://snkvszndxwpozrefnpnv.supabase.co/storage/v1/object/public/Images/Hilux%20dunes.png");
-  background-size:cover; background-position:center; background-attachment:fixed;
+/* tall section so we have scroll runway for the two scenes */
+.curate{ position:relative; isolation:isolate; color:var(--paper); height:260vh; }
+.curate__sticky{
+  position:sticky; top:0; height:100vh; overflow:hidden;
+  display:grid; place-items:center; text-align:center;
+  padding:clamp(5rem,12vh,8rem) var(--pad);
 }
-.curate__overlay{ position:absolute; inset:0; z-index:-1; background:linear-gradient(rgba(20,19,18,.6), rgba(20,19,18,.74)); }
-.curate__content{ max-width:840px; margin:0 auto; }
-.curate__title{ font-family:var(--display); font-weight:900; text-transform:uppercase; font-size:clamp(2.4rem,7vw,5rem); line-height:.92; letter-spacing:-.02em; margin:.3rem 0 1.2rem; }
+/* crossfading, slowly drifting backgrounds */
+.curate__bg{ position:absolute; inset:-4% 0; z-index:-2; background-size:cover; background-position:center;
+  will-change:opacity, transform; transition:opacity .5s linear; }
+.curate__bg--1{ background-image:url("https://snkvszndxwpozrefnpnv.supabase.co/storage/v1/object/public/Images/Hilux%20dunes.png"); opacity:1; }
+.curate__bg--2{ background-image:url("https://snkvszndxwpozrefnpnv.supabase.co/storage/v1/object/public/Images/Braai.png"); opacity:0; }
+.curate__overlay{ position:absolute; inset:0; z-index:-1; background:linear-gradient(rgba(20,19,18,.55), rgba(20,19,18,.8)); }
+
+/* both scenes share the same centred stage and crossfade */
+.curate__scene{
+  grid-area:1/1; max-width:880px; margin:0 auto; width:100%;
+  opacity:0; transform:translateY(34px) scale(.985); pointer-events:none;
+  transition:opacity .7s var(--ease), transform .7s var(--ease);
+}
+.curate__scene.is-on{ opacity:1; transform:none; pointer-events:auto; }
+.curate__title{ font-family:var(--display); font-weight:900; text-transform:uppercase; font-size:clamp(2.4rem,7vw,5.2rem); line-height:.92; letter-spacing:-.02em; margin:.3rem 0 1.2rem; }
 .curate__title em{ font-style:italic; font-weight:400; text-transform:none; color:var(--khaki-soft); }
-.curate__lead{ max-width:54ch; margin:0 auto 2.6rem; color:rgba(243,232,214,.86); font-size:clamp(1rem,1.5vw,1.18rem); }
-.curate__steps{ list-style:none; display:grid; grid-template-columns:repeat(3,1fr); gap:1.6rem; text-align:left; margin:0 auto 2.6rem; }
+.curate__lead{ max-width:54ch; margin:0 auto 2.4rem; color:rgba(243,232,214,.88); font-size:clamp(1rem,1.5vw,1.18rem); }
+.curate__steps{ list-style:none; display:grid; grid-template-columns:repeat(3,1fr); gap:1.6rem; text-align:left; margin:0 auto 2.4rem; }
 .curate__steps li{ border-top:2px solid rgba(202,189,156,.55); padding-top:1rem; }
 .curate__steps span{ font-family:var(--display); font-weight:800; color:var(--khaki-soft); font-size:1rem; letter-spacing:.1em; }
 .curate__steps b{ display:block; font-family:var(--display); font-weight:700; font-size:1.15rem; margin:.5rem 0 .4rem; }
 .curate__steps p{ color:rgba(243,232,214,.78); font-size:.92rem; }
+/* scene pager dots */
+.curate__pager{ position:absolute; right:clamp(16px,3vw,40px); top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:.7rem; z-index:3; }
+.curate__pager span{ width:10px; height:10px; border-radius:50%; border:1.5px solid rgba(243,232,214,.6); cursor:pointer; transition:.3s; }
+.curate__pager span.is-on{ background:var(--khaki); border-color:var(--khaki); transform:scale(1.25); }
 
 /* =====================================================================
    BOOKING
@@ -731,6 +748,36 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .book__total p{ font-size:.78rem; color:var(--txt-soft); margin:0; text-align:right; max-width:18ch; }
 .bk__note{ text-align:center; font-size:.8rem; color:var(--txt-soft); margin-top:.8rem; }
 
+/* booking popup — slim slide-in drawer */
+.bookmodal{ position:fixed; inset:0; z-index:170; display:none; }
+.bookmodal.is-open{ display:block; }
+.bookmodal__scrim{ position:absolute; inset:0; background:rgba(12,11,10,.62); backdrop-filter:blur(5px); opacity:0; transition:opacity .45s var(--ease); }
+.bookmodal.is-open .bookmodal__scrim{ opacity:1; }
+.bookmodal__panel{ position:absolute; top:0; right:0; height:100%; width:min(440px,100%); background:var(--mist); color:var(--txt); padding:clamp(1.5rem,3vw,2.3rem); overflow-y:auto; box-shadow:-30px 0 80px -30px rgba(0,0,0,.55); transform:translateX(100%); transition:transform .55s var(--ease); }
+.bookmodal.is-open .bookmodal__panel{ transform:none; }
+.bookmodal__x{ position:absolute; top:14px; right:16px; width:40px; height:40px; border-radius:50%; font-size:1.05rem; color:var(--ink); background:var(--paper-2); display:grid; place-items:center; transition:.2s; }
+.bookmodal__x:hover{ background:var(--sand-deep); transform:rotate(90deg); }
+.bookmodal__title{ font-family:var(--display); font-weight:700; font-size:1.7rem; line-height:1.05; margin:.2rem 0 .4rem; color:var(--ink); }
+.bookmodal__sub{ font-size:.9rem; color:var(--txt-soft); }
+.bkf{ display:flex; flex-direction:column; gap:.9rem; margin-top:1.3rem; }
+.bkf .bk__row--2{ display:grid; grid-template-columns:1fr 1fr; gap:.8rem; margin:0; }
+.bkf .stepper{ border-color:var(--line); width:100%; justify-content:space-between; }
+.bkf .stepper button{ color:var(--ink); }
+.bkf .stepper button:hover{ background:rgba(20,19,18,.06); }
+.bkf .stepper input{ color:var(--ink); width:100%; }
+.bkf .book__total{ margin:.3rem 0; }
+
+/* reviews page — wall of quotes */
+.revwall{ max-width:var(--maxw); margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:1.4rem; }
+.rw{ background:var(--mist); border:1px solid var(--line); border-radius:var(--r); padding:1.6rem; display:flex; flex-direction:column; transition:transform .4s var(--ease), box-shadow .4s; }
+.rw:hover{ transform:translateY(-5px); box-shadow:0 30px 50px -34px rgba(20,19,18,.45); }
+.rw__stars{ color:var(--khaki-deep); letter-spacing:.12em; margin-bottom:.7rem; }
+.rw__text{ font-family:var(--display); font-weight:500; font-size:1.06rem; line-height:1.4; color:var(--ink); flex:1; }
+.rw__by{ margin-top:1.2rem; display:flex; align-items:center; gap:.7rem; }
+.rw__avatar{ width:42px; height:42px; border-radius:50%; display:grid; place-items:center; font-family:var(--display); font-weight:700; color:var(--char); background:linear-gradient(135deg,var(--khaki-soft),var(--khaki-deep)); flex:none; }
+.rw__by b{ display:block; color:var(--ink); }
+.rw__by small{ color:var(--txt-soft); }
+
 /* =====================================================================
    RESPONSIVE
    ===================================================================== */
@@ -743,6 +790,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
   .builder__summary{ position:static; }
   .rv{ grid-template-columns:1fr; gap:2.5rem; }
   .rv__stage{ min-height:auto; }
+  .revwall{ grid-template-columns:repeat(2,1fr); }
   .gallery__grid{ grid-template-columns:repeat(2,1fr); }
   .gtile:nth-child(1){ grid-column:span 2; grid-row:span 1; }
   .gtile:nth-child(6){ grid-column:span 1; }
@@ -757,9 +805,20 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
   .policy__grid{ grid-template-columns:1fr; }
   .cf__row{ grid-template-columns:1fr; }
   .bk__row--2{ grid-template-columns:1fr; }
+  .bkf .bk__row--2{ grid-template-columns:1fr; }
+  .revwall{ grid-template-columns:1fr; }
   .about__stats{ grid-template-columns:1fr 1fr; }
-  .curate{ background-attachment:scroll; }
-  .curate__steps{ grid-template-columns:1fr; }
+  /* mobile: drop the pin — stack the two scenes as full-height panels */
+  .curate{ height:auto; }
+  .curate__sticky{ position:relative; height:auto; min-height:0; display:block; overflow:visible; padding:0; }
+  .curate__bg, .curate__overlay, .curate__pager{ display:none; }
+  .curate__scene{ position:relative; grid-area:auto; opacity:1; transform:none; pointer-events:auto;
+    min-height:100svh; display:flex; flex-direction:column; justify-content:center; isolation:isolate;
+    padding:clamp(6rem,16vh,8rem) var(--pad); background-size:cover; background-position:center; }
+  .curate__scene[data-scene="1"]{ background-image:url("https://snkvszndxwpozrefnpnv.supabase.co/storage/v1/object/public/Images/Hilux%20dunes.png"); }
+  .curate__scene[data-scene="2"]{ background-image:url("https://snkvszndxwpozrefnpnv.supabase.co/storage/v1/object/public/Images/Braai.png"); }
+  .curate__scene::before{ content:""; position:absolute; inset:0; z-index:-1; background:linear-gradient(rgba(20,19,18,.55), rgba(20,19,18,.82)); }
+  .curate__steps{ grid-template-columns:1fr; gap:1rem; }
   .mf-cols{ grid-template-columns:1fr; gap:1.8rem; }
   .pass{ grid-template-columns:1fr; }
   .pass__main{ border-radius:16px 16px 0 0; }
@@ -768,7 +827,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
   .mf-cta__big{ font-size:clamp(1.8rem,9vw,3rem); }
   .cyl{ --pw:215px; --ph:305px; min-height:380px; perspective:1100px; }
   .hero__links{ gap:1.4rem; }
-  .nav__emblem{ width:64px; }
+  .nav__emblem{ width:92px; margin-block:-14px; }
 }
 @media (max-width:480px){
   .why{ grid-template-columns:1fr; }

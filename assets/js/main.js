@@ -60,7 +60,7 @@
               <b data-nad="${t.adult ?? ""}">${fmt(t.adult)}</b>
               <small>${t.adult == null ? "tailored quote" : "per adult · child " + fmt(t.child)}</small>
             </div>
-            <a class="card__add" href="contact.html?tour=${t.id}">Book</a>
+            <a class="card__add" href="#book" data-book="${t.id}">Book</a>
           </div>
         </div>
       </article>`).join("");
@@ -86,7 +86,7 @@
               <b data-nad="${t.adult ?? ""}">${fmt(t.adult)}</b>
               <small>${t.adult == null ? "tailored quote" : "per adult · child " + fmt(t.child)}</small>
             </div>
-            <a class="card__add" href="contact.html?tour=${t.id}">Book</a>
+            <a class="card__add" href="#book" data-book="${t.id}">Book</a>
           </div>
         </div>
       </article>`).join("");
@@ -174,6 +174,18 @@
     start();
   }
 
+  /* RENDER: full reviews wall (reviews.html) */
+  const revWall = $("#revWall");
+  if (revWall) {
+    const initial = (s) => (s.match(/\b\w/g) || []).slice(0, 2).join("").toUpperCase();
+    revWall.innerHTML = REVIEWS.map(r => `
+      <blockquote class="rw">
+        <div class="rw__stars">${"★".repeat(r.stars)}</div>
+        <p class="rw__text">“${r.text}”</p>
+        <footer class="rw__by"><span class="rw__avatar">${initial(r.name)}</span><span><b>${r.name}</b><small>${r.from}</small></span></footer>
+      </blockquote>`).join("");
+  }
+
   /* count-up animation (data-to) for the review score + total */
   const upEls = $$("[data-to]");
   if (upEls.length) {
@@ -258,7 +270,7 @@
   const rotor = $("#rotor"), cyl = $("#cyl");
   if (rotor && cyl) {
     const pool = HERO_POOL.map(p => ({ url: p.url || IMG(p.id, 700), cap: p.cap }));
-    const N = Math.min(12, pool.length);          // panels on the cylinder
+    const N = Math.max(13, pool.length);          // panels on the cylinder (denser than the photo pool)
     const step = 360 / N;
     let radius = 560;                              // recomputed by sizeUp()
     let nextIdx = N % pool.length;                 // next photo to feed in
@@ -283,7 +295,7 @@
     const sizeUp = () => {
       const pw = parseFloat(getComputedStyle(cyl).getPropertyValue("--pw")) || 240;
       // radius so panels tile the cylinder with a comfortable gap
-      radius = Math.round((pw / 2) / Math.tan((Math.PI / N)) * 1.5);
+      radius = Math.round((pw / 2) / Math.tan((Math.PI / N)) * 1.04);
       panels.forEach(p => { p.el.style.transform = `rotateY(${p.angle}deg) translateZ(${radius}px)`; });
     };
     sizeUp();
@@ -336,6 +348,47 @@
   }
 
   /* =================================================================
+     CURATE → BRAAI : scroll-driven two-scene crossfade
+     ================================================================= */
+  const curate = $("#curate");
+  if (curate) {
+    const scenes = $$(".curate__scene", curate);
+    const bg2 = $(".curate__bg--2", curate);
+    const bg1 = $(".curate__bg--1", curate);
+    const dots = $$(".curate__pager span", curate);
+    const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+    const smooth = (e0, e1, x) => { const t = clamp((x - e0) / (e1 - e0), 0, 1); return t * t * (3 - 2 * t); };
+    let ticking = false;
+
+    const update = () => {
+      ticking = false;
+      const rect = curate.getBoundingClientRect();
+      const runway = curate.offsetHeight - innerHeight;
+      if (runway <= 0) return;
+      const p = clamp(-rect.top / runway, 0, 1);     // 0 → 1 through the section
+      const t = smooth(0.34, 0.62, p);               // bg crossfade window
+      bg2.style.opacity = t;
+      // gentle opposing drift / zoom for depth
+      bg1.style.transform = `translateY(${p * -22}px) scale(${1.05 + p * 0.05})`;
+      bg2.style.transform = `translateY(${(p - 1) * -22}px) scale(${1.1 - t * 0.05})`;
+      const two = p >= 0.5;
+      scenes[0].classList.toggle("is-on", !two);
+      scenes[1].classList.toggle("is-on", two);
+      dots[0].classList.toggle("is-on", !two);
+      dots[1].classList.toggle("is-on", two);
+    };
+    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+    addEventListener("scroll", onScroll, { passive: true });
+    addEventListener("resize", onScroll);
+    dots.forEach((d, i) => d.addEventListener("click", () => {
+      const runway = curate.offsetHeight - innerHeight;
+      const target = curate.offsetTop + (i === 0 ? runway * 0.16 : runway * 0.82);
+      if (lenis) lenis.scrollTo(target); else scrollTo({ top: target, behavior: "smooth" });
+    }));
+    update();
+  }
+
+  /* =================================================================
      PRELOADER + reveals + nav
      ================================================================= */
   addEventListener("load", () => {
@@ -364,6 +417,7 @@
   stagger(".gallery__grid .gtile", 60);
   stagger(".policy__grid .pol", 50);
   stagger(".safari-grid .card", 60);
+  stagger(".revwall .rw", 60);
 
   /* 3D tilt on cards */
   if (!reduce && matchMedia("(pointer:fine)").matches) {
@@ -518,6 +572,67 @@
       .replace(/%0A/g, "\n").replace(/%20/g, " ");
     location.href = `mailto:${CONTACT.email}?subject=${encodeURIComponent("Tour enquiry — Build your own")}&body=${encodeURIComponent(body)}`;
   });
+
+  /* =================================================================
+     BOOKING POPUP — slim drawer, injected on every page
+     ================================================================= */
+  if (!$("#bookModal")) {
+    const wrap = document.createElement("div");
+    wrap.className = "bookmodal"; wrap.id = "bookModal"; wrap.setAttribute("aria-hidden", "true");
+    wrap.innerHTML = `
+      <div class="bookmodal__scrim" data-close></div>
+      <aside class="bookmodal__panel" role="dialog" aria-modal="true" aria-label="Book a safari">
+        <button class="bookmodal__x" data-close aria-label="Close">✕</button>
+        <p class="eyebrow">— Book a safari</p>
+        <h3 class="bookmodal__title">Reserve your day</h3>
+        <p class="bookmodal__sub">Pick a tour and we'll confirm by WhatsApp or email. No payment now.</p>
+        <form class="bkf" id="bookForm" novalidate>
+          <label class="bk">Experience<select id="bookTour" name="tour" required></select></label>
+          <div class="bk__row--2">
+            <label class="bk">Date<input type="date" name="date" required></label>
+            <label class="bk">Time<input type="time" name="time" value="08:00"></label>
+          </div>
+          <div class="bk__row--2">
+            <label class="bk">Adults<span class="stepper"><button type="button" data-bk="adults" data-d="-1">–</button><input id="bookAdults" name="adults" type="text" inputmode="numeric" value="2" readonly><button type="button" data-bk="adults" data-d="1">+</button></span></label>
+            <label class="bk">Children<span class="stepper"><button type="button" data-bk="kids" data-d="-1">–</button><input id="bookKids" name="kids" type="text" inputmode="numeric" value="0" readonly><button type="button" data-bk="kids" data-d="1">+</button></span></label>
+          </div>
+          <div class="bk__row--2">
+            <label class="bk">Name<input name="name" autocomplete="name" required></label>
+            <label class="bk">Email<input type="email" name="email" autocomplete="email" required></label>
+          </div>
+          <div class="bk__row--2">
+            <label class="bk">Phone<input name="phone" autocomplete="tel"></label>
+            <label class="bk">Nationality<input name="country"></label>
+          </div>
+          <label class="bk">Requests<textarea name="notes" rows="2" placeholder="Anything special?"></textarea></label>
+          <div class="book__total"><div><span>Estimated total</span><strong id="bookTotal">—</strong></div><p id="bookHint">Select a tour to see your estimate.</p></div>
+          <button class="btn btn--solid btn--block" type="submit">Request booking</button>
+          <p class="bk__note" id="bookNote">We reply within a few hours · no payment now.</p>
+        </form>
+      </aside>`;
+    document.body.appendChild(wrap);
+  }
+  const bookModal = $("#bookModal");
+  const openBook = (id) => {
+    if (!bookModal) return;
+    if (id) { const sel = $("#bookTour"); if (sel) { sel.value = id; renderBooking(); } }
+    bookModal.classList.add("is-open"); bookModal.setAttribute("aria-hidden", "false");
+    document.documentElement.style.overflow = "hidden";
+    lenis && lenis.stop();
+    setTimeout(() => $("#bookTour")?.focus(), 360);
+  };
+  const closeBook = () => {
+    if (!bookModal) return;
+    bookModal.classList.remove("is-open"); bookModal.setAttribute("aria-hidden", "true");
+    document.documentElement.style.overflow = "";
+    lenis && lenis.start();
+  };
+  document.addEventListener("click", (e) => {
+    const opener = e.target.closest("[data-book]");
+    if (opener) { e.preventDefault(); openBook(opener.dataset.book || ""); return; }
+    if (e.target.closest("[data-close]")) closeBook();
+  });
+  addEventListener("keydown", (e) => { if (e.key === "Escape") closeBook(); });
 
   /* =================================================================
      BOOKING FORM

@@ -45,9 +45,11 @@
 
     <nav class="nav__links" id="navLinks" aria-label="Primary">
       <a href="#about">About</a>
-      <a href="safaris.html">Safaris</a>
       <a href="gallery.html">Gallery</a>
-      <a href="contact.html" class="nav__cta">Plan a trip</a>
+      <a href="safaris.html">Safaris</a>
+      <a href="reviews.html">Reviews</a>
+      <a href="contact.html">Contact</a>
+      <a href="#book" class="nav__cta" data-book>Book a Safari</a>
     </nav>
 
     <div class="nav__tools">
@@ -121,55 +123,51 @@
 
     </section>
 
-    <!-- ============ CURATE YOUR OWN TOUR (pinned bg) ============ -->
+    <!-- ============ CURATE → BRAAI SCHOOLS (scroll-driven two-scene) ============ -->
     <section class="curate" id="curate">
-      <div class="curate__overlay" aria-hidden="true"></div>
-      <div class="curate__content">
-        <p class="eyebrow eyebrow--light" data-reveal>— Tailor-made</p>
-        <h2 class="curate__title" data-reveal>Curate your <em>own</em> tour</h2>
-        <p class="curate__lead" data-reveal>
-          No two travellers are the same. Mix the dunes, the ocean and the wildlife into a single
-          day built entirely around you — your pace, your people, your perfect light.
-        </p>
-        <ol class="curate__steps" data-reveal>
-          <li><span>01</span><b>Choose your experiences</b><p>Pick the moments that matter — Sandwich Harbour, kayaking, sunset dunes and more.</p></li>
-          <li><span>02</span><b>Tell us who's coming</b><p>Group size, dates and any special touches. Flexible departures, always.</p></li>
-          <li><span>03</span><b>We craft &amp; confirm</b><p>Your guide shapes the route and timing, then confirms it all with you.</p></li>
-        </ol>
-        <a class="btn btn--solid" href="https://wa.me/264817269221?text=Hi%20Infinite%20African%20Safaris%2C%20I'd%20like%20to%20curate%20my%20own%20tour." target="_blank" rel="noopener" data-magnet data-reveal>Start curating your safari</a>
-      </div>
-    </section>
+      <div class="curate__sticky">
+        <!-- crossfading backgrounds -->
+        <div class="curate__bg curate__bg--1" aria-hidden="true"></div>
+        <div class="curate__bg curate__bg--2" aria-hidden="true"></div>
+        <div class="curate__overlay" aria-hidden="true"></div>
 
-    <!-- ============ REVIEWS — live spotlight ============ -->
-    <section class="reviews section" id="reviews">
-      <div class="rv">
-        <aside class="rv__aside" data-reveal>
-          <p class="eyebrow"><span class="rv__pulse" aria-hidden="true"></span> Live reviews</p>
-          <h2 class="h2">Loved by<br>travellers</h2>
-          <div class="rv__score">
-            <b class="rv__num" id="rvNum" data-to="4.9">0.0</b>
-            <div class="rv__rating">
-              <div class="rv__stars" aria-hidden="true">★★★★★</div>
-              <span class="rv__from">from <b id="rvTotal" data-to="240">0</b>+ happy travellers</span>
-            </div>
-          </div>
-          <div class="rv__badges">
-            <a class="rv__badge" href="#" data-social="google"><b>Google</b><span>★ 4.9</span></a>
-            <a class="rv__badge" href="#" data-social="getyourguide"><b>GetYourGuide</b><span>★ 5.0</span></a>
-          </div>
-        </aside>
+        <!-- SCENE 1 — curate your own tour -->
+        <div class="curate__scene is-on" data-scene="1">
+          <p class="eyebrow eyebrow--light">— Tailor-made</p>
+          <h2 class="curate__title">Curate your <em>own</em> tour</h2>
+          <p class="curate__lead">
+            No two travellers are the same. Mix the dunes, the ocean and the wildlife into a single
+            day built entirely around you — your pace, your people, your perfect light.
+          </p>
+          <ol class="curate__steps">
+            <li><span>01</span><b>Choose your experiences</b><p>Pick the moments that matter — Sandwich Harbour, kayaking, sunset dunes and more.</p></li>
+            <li><span>02</span><b>Tell us who's coming</b><p>Group size, dates and any special touches. Flexible departures, always.</p></li>
+            <li><span>03</span><b>We craft &amp; confirm</b><p>Your guide shapes the route and timing, then confirms it all with you.</p></li>
+          </ol>
+          <a class="btn btn--solid" href="contact.html" data-magnet>Start curating your safari</a>
+        </div>
 
-        <div class="rv__stage" id="rvStage" data-reveal>
-          <svg class="rv__quote" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.2 6C6.3 7.4 4.5 10 4.5 13.3c0 2.7 1.6 4.7 4 4.7 2 0 3.6-1.5 3.6-3.6 0-2-1.4-3.4-3.2-3.4-.4 0-.9.1-1 .1.3-1.5 1.8-3.2 3.6-4.1L9.2 6zm9 0c-2.9 1.4-4.7 4-4.7 7.3 0 2.7 1.6 4.7 4 4.7 2 0 3.6-1.5 3.6-3.6 0-2-1.4-3.4-3.2-3.4-.4 0-.9.1-1 .1.3-1.5 1.8-3.2 3.6-4.1L18.2 6z"/></svg>
-          <div class="rv__slides" id="rvSlides"><!-- injected --></div>
-          <div class="rv__controls">
-            <div class="rv__dots" id="rvDots" role="tablist" aria-label="Choose a review"></div>
-            <div class="rv__arrows">
-              <button class="rv__arrow" id="rvPrev" aria-label="Previous review">←</button>
-              <button class="rv__arrow" id="rvNext" aria-label="Next review">→</button>
-            </div>
-          </div>
-          <div class="rv__progress" aria-hidden="true"><span id="rvBar"></span></div>
+        <!-- SCENE 2 — braai schools -->
+        <div class="curate__scene" data-scene="2">
+          <p class="eyebrow eyebrow--light">— Around the fire</p>
+          <h2 class="curate__title">Braai <em>schools</em></h2>
+          <p class="curate__lead">
+            In Namibia the braai isn't dinner — it's the whole evening. Learn to cook over open coals
+            the local way: the fire, the cuts, the timing, the stories. You leave with a full plate
+            and a skill for life.
+          </p>
+          <ol class="curate__steps">
+            <li><span>01</span><b>Light the coals</b><p>Build and master a proper wood-and-charcoal fire the Namibian way.</p></li>
+            <li><span>02</span><b>Master the cuts</b><p>Boerewors, kapana, lamb chops and the day's fresh catch — seasoned and grilled to the second.</p></li>
+            <li><span>03</span><b>Feast under the stars</b><p>Sit down to your own braai as the desert sky lights up. Drinks and stories included.</p></li>
+          </ol>
+          <a class="btn btn--solid" href="https://wa.me/264817269221?text=Hi%20Infinite%20African%20Safaris%2C%20I'd%20love%20to%20join%20a%20Braai%20School." target="_blank" rel="noopener" data-magnet>Book a braai school</a>
+        </div>
+
+        <!-- scene pager -->
+        <div class="curate__pager" aria-hidden="true">
+          <span class="is-on" data-go="1"></span>
+          <span data-go="2"></span>
         </div>
       </div>
     </section>
@@ -211,7 +209,8 @@
         <a href="index.html#about">About</a>
         <a href="safaris.html">Our safaris</a>
         <a href="gallery.html">Gallery</a>
-        <a href="contact.html">Plan a trip</a>
+        <a href="reviews.html">Reviews</a>
+        <a href="contact.html">Contact</a>
       </nav>
       <div class="mf-col">
         <h4>Find us</h4>
