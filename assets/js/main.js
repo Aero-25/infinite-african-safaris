@@ -514,6 +514,23 @@
   /* year */
   $("#year") && ($("#year").textContent = new Date().getFullYear());
 
+  /* live Walvis Bay clock (Africa/Windhoek, UTC+2) */
+  const clockEl = $("#footClock");
+  if (clockEl) {
+    const tick = () => {
+      const t = new Date().toLocaleTimeString("en-GB", {
+        timeZone: "Africa/Windhoek", hour: "2-digit", minute: "2-digit", hour12: false
+      });
+      clockEl.textContent = t;
+    };
+    tick(); setInterval(tick, 1000 * 20);
+  }
+
+  /* back to top */
+  $("#toTop")?.addEventListener("click", () => {
+    if (lenis) lenis.scrollTo(0); else scrollTo({ top: 0, behavior: "smooth" });
+  });
+
   /* init */
   applyCurrency();
   renderBuilder();

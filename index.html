@@ -17,7 +17,7 @@
   <!-- ============ PRELOADER ============ -->
   <div class="preloader" id="preloader" aria-hidden="true">
     <div class="preloader__inner">
-      <img src="assets/img/logo-full.png" alt="Infinite African Safaris" class="preloader__logo"
+      <img src="https://kbmgpqwmgthswjkfmqfe.supabase.co/storage/v1/object/public/Infinite/Big%20logo.png" alt="Infinite African Safaris" class="preloader__logo"
            onerror="document.getElementById('preloader').classList.add('logo-missing')" />
       <div class="preloader__fallback">
         <svg viewBox="0 0 100 50" class="infinity" aria-hidden="true">
@@ -33,7 +33,7 @@
   <header class="nav" id="nav">
     <a href="#top" class="nav__brand" aria-label="Infinite African Safaris — home">
       <span class="nav__emblem" aria-hidden="true">
-        <img src="assets/img/logo-mark.png" alt="" class="nav__emblemimg"
+        <img src="https://kbmgpqwmgthswjkfmqfe.supabase.co/storage/v1/object/public/Infinite/small%20logo.png" alt="" class="nav__emblemimg"
              onerror="this.closest('.nav__brand').classList.add('mark-missing')" />
         <svg class="nav__emblemsvg" viewBox="0 0 100 50"><path d="M50,25 C50,8 25,8 25,25 C25,42 50,42 50,25 C50,8 75,8 75,25 C75,42 50,42 50,25" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>
       </span>
@@ -46,10 +46,8 @@
     <nav class="nav__links" id="navLinks" aria-label="Primary">
       <a href="#about">About</a>
       <a href="#experiences">Safaris</a>
-      <a href="#builder">Build a tour</a>
-      <a href="#gallery">Gallery</a>
       <a href="#reviews">Reviews</a>
-      <a href="#book" class="nav__cta">Book now</a>
+      <a href="#contact" class="nav__cta">Plan a trip</a>
     </nav>
 
     <div class="nav__tools">
@@ -149,131 +147,6 @@
       </details>
     </section>
 
-    <!-- ============ BOOKING FORM ============ -->
-    <section class="book section" id="book">
-      <div class="book__grid">
-        <div class="book__intro" data-reveal>
-          <p class="eyebrow eyebrow--light">— Reserve your spot</p>
-          <h2 class="h2 h2--light">Book your safari</h2>
-          <p class="book__lead">Choose a tour, pick a date and tell us who's coming. We'll confirm availability and your meeting time at Flamingo Villas — usually within a day.</p>
-          <ul class="book__trust">
-            <li>Flexible departure times</li>
-            <li>Pay cash or card at check-in</li>
-            <li>Free cancellation 15+ days before</li>
-            <li>N$5,000,000 passenger liability cover</li>
-          </ul>
-          <div class="book__or">
-            <span>Prefer to chat?</span>
-            <a href="https://wa.me/264817269221" target="_blank" rel="noopener">WhatsApp us →</a>
-          </div>
-        </div>
-
-        <form class="book__form" id="bookForm" novalidate>
-          <div class="bk__row">
-            <label class="bk">Tour / experience
-              <select name="tour" id="bookTour" required><option value="">Select a safari…</option></select>
-            </label>
-          </div>
-          <div class="bk__row bk__row--2">
-            <label class="bk">Preferred date<input name="date" id="bookDate" type="date" required></label>
-            <label class="bk">Preferred time
-              <select name="time" id="bookTime">
-                <option>Flexible</option><option>Sunrise</option><option>Morning</option><option>Midday</option><option>Afternoon</option><option>Sunset</option>
-              </select>
-            </label>
-          </div>
-          <div class="bk__row bk__row--2">
-            <label class="bk">Adults
-              <span class="stepper"><button type="button" data-bk="adults" data-d="-1">−</button><input id="bookAdults" type="number" min="1" value="2" inputmode="numeric"><button type="button" data-bk="adults" data-d="1">+</button></span>
-            </label>
-            <label class="bk">Children <small>4–12</small>
-              <span class="stepper"><button type="button" data-bk="kids" data-d="-1">−</button><input id="bookKids" type="number" min="0" value="0" inputmode="numeric"><button type="button" data-bk="kids" data-d="1">+</button></span>
-            </label>
-          </div>
-          <div class="bk__row bk__row--2">
-            <label class="bk">Full name<input name="name" required></label>
-            <label class="bk">Email<input name="email" type="email" required></label>
-          </div>
-          <div class="bk__row bk__row--2">
-            <label class="bk">Phone / WhatsApp<input name="phone" type="tel"></label>
-            <label class="bk">Nationality<input name="country"></label>
-          </div>
-          <label class="bk">Special requests <small>(dietary, accessibility, occasion)</small>
-            <textarea name="notes" rows="2"></textarea>
-          </label>
-
-          <div class="book__total">
-            <div><span>Estimated total</span><strong id="bookTotal">—</strong></div>
-            <p id="bookHint">Select a tour to see your estimate.</p>
-          </div>
-          <button class="btn btn--solid btn--block" type="submit" data-magnet>Request booking</button>
-          <p class="bk__note" id="bookNote">Sends your booking request via WhatsApp, with an email option.</p>
-        </form>
-      </div>
-    </section>
-
-    <!-- ============ BUILD YOUR OWN TOUR ============ -->
-    <section class="builder section" id="builder">
-      <div class="builder__head" data-reveal>
-        <p class="eyebrow eyebrow--light">— Build your own tour</p>
-        <h2 class="h2 h2--light">Design the day, we'll make it real</h2>
-        <p class="builder__intro">Pick your experiences, tell us who's coming, and we'll prepare a tailored quote. Flexible departure times — we meet at Flamingo Villas.</p>
-      </div>
-
-      <div class="builder__grid">
-        <div class="builder__pick" data-reveal>
-          <fieldset class="bpick" id="bExperiences">
-            <legend>1 · Choose experiences</legend>
-            <div class="bpick__list" id="bList"><!-- injected --></div>
-          </fieldset>
-
-          <fieldset class="bpick">
-            <legend>2 · Who's coming?</legend>
-            <div class="bcount">
-              <label>Adults
-                <span class="stepper"><button type="button" data-step="adults" data-d="-1">−</button><input id="bAdults" type="number" min="1" value="2" inputmode="numeric"><button type="button" data-step="adults" data-d="1">+</button></span>
-              </label>
-              <label>Children <small>4–12</small>
-                <span class="stepper"><button type="button" data-step="kids" data-d="-1">−</button><input id="bKids" type="number" min="0" value="0" inputmode="numeric"><button type="button" data-step="kids" data-d="1">+</button></span>
-              </label>
-            </div>
-            <label class="bfield">3 · Preferred date
-              <input id="bDate" type="date">
-            </label>
-            <label class="bfield">Anything we should know?
-              <textarea id="bNotes" rows="2" placeholder="Dietary needs, accessibility, pickup, occasion…"></textarea>
-            </label>
-          </fieldset>
-        </div>
-
-        <aside class="builder__summary" id="bSummary" data-reveal>
-          <h3>Your tour</h3>
-          <ul class="bsum__lines" id="bLines"><li class="bsum__empty">Select an experience to begin.</li></ul>
-          <div class="bsum__total">
-            <span>Estimated total</span>
-            <strong id="bTotal">—</strong>
-          </div>
-          <p class="bsum__fine">Estimate only · minimum 2 guests per experience · final quote confirmed by our team.</p>
-          <div class="bsum__actions">
-            <a class="btn btn--solid" id="bWhats" href="#" target="_blank" rel="noopener" data-magnet>Send on WhatsApp</a>
-            <button class="btn btn--ghost btn--ghost-dark" id="bEmail" type="button" data-magnet>Email this plan</button>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <!-- ============ GALLERY ============ -->
-    <section class="gallery section" id="gallery">
-      <div class="section__head">
-        <div data-reveal>
-          <p class="eyebrow">— Gallery</p>
-          <h2 class="h2">Namibia, frame by frame</h2>
-        </div>
-        <p class="section__note" data-reveal>A taste of the coast and the desert. Your own tour photos appear in the client gallery below.</p>
-      </div>
-      <div class="gallery__grid" id="galleryGrid" data-reveal><!-- injected --></div>
-    </section>
-
     <!-- ============ VIDEO ============ -->
     <section class="film section" id="film">
       <div class="film__card" data-reveal>
@@ -326,116 +199,92 @@
       </p>
     </section>
 
-    <!-- ============ VISIT / MEETING POINT ============ -->
-    <section class="visit section" id="visit">
-      <div class="visit__text" data-reveal>
-        <p class="eyebrow">— Where we meet</p>
-        <h2 class="h2">Flamingo Villas, Walvis Bay</h2>
-        <p class="lead">Our tours depart from Flamingo Villas — easy to find, with parking. Departure times are flexible; we'll confirm yours when we plan your day.</p>
-        <ul class="visit__facts">
-          <li><b>Meeting point</b>Flamingo Villas, Walvis Bay, Namibia</li>
-          <li><b>Departures</b>Flexible — set with your guide</li>
-          <li><b>Postal</b>P.O. Box 4145, Walvis Bay, Namibia</li>
-          <li><b>Call / WhatsApp</b><a href="tel:+264817269221">+264 81 726 9221</a></li>
-        </ul>
-        <a class="btn btn--ghost" href="https://www.google.com/maps/search/Flamingo+Villas+Walvis+Bay+Namibia" target="_blank" rel="noopener" data-magnet>Open in Google Maps</a>
+  <!-- ============ NEXT-LEVEL FOOTER : THE DEPARTURE LOUNGE ============ -->
+  <footer class="megafoot" id="contact">
+    <!-- kinetic marquee -->
+    <div class="kinetic" aria-hidden="true">
+      <div class="kinetic__row" id="kineticRow">
+        <span>Explore Namibia</span><i>∞</i><span>Infinite African Safaris</span><i>∞</i>
+        <span>Adventure · Nature · Ocean · Memories</span><i>∞</i>
+        <span>Explore Namibia</span><i>∞</i><span>Infinite African Safaris</span><i>∞</i>
+        <span>Adventure · Nature · Ocean · Memories</span><i>∞</i>
       </div>
-      <div class="visit__map" data-reveal>
-        <iframe
-          title="Flamingo Villas meeting point map"
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-          src="https://www.google.com/maps?q=Flamingo+Villas+Walvis+Bay+Namibia&output=embed"></iframe>
-      </div>
-    </section>
+    </div>
 
-    <!-- ============ POLICIES ============ -->
-    <section class="policy section" id="policy">
-      <div class="section__head">
-        <div data-reveal>
-          <p class="eyebrow">— Good to know</p>
-          <h2 class="h2">Policies &amp; peace of mind</h2>
+    <!-- oversized CTA -->
+    <div class="mf-cta">
+      <p class="eyebrow eyebrow--light">— Ready when you are</p>
+      <a class="mf-cta__big" href="https://wa.me/264817269221?text=Hi%20Infinite%20African%20Safaris%2C%20I'd%20love%20to%20plan%20a%20safari." target="_blank" rel="noopener" data-magnet>
+        Let's plan your safari <span aria-hidden="true">→</span>
+      </a>
+      <div class="mf-cta__quick">
+        <a href="https://wa.me/264817269221" target="_blank" rel="noopener">WhatsApp +264 81 726 9221</a>
+        <a href="mailto:info@infiniteafricansafaris.com">info@infiniteafricansafaris.com</a>
+      </div>
+    </div>
+
+    <!-- the safari boarding pass -->
+    <div class="pass" data-reveal>
+      <div class="pass__main">
+        <div class="pass__top">
+          <span class="pass__mark"><svg viewBox="0 0 100 50"><path d="M50,25 C50,8 25,8 25,25 C25,42 50,42 50,25 C50,8 75,8 75,25 C75,42 50,42 50,25" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></svg></span>
+          <span class="pass__title">Safari Boarding Pass</span>
+          <span class="pass__class">Small group · All in one</span>
+        </div>
+        <div class="pass__route">
+          <div class="pass__pt"><b>WVB</b><small>Flamingo Villas</small></div>
+          <div class="pass__line"><span>✦</span></div>
+          <div class="pass__pt pass__pt--r"><b>DUNE</b><small>Sandwich Harbour</small></div>
+        </div>
+        <div class="pass__meta">
+          <div><span>Operator</span><b>NTB Registered</b></div>
+          <div><span>Departures</span><b>Flexible</b></div>
+          <div><span>Walvis Bay time</span><b id="footClock">--:--</b></div>
+          <div><span>Cover</span><b>N$5 000 000</b></div>
         </div>
       </div>
-      <div class="policy__grid" id="policyGrid" data-reveal><!-- injected --></div>
-    </section>
-
-    <!-- ============ CONTACT / INQUIRY ============ -->
-    <section class="contact section" id="contact">
-      <div class="contact__grid">
-        <div class="contact__text" data-reveal>
-          <p class="eyebrow eyebrow--light">— Enquire</p>
-          <h2 class="h2 h2--light">Start your Namibian adventure</h2>
-          <p>Tell us what you'd love to see and we'll craft the perfect itinerary. We usually reply within a day.</p>
-          <ul class="contact__direct">
-            <li><span>WhatsApp</span><a href="https://wa.me/264817269221" target="_blank" rel="noopener">+264 81 726 9221</a></li>
-            <li><span>Email</span><a href="mailto:info@infiniteafricansafaris.com">info@infiniteafricansafaris.com</a></li>
-            <li><span>Find us</span><a href="https://www.google.com/maps/search/Flamingo+Villas+Walvis+Bay+Namibia" target="_blank" rel="noopener">Flamingo Villas, Walvis Bay</a></li>
-          </ul>
-          <div class="contact__social" id="socialRow"><!-- injected --></div>
-        </div>
-
-        <form class="contact__form" id="inquiryForm" data-reveal novalidate>
-          <div class="cf__row">
-            <label class="cf">Name<input name="name" required></label>
-            <label class="cf">Email<input name="email" type="email" required></label>
-          </div>
-          <div class="cf__row">
-            <label class="cf">Country / nationality<input name="country"></label>
-            <label class="cf">Group size<input name="size" type="number" min="1" value="2"></label>
-          </div>
-          <div class="cf__row">
-            <label class="cf">Preferred date<input name="date" type="date"></label>
-            <label class="cf">Interested in
-              <select name="interest" id="interestSelect"><option value="">Choose an experience…</option></select>
-            </label>
-          </div>
-          <label class="cf">Your message<textarea name="message" rows="4" placeholder="Tell us about your dream trip…"></textarea></label>
-          <button class="btn btn--solid btn--block" type="submit" data-magnet>Send enquiry</button>
-          <p class="cf__note" id="formNote">Opens WhatsApp / email with your details ready to send.</p>
-        </form>
+      <div class="pass__stub">
+        <span class="pass__stublbl">Boarding</span>
+        <span class="pass__seat" id="passSeat">∞</span>
+        <span class="pass__code">NTB · TSO01779</span>
       </div>
-    </section>
-  </main>
+    </div>
 
-  <!-- ============ FOOTER ============ -->
-  <footer class="footer">
-    <div class="footer__top">
-      <div class="footer__brand">
-        <span class="nav__emblem nav__emblem--lg" aria-hidden="true">
-          <svg viewBox="0 0 100 50"><path d="M50,25 C50,8 25,8 25,25 C25,42 50,42 50,25 C50,8 75,8 75,25 C75,42 50,42 50,25" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>
-        </span>
-        <p class="footer__word"><strong>INFINITE</strong> AFRICAN SAFARIS</p>
-        <p class="footer__tag">Adventure. Nature. Ocean. Memories. <em>All in one.</em></p>
+    <!-- columns -->
+    <div class="mf-cols">
+      <div class="mf-col mf-col--brand">
+        <p class="mf-word"><strong>INFINITE</strong> AFRICAN SAFARIS</p>
+        <p class="mf-tag">Adventure. Nature. Ocean. Memories. <em>All in one.</em></p>
         <div class="footer__social" id="footerSocial"><!-- injected --></div>
       </div>
-
-      <nav class="footer__nav" aria-label="Footer">
+      <nav class="mf-col" aria-label="Footer">
         <h4>Explore</h4>
-        <a href="#experiences">Experiences</a>
-        <a href="#builder">Build a tour</a>
-        <a href="#gallery">Gallery</a>
+        <a href="#about">About</a>
+        <a href="#experiences">Our safaris</a>
+        <a href="#film">Showreel</a>
         <a href="#reviews">Reviews</a>
       </nav>
-
-      <div class="footer__contact">
-        <h4>Get in touch</h4>
+      <div class="mf-col">
+        <h4>Find us</h4>
         <a href="tel:+264817269221">+264 81 726 9221</a>
         <a href="mailto:info@infiniteafricansafaris.com">info@infiniteafricansafaris.com</a>
-        <p>Flamingo Villas, Walvis Bay, Namibia<br>P.O. Box 4145</p>
+        <a href="https://www.google.com/maps/search/Flamingo+Villas+Walvis+Bay+Namibia" target="_blank" rel="noopener">Flamingo Villas, Walvis Bay</a>
+        <p>P.O. Box 4145, Namibia</p>
       </div>
-
-      <div class="footer__reg">
+      <div class="mf-col">
         <h4>Registered &amp; insured</h4>
         <p>Company Reg. 2026/04002</p>
         <p>VAT Reg. 16132448</p>
         <p>NTB Reg. TSO01779</p>
-        <p>Passenger liability N$5,000,000</p>
       </div>
     </div>
-    <div class="footer__bottom">
-      <p>© <span id="year"></span> Infinite African Safaris CC · NTB Registered Tour Operator</p>
-      <p>Walvis Bay · Namibia</p>
+
+    <div class="mf-bottom">
+      <p>© <span id="year"></span> Infinite African Safaris CC · NTB Registered Tour Operator · Walvis Bay, Namibia</p>
+      <button class="totop" id="toTop" aria-label="Back to top">
+        <svg viewBox="0 0 100 50" aria-hidden="true"><path d="M50,25 C50,8 25,8 25,25 C25,42 50,42 50,25 C50,8 75,8 75,25 C75,42 50,42 50,25" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></svg>
+        <span>Top</span>
+      </button>
     </div>
   </footer>
 
