@@ -139,11 +139,6 @@
             No two travellers are the same. Mix the dunes, the ocean and the wildlife into a single
             day built entirely around you — your pace, your people, your perfect light.
           </p>
-          <ol class="curate__steps">
-            <li><span>01</span><b>Choose your experiences</b><p>Pick the moments that matter — Sandwich Harbour, kayaking, sunset dunes and more.</p></li>
-            <li><span>02</span><b>Tell us who's coming</b><p>Group size, dates and any special touches. Flexible departures, always.</p></li>
-            <li><span>03</span><b>We craft &amp; confirm</b><p>Your guide shapes the route and timing, then confirms it all with you.</p></li>
-          </ol>
           <a class="btn btn--solid" href="contact.html" data-magnet>Start curating your safari</a>
         </div>
 
@@ -156,11 +151,6 @@
             the local way: the fire, the cuts, the timing, the stories. You leave with a full plate
             and a skill for life.
           </p>
-          <ol class="curate__steps">
-            <li><span>01</span><b>Light the coals</b><p>Build and master a proper wood-and-charcoal fire the Namibian way.</p></li>
-            <li><span>02</span><b>Master the cuts</b><p>Boerewors, kapana, lamb chops and the day's fresh catch — seasoned and grilled to the second.</p></li>
-            <li><span>03</span><b>Feast under the stars</b><p>Sit down to your own braai as the desert sky lights up. Drinks and stories included.</p></li>
-          </ol>
           <a class="btn btn--solid" href="https://wa.me/264817269221?text=Hi%20Infinite%20African%20Safaris%2C%20I'd%20love%20to%20join%20a%20Braai%20School." target="_blank" rel="noopener" data-magnet>Book a braai school</a>
         </div>
 
@@ -172,20 +162,29 @@
       </div>
     </section>
 
-    <!-- ============ VIDEO ============ -->
-    <section class="film section" id="film">
-      <div class="film__card" data-reveal>
-        <div class="film__media" id="filmMedia">
-          <div class="film__scene" aria-hidden="true"></div>
-          <button class="film__play" id="filmPlay" aria-label="Play showreel">
-            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-          </button>
-          <!-- Drop your footage in: replace this block's data-src with assets/video/showreel.mp4 -->
-        </div>
-        <div class="film__text">
-          <p class="eyebrow">— Showreel</p>
-          <h2 class="h2">Watch the coast come alive</h2>
-          <p class="lead">Dunes spilling into the Atlantic, seals at the bow, dust and gold light. Your films go here — we've built the player and you drop in the footage.</p>
+    <!-- ============ SHOWREEL — scroll-grown cinematic ============ -->
+    <section class="film" id="film">
+      <div class="film__sticky">
+        <div class="film__backdrop" aria-hidden="true"></div>
+        <div class="film__stage" id="filmStage">
+          <figure class="film__frame" id="filmFrame">
+            <video id="filmVid" class="film__vid" muted loop playsinline preload="metadata"
+              poster="https://snkvszndxwpozrefnpnv.supabase.co/storage/v1/object/public/Images/Hero/Sunset.png">
+              <!-- Swap this src for your own footage at assets/video/showreel.mp4 -->
+              <source src="https://videos.pexels.com/video-files/1093662/1093662-hd_1920_1080_30fps.mp4" type="video/mp4" />
+            </video>
+            <span class="film__veil" aria-hidden="true"></span>
+            <button class="film__sound" id="filmSound" aria-label="Turn sound on" aria-pressed="false">
+              <svg class="film__ic-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9l5 6M21 9l-5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <svg class="film__ic-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a5 5 0 010 7M18.7 6a9 9 0 010 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+          </figure>
+          <div class="film__intro" id="filmIntro">
+            <p class="eyebrow eyebrow--light">— Showreel</p>
+            <h2 class="film__title">Watch the coast<br>come alive</h2>
+            <p class="film__lead">Dunes spilling into the Atlantic, seals at the bow, dust and gold light.</p>
+            <span class="film__cue">Keep scrolling ↓</span>
+          </div>
         </div>
       </div>
     </section>

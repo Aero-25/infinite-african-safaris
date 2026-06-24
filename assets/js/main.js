@@ -389,6 +389,75 @@
   }
 
   /* =================================================================
+     SHOWREEL — scroll-grown cinematic video
+     ================================================================= */
+  const film = $("#film");
+  if (film) {
+    const frame = $("#filmFrame"), intro = $("#filmIntro"), stage = $("#filmStage");
+    const backdrop = $(".film__backdrop", film), vid = $("#filmVid");
+    const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+    const smooth = (e0, e1, x) => { const t = clamp((x - e0) / (e1 - e0), 0, 1); return t * t * (3 - 2 * t); };
+    let coverScale = 1, startScale = 0.5, ticking = false;
+
+    const measure = () => {
+      const w = frame.offsetWidth, h = frame.offsetHeight;
+      if (!w || !h) return;
+      coverScale = Math.max(innerWidth / w, innerHeight / h);
+      startScale = Math.min(coverScale * 0.5, 1);
+    };
+    const update = () => {
+      ticking = false;
+      const runway = film.offsetHeight - innerHeight;
+      if (runway <= 0) return;
+      const p = clamp(-film.getBoundingClientRect().top / runway, 0, 1);
+      const grow = smooth(0, 0.58, p);
+      const out = smooth(0.84, 1, p);
+      frame.style.transform = `scale(${startScale + (coverScale - startScale) * grow})`;
+      frame.style.borderRadius = `${18 * (1 - grow)}px`;
+      frame.style.setProperty("--veil", (0.55 * (1 - grow * 0.7)).toFixed(3));
+      backdrop.style.opacity = (grow * 0.92).toFixed(3);
+      intro.style.opacity = ((1 - smooth(0.05, 0.32, p)) * (1 - out)).toFixed(3);
+      intro.style.transform = `translateY(${(-grow * 34).toFixed(1)}px)`;
+      stage.style.opacity = (1 - out).toFixed(3);
+      stage.style.transform = `scale(${1 + out * 0.05})`;
+    };
+    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+    addEventListener("scroll", onScroll, { passive: true });
+    addEventListener("resize", () => { measure(); update(); });
+    if (vid) vid.addEventListener("loadedmetadata", () => { measure(); update(); });
+    measure(); update();
+
+    // autoplay only while on screen
+    if (vid) {
+      new IntersectionObserver((es) => es.forEach(e => {
+        if (e.isIntersecting) vid.play().catch(() => {}); else vid.pause();
+      }), { threshold: 0.04 }).observe(film);
+
+      const sound = $("#filmSound");
+      sound?.addEventListener("click", (e) => {
+        e.preventDefault(); e.stopPropagation();
+        vid.muted = !vid.muted;
+        sound.classList.toggle("is-on", !vid.muted);
+        sound.setAttribute("aria-pressed", String(!vid.muted));
+        if (!vid.muted) vid.play().catch(() => {});
+      });
+    }
+  }
+
+  /* =================================================================
+     FLOATING INFINITY — pulse tracing the mark (replaces WA icon)
+     ================================================================= */
+  const fab = $(".fab");
+  if (fab) {
+    fab.classList.add("fab--inf");
+    const d = "M50,25 C50,8 25,8 25,25 C25,42 50,42 50,25 C50,8 75,8 75,25 C75,42 50,42 50,25";
+    fab.innerHTML = `<svg class="fab__inf" viewBox="0 0 100 50" aria-hidden="true">
+      <path class="fab__base" d="${d}"/>
+      <path class="fab__trace" pathLength="100" d="${d}"/>
+    </svg>`;
+  }
+
+  /* =================================================================
      PRELOADER + reveals + nav
      ================================================================= */
   addEventListener("load", () => {
