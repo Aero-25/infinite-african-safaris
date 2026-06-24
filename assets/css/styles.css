@@ -851,7 +851,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
   .pass__stub{ border-radius:0 0 16px 16px; flex-direction:row; gap:1.2rem; padding:1rem; }
   .pass__stub::before{ left:14px; right:14px; top:0; bottom:auto; border-left:0; border-top:2px dashed rgba(20,19,18,.4); }
   .mf-cta__big{ font-size:clamp(1.8rem,9vw,3rem); }
-  .cyl{ --pw:298px; --ph:470px; min-height:clamp(470px,70vh,640px); perspective:1150px; }
+  .cyl{ --pw:298px; --ph:470px; min-height:clamp(470px,70vh,640px); perspective:760px; perspective-origin:50% 50%; }
   .hero--bare{ padding-block:76px clamp(14px,3vh,28px); }
   .hero__links{ gap:1.4rem; }
   .nav__emblem{ width:92px; margin-block:-14px; }
