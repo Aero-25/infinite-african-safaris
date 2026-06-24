@@ -71,7 +71,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .lead{ font-size:clamp(1.05rem,1.6vw,1.22rem); color:var(--txt); max-width:54ch; }
 .muted{ color:var(--txt-soft); margin-top:1rem; max-width:54ch; }
 
-.section{ padding:clamp(64px,9vw,140px) var(--pad); position:relative; }
+.section{ padding:clamp(38px,4.5vw,72px) var(--pad); position:relative; }
 .section__head{
   display:flex; justify-content:space-between; align-items:flex-end; gap:2rem;
   flex-wrap:wrap; margin-bottom:clamp(2.5rem,5vw,4rem);
@@ -626,7 +626,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .curate{
   position:relative; isolation:isolate; color:var(--paper); text-align:center;
   padding:clamp(6rem,18vh,12rem) var(--pad);
-  background-image:url("https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?auto=format&fit=crop&q=80&w=1600");
+  background-image:url("https://snkvszndxwpozrefnpnv.supabase.co/storage/v1/object/public/Images/Hilux%20dunes.png");
   background-size:cover; background-position:center; background-attachment:fixed;
 }
 .curate__overlay{ position:absolute; inset:0; z-index:-1; background:linear-gradient(rgba(20,19,18,.6), rgba(20,19,18,.74)); }

@@ -149,7 +149,7 @@
      ================================================================= */
   const rotor = $("#rotor"), cyl = $("#cyl");
   if (rotor && cyl) {
-    const pool = HERO_POOL.map(p => ({ url: IMG(p.id, 700), cap: p.cap }));
+    const pool = HERO_POOL.map(p => ({ url: p.url || IMG(p.id, 700), cap: p.cap }));
     const N = Math.min(12, pool.length);          // panels on the cylinder
     const step = 360 / N;
     let radius = 560;                              // recomputed by sizeUp()

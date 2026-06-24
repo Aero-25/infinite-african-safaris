@@ -16,24 +16,18 @@ const CURRENCY = {
   USD: { symbol: "US$", name: "US Dollar",       rate: 18.0, decimals: 0 },
 };
 
-/* --- The rotating hero photo wall. Add/replace freely. ---------------- */
+/* --- The rotating hero photo wall. Add/replace freely. ----------------
+   Use full URLs in `url`, or an Unsplash id in `id`.                    */
+const HERO_BASE = "https://snkvszndxwpozrefnpnv.supabase.co/storage/v1/object/public/Images/Hero/";
 const HERO_POOL = [
-  { id: "1549366021-9f761d450615", cap: "Wildlife encounters" },
-  { id: "1559827260-dc66d52bef19", cap: "Atlantic boat cruises" },
-  { id: "1516026672322-bc52d61a55d5", cap: "The endless desert" },
-  { id: "1502784444187-359ac186c5bb", cap: "Kayaking the bay" },
-  { id: "1489493887464-892be6d1daae", cap: "Golden hour" },
-  { id: "1547234935-80c7145ec969", cap: "Spitzkoppe" },
-  { id: "1444703686981-a3abbc4d4fe3", cap: "Desert nights" },
-  { id: "1523805009345-7448845a9e53", cap: "On safari" },
-  { id: "1500964757637-c85e8a162699", cap: "Moon landscapes" },
-  { id: "1471922694854-ff1b63b20054", cap: "Skeleton Coast" },
-  { id: "1535941339077-2dd1c7963098", cap: "Etosha plains" },
-  { id: "1547471080-7cc2caa01a7e", cap: "Sunset drives" },
-  { id: "1466721591366-2d5fba72006d", cap: "Living desert" },
-  { id: "1473580044384-7ba9967e16a0", cap: "Big skies" },
-  { id: "1534177616072-ef7dc120449d", cap: "Bush evenings" },
-  { id: "1493246507139-91e8fad9978e", cap: "Wide horizons" },
+  { url: HERO_BASE + "dune.png",      cap: "The dunes" },
+  { url: HERO_BASE + "Sunset.png",    cap: "Desert sunsets" },
+  { url: HERO_BASE + "Flamingos.png", cap: "Flamingos" },
+  { url: HERO_BASE + "Chameleon.png", cap: "Chameleons" },
+  { url: HERO_BASE + "Trail.png",     cap: "On the trail" },
+  { url: HERO_BASE + "Gecko.png",     cap: "Desert geckos" },
+  { url: HERO_BASE + "Jakkals.png",   cap: "Jackals" },
+  { url: HERO_BASE + "Birds.png",     cap: "Birdlife" },
 ];
 
 /* --- Tours / experiences (adult/child in NAD; null = "On request") ----
