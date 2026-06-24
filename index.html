@@ -20,8 +20,8 @@
       <img src="assets/img/logo-full.png" alt="Infinite African Safaris" class="preloader__logo"
            onerror="document.getElementById('preloader').classList.add('logo-missing')" />
       <div class="preloader__fallback">
-        <svg viewBox="0 0 120 60" class="infinity" aria-hidden="true">
-          <path class="infinity__path" d="M30,30 C30,12 6,12 6,30 C6,48 30,48 30,30 C30,12 54,12 54,30 C54,48 30,48 30,30 Z M60,30 C60,12 84,12 84,30 C84,48 60,48 60,30 C60,12 36,12 36,30" />
+        <svg viewBox="0 0 100 50" class="infinity" aria-hidden="true">
+          <path class="infinity__path" d="M50,25 C50,8 25,8 25,25 C25,42 50,42 50,25 C50,8 75,8 75,25 C75,42 50,42 50,25" />
         </svg>
         <span class="preloader__text">INFINITE AFRICAN SAFARIS</span>
       </div>
@@ -35,7 +35,7 @@
       <span class="nav__emblem" aria-hidden="true">
         <img src="assets/img/logo-mark.png" alt="" class="nav__emblemimg"
              onerror="this.closest('.nav__brand').classList.add('mark-missing')" />
-        <svg class="nav__emblemsvg" viewBox="0 0 90 44"><path d="M22,22 C22,8 4,8 4,22 C4,36 22,36 22,22 C22,8 41,8 41,22 C41,36 22,36 22,22 Z M45,22 C45,8 64,8 64,22 C64,36 45,36 45,22 C45,8 27,8 27,22" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>
+        <svg class="nav__emblemsvg" viewBox="0 0 100 50"><path d="M50,25 C50,8 25,8 25,25 C25,42 50,42 50,25 C50,8 75,8 75,25 C75,42 50,42 50,25" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>
       </span>
       <span class="nav__word">
         <strong>INFINITE</strong>
@@ -44,12 +44,12 @@
     </a>
 
     <nav class="nav__links" id="navLinks" aria-label="Primary">
-      <a href="#experiences">Experiences</a>
+      <a href="#about">About</a>
+      <a href="#experiences">Safaris</a>
       <a href="#builder">Build a tour</a>
       <a href="#gallery">Gallery</a>
       <a href="#reviews">Reviews</a>
-      <a href="#visit">Find us</a>
-      <a href="#contact" class="nav__cta">Enquire</a>
+      <a href="#book" class="nav__cta">Book now</a>
     </nav>
 
     <div class="nav__tools">
@@ -76,41 +76,36 @@
         <div class="cyl__fade cyl__fade--r" aria-hidden="true"></div>
       </div>
 
-      <a href="#marquee" class="hero__cue" aria-label="Scroll down"><span></span></a>
-    </section>
-
-    <!-- ============ MARQUEE ============ -->
-    <section class="marquee" id="marquee" aria-hidden="true">
-      <div class="marquee__track">
-        <span>Adventure</span><i>✦</i><span>Nature</span><i>✦</i><span>Ocean</span><i>✦</i><span>Memories</span><i>✦</i>
-        <span>Adventure</span><i>✦</i><span>Nature</span><i>✦</i><span>Ocean</span><i>✦</i><span>Memories</span><i>✦</i>
-      </div>
+      <a href="#about" class="hero__cue" aria-label="Scroll down"><span></span></a>
     </section>
 
     <!-- ============ ABOUT ============ -->
     <section class="about section" id="about">
-      <div class="about__grid">
+      <div class="about__editorial">
         <div class="about__intro" data-reveal>
-          <p class="eyebrow">— The company</p>
-          <h2 class="h2">Locally owned. <br>Built for the curious traveller.</h2>
+          <p class="eyebrow">— Who we are</p>
+          <h2 class="h2">Expertise rooted <br>in the dunes</h2>
           <p class="lead">
-            Infinite African Safaris is a Walvis Bay tour operator founded by Michael,
-            who brings over six years of professional guiding to every journey. We design
-            adventures for budget-conscious explorers and discerning travellers alike —
-            family-friendly, accessible to guests with disabilities, and always small-group.
+            With over six years navigating the untamed landscapes of Namibia, Michael and the
+            Infinite African Safaris team provide unparalleled access to the region's hidden gems.
           </p>
           <p class="muted">
-            Our guides hold valid Professional Driving Permits and First-Aid certification,
-            so every kilometre is safe, informative and genuinely fun. Descriptions for each
-            route are being finished and will appear here soon.
+            Locally owned and based in Walvis Bay, we craft every journey as a personal narrative —
+            family-friendly, accessible to guests with disabilities, and always small-group. Our
+            guides hold valid Professional Driving Permits and First-Aid certification, so every
+            kilometre is safe, informative and genuinely fun.
           </p>
+          <ul class="about__stats">
+            <li><b data-count="6">6</b><span>Years guiding</span></li>
+            <li><b data-count="15">15</b><span>Signature tours</span></li>
+            <li><b data-count="100">100</b><span>% local expertise</span></li>
+            <li><b>N$5M</b><span>Liability cover</span></li>
+          </ul>
         </div>
-        <ul class="about__stats" data-reveal>
-          <li><b data-count="6">6</b><span>Years guiding</span></li>
-          <li><b data-count="15">15</b><span>Signature experiences</span></li>
-          <li><b data-count="100">100</b><span>% local expertise</span></li>
-          <li><b>N$5M</b><span>Passenger liability cover</span></li>
-        </ul>
+        <figure class="about__media" data-reveal>
+          <img src="https://images.unsplash.com/photo-1547234935-80c7145ec969?auto=format&fit=crop&q=80&w=900" alt="Namibian desert landscape" loading="lazy" />
+          <figcaption>Walvis Bay · Namibia</figcaption>
+        </figure>
       </div>
 
       <div class="why" data-reveal>
@@ -123,17 +118,21 @@
       </div>
     </section>
 
-    <!-- ============ EXPERIENCES + RATES ============ -->
+    <!-- ============ OUR SAFARIS (rail) + RATES ============ -->
     <section class="exp section" id="experiences">
       <div class="section__head">
         <div data-reveal>
-          <p class="eyebrow">— Tours &amp; experiences</p>
-          <h2 class="h2">Choose your horizon</h2>
+          <p class="eyebrow">— Our safaris</p>
+          <h2 class="h2">Curated adventures</h2>
+          <p class="section__note">Discover the essence of Walvis Bay. Prices in <b id="curName">Namibian Dollar</b>.</p>
         </div>
-        <p class="section__note" data-reveal>2026 rates include VAT, NTB levies &amp; park fees. Catering included on day &amp; combo tours. Prices shown in <b id="curName">Namibian Dollar</b>.</p>
+        <div class="rail__arrows" data-reveal>
+          <button class="rail__arrow" id="railPrev" aria-label="Previous safaris">←</button>
+          <button class="rail__arrow" id="railNext" aria-label="Next safaris">→</button>
+        </div>
       </div>
 
-      <div class="cards" id="tourCards" data-reveal><!-- injected --></div>
+      <div class="cards cards--rail" id="tourCards"><!-- injected --></div>
 
       <details class="rates" data-reveal>
         <summary>View full 2026 rate card &amp; catering</summary>
@@ -148,6 +147,69 @@
           </div>
         </div>
       </details>
+    </section>
+
+    <!-- ============ BOOKING FORM ============ -->
+    <section class="book section" id="book">
+      <div class="book__grid">
+        <div class="book__intro" data-reveal>
+          <p class="eyebrow eyebrow--light">— Reserve your spot</p>
+          <h2 class="h2 h2--light">Book your safari</h2>
+          <p class="book__lead">Choose a tour, pick a date and tell us who's coming. We'll confirm availability and your meeting time at Flamingo Villas — usually within a day.</p>
+          <ul class="book__trust">
+            <li>Flexible departure times</li>
+            <li>Pay cash or card at check-in</li>
+            <li>Free cancellation 15+ days before</li>
+            <li>N$5,000,000 passenger liability cover</li>
+          </ul>
+          <div class="book__or">
+            <span>Prefer to chat?</span>
+            <a href="https://wa.me/264817269221" target="_blank" rel="noopener">WhatsApp us →</a>
+          </div>
+        </div>
+
+        <form class="book__form" id="bookForm" novalidate>
+          <div class="bk__row">
+            <label class="bk">Tour / experience
+              <select name="tour" id="bookTour" required><option value="">Select a safari…</option></select>
+            </label>
+          </div>
+          <div class="bk__row bk__row--2">
+            <label class="bk">Preferred date<input name="date" id="bookDate" type="date" required></label>
+            <label class="bk">Preferred time
+              <select name="time" id="bookTime">
+                <option>Flexible</option><option>Sunrise</option><option>Morning</option><option>Midday</option><option>Afternoon</option><option>Sunset</option>
+              </select>
+            </label>
+          </div>
+          <div class="bk__row bk__row--2">
+            <label class="bk">Adults
+              <span class="stepper"><button type="button" data-bk="adults" data-d="-1">−</button><input id="bookAdults" type="number" min="1" value="2" inputmode="numeric"><button type="button" data-bk="adults" data-d="1">+</button></span>
+            </label>
+            <label class="bk">Children <small>4–12</small>
+              <span class="stepper"><button type="button" data-bk="kids" data-d="-1">−</button><input id="bookKids" type="number" min="0" value="0" inputmode="numeric"><button type="button" data-bk="kids" data-d="1">+</button></span>
+            </label>
+          </div>
+          <div class="bk__row bk__row--2">
+            <label class="bk">Full name<input name="name" required></label>
+            <label class="bk">Email<input name="email" type="email" required></label>
+          </div>
+          <div class="bk__row bk__row--2">
+            <label class="bk">Phone / WhatsApp<input name="phone" type="tel"></label>
+            <label class="bk">Nationality<input name="country"></label>
+          </div>
+          <label class="bk">Special requests <small>(dietary, accessibility, occasion)</small>
+            <textarea name="notes" rows="2"></textarea>
+          </label>
+
+          <div class="book__total">
+            <div><span>Estimated total</span><strong id="bookTotal">—</strong></div>
+            <p id="bookHint">Select a tour to see your estimate.</p>
+          </div>
+          <button class="btn btn--solid btn--block" type="submit" data-magnet>Request booking</button>
+          <p class="bk__note" id="bookNote">Sends your booking request via WhatsApp, with an email option.</p>
+        </form>
+      </div>
     </section>
 
     <!-- ============ BUILD YOUR OWN TOUR ============ -->
@@ -341,7 +403,7 @@
     <div class="footer__top">
       <div class="footer__brand">
         <span class="nav__emblem nav__emblem--lg" aria-hidden="true">
-          <svg viewBox="0 0 90 44"><path d="M22,22 C22,8 4,8 4,22 C4,36 22,36 22,22 C22,8 41,8 41,22 C41,36 22,36 22,22 Z M45,22 C45,8 64,8 64,22 C64,36 45,36 45,22 C45,8 27,8 27,22" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>
+          <svg viewBox="0 0 100 50"><path d="M50,25 C50,8 25,8 25,25 C25,42 50,42 50,25 C50,8 75,8 75,25 C75,42 50,42 50,25" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>
         </span>
         <p class="footer__word"><strong>INFINITE</strong> AFRICAN SAFARIS</p>
         <p class="footer__tag">Adventure. Nature. Ocean. Memories. <em>All in one.</em></p>
@@ -390,6 +452,7 @@
     <button class="lightbox__nav lightbox__nav--next" id="lbNext" aria-label="Next">›</button>
   </div>
 
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
   <script src="assets/js/data.js" defer></script>

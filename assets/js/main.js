@@ -7,6 +7,26 @@
   const $$ = (s, c = document) => [...c.querySelectorAll(s)];
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  /* ---------- smooth scrolling (Lenis) ---------- */
+  let lenis = null;
+  if (window.Lenis && !reduce) {
+    lenis = new Lenis({ duration: 1.15, smoothWheel: true, wheelMultiplier: 1, touchMultiplier: 1.6 });
+    const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
+    requestAnimationFrame(raf);
+  }
+  // in-page anchor links → smooth scroll (works with or without Lenis)
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const id = a.getAttribute("href");
+    if (id.length < 2) return;
+    const target = document.querySelector(id);
+    if (!target) return;
+    e.preventDefault();
+    if (lenis) lenis.scrollTo(target, { offset: -70 });
+    else target.scrollIntoView({ behavior: "smooth" });
+  });
+
   /* ---------- currency ---------- */
   let cur = localStorage.getItem("ias_cur") || "NAD";
   const fmt = (nad) => {
@@ -118,6 +138,7 @@
     $$(".cur__btn").forEach(b => b.classList.toggle("is-active", b.dataset.cur === cur));
     if ($("#curName")) $("#curName").textContent = CURRENCY[cur].name;
     renderBuilder();
+    renderBooking();
   }
   $$(".cur__btn").forEach(b => b.addEventListener("click", () => {
     cur = b.dataset.cur; localStorage.setItem("ias_cur", cur); applyCurrency();
@@ -221,6 +242,45 @@
     });
   }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
   $$("[data-reveal]").forEach(el => io.observe(el));
+
+  /* staggered reveals for grids/rails */
+  const stagger = (selector, step = 80) => {
+    $$(selector).forEach((el, i) => {
+      el.setAttribute("data-reveal", "");
+      el.style.transitionDelay = `${(i % 6) * step}ms`;
+      io.observe(el);
+    });
+  };
+  stagger(".cards--rail .card", 70);
+  stagger(".why article", 70);
+  stagger(".gallery__grid .gtile", 60);
+  stagger(".reviews__track .rev", 70);
+  stagger(".policy__grid .pol", 50);
+
+  /* 3D tilt on cards */
+  if (!reduce && matchMedia("(pointer:fine)").matches) {
+    const tilt = (el, max = 7) => {
+      el.addEventListener("pointermove", (e) => {
+        const r = el.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - .5;
+        const py = (e.clientY - r.top) / r.height - .5;
+        el.style.transform = `perspective(900px) rotateY(${px * max}deg) rotateX(${-py * max}deg) translateY(-6px)`;
+      });
+      el.addEventListener("pointerleave", () => { el.style.transform = ""; });
+    };
+    $$(".cards--rail .card").forEach(c => tilt(c, 6));
+  }
+
+  /* Our Safaris rail arrows */
+  const rail = $("#tourCards");
+  const scrollRail = (dir) => {
+    if (!rail) return;
+    const card = rail.querySelector(".card");
+    const w = card ? card.offsetWidth + 21 : 320;
+    rail.scrollBy({ left: dir * w * 1.15, behavior: "smooth" });
+  };
+  $("#railPrev")?.addEventListener("click", () => scrollRail(-1));
+  $("#railNext")?.addEventListener("click", () => scrollRail(1));
 
   /* nav state */
   const nav = $("#nav");
@@ -350,6 +410,57 @@
       .replace(/%0A/g, "\n").replace(/%20/g, " ");
     location.href = `mailto:${CONTACT.email}?subject=${encodeURIComponent("Tour enquiry — Build your own")}&body=${encodeURIComponent(body)}`;
   });
+
+  /* =================================================================
+     BOOKING FORM
+     ================================================================= */
+  const bookTour = $("#bookTour");
+  if (bookTour) TOURS.forEach(t =>
+    bookTour.insertAdjacentHTML("beforeend", `<option value="${t.id}">${t.name}${t.adult == null ? " (on request)" : ""}</option>`));
+
+  function renderBooking() {
+    const sel = $("#bookTour"); if (!sel) return;
+    const t = TOURS.find(x => x.id === sel.value);
+    const a = Math.max(1, +$("#bookAdults").value || 1);
+    const k = Math.max(0, +$("#bookKids").value || 0);
+    const totalEl = $("#bookTotal"), hint = $("#bookHint");
+    if (!t) { totalEl.textContent = "—"; hint.textContent = "Select a tour to see your estimate."; return; }
+    if (t.adult == null) { totalEl.textContent = "On request"; hint.textContent = "We'll confirm a tailored quote for this experience."; return; }
+    totalEl.textContent = fmt(t.adult * a + t.child * k);
+    hint.textContent = `${a} adult${a>1?"s":""}${k?` · ${k} child${k>1?"ren":""}`:""} · incl. VAT, levies & park fees`;
+  }
+  bookTour?.addEventListener("change", renderBooking);
+  $("#bookAdults")?.addEventListener("input", renderBooking);
+  $("#bookKids")?.addEventListener("input", renderBooking);
+  $$("[data-bk]").forEach(b => b.addEventListener("click", () => {
+    const el = b.dataset.bk === "adults" ? $("#bookAdults") : $("#bookKids");
+    const min = b.dataset.bk === "adults" ? 1 : 0;
+    el.value = Math.max(min, (+el.value || 0) + (+b.dataset.d));
+    renderBooking();
+  }));
+  // pre-select a tour when "Add +" / booking links pass a hash like #book?tour=
+  $("#bookForm")?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const d = Object.fromEntries(new FormData(e.target));
+    const t = TOURS.find(x => x.id === d.tour);
+    if (!t || !d.name || !d.email || !d.date) { $("#bookNote").textContent = "Please choose a tour, date, your name and email."; return; }
+    const a = +$("#bookAdults").value, k = +$("#bookKids").value;
+    const total = t.adult == null ? null : t.adult * a + t.child * k;
+    let m = `BOOKING REQUEST — Infinite African Safaris%0A%0A`;
+    m += `Tour: ${t.name}%0ADate: ${d.date}%0ATime: ${d.time}%0A`;
+    m += `Guests: ${a} adult${a>1?"s":""}${k?`, ${k} child${k>1?"ren":""}`:""}%0A`;
+    if (total) m += `Estimated total: ${fmt(total).replace(/ /g,"%20")}%0A`;
+    m += `Name: ${encodeURIComponent(d.name)}%0AEmail: ${encodeURIComponent(d.email)}%0A`;
+    m += `Phone: ${encodeURIComponent(d.phone||"-")}%0ANationality: ${encodeURIComponent(d.country||"-")}`;
+    if (d.notes) m += `%0ARequests: ${encodeURIComponent(d.notes)}`;
+    window.open(`https://wa.me/${CONTACT.whatsapp}?text=${m}`, "_blank");
+    const body = m.replace(/%0A/g, "\n").replace(/%20/g, " ");
+    $("#bookNote").innerHTML = `Thanks ${(d.name.split(" ")[0]||"")}! Opening WhatsApp — or <a href="mailto:${CONTACT.email}?subject=${encodeURIComponent("Booking request — "+t.name)}&body=${encodeURIComponent(body)}" style="color:var(--khaki-deep);font-weight:600">send by email</a>.`;
+  });
+  // clicking "Add +" on a safari card also pre-fills the booking tour
+  $$("[data-add]").forEach(a => a.addEventListener("click", () => {
+    if (bookTour) { bookTour.value = a.dataset.add; renderBooking(); }
+  }));
 
   /* =================================================================
      INQUIRY FORM
