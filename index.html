@@ -167,12 +167,8 @@
       <div class="film__sticky">
         <div class="film__backdrop" aria-hidden="true"></div>
         <div class="film__stage" id="filmStage">
-          <figure class="film__frame" id="filmFrame">
-            <video id="filmVid" class="film__vid" muted loop playsinline preload="metadata"
-              poster="https://snkvszndxwpozrefnpnv.supabase.co/storage/v1/object/public/Images/Hero/Sunset.png">
-              <!-- Swap this src for your own footage at assets/video/showreel.mp4 -->
-              <source src="https://videos.pexels.com/video-files/1093662/1093662-hd_1920_1080_30fps.mp4" type="video/mp4" />
-            </video>
+          <figure class="film__frame" id="filmFrame" data-yt="B3zoK-EMM-s" data-start="60">
+            <div id="ytPlayer" class="film__yt"></div>
             <span class="film__veil" aria-hidden="true"></span>
             <button class="film__sound" id="filmSound" aria-label="Turn sound on" aria-pressed="false">
               <svg class="film__ic-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9l5 6M21 9l-5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>

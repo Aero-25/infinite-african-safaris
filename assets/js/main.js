@@ -295,7 +295,8 @@
     const sizeUp = () => {
       const pw = parseFloat(getComputedStyle(cyl).getPropertyValue("--pw")) || 240;
       // radius so panels tile the cylinder with a comfortable gap
-      radius = Math.round((pw / 2) / Math.tan((Math.PI / N)) * 1.04);
+      const mult = innerWidth <= 760 ? 0.94 : 1.04;   // mobile: slight overlap = seamless curve
+      radius = Math.round((pw / 2) / Math.tan((Math.PI / N)) * mult);
       panels.forEach(p => { p.el.style.transform = `rotateY(${p.angle}deg) translateZ(${radius}px)`; });
     };
     sizeUp();
@@ -394,7 +395,7 @@
   const film = $("#film");
   if (film) {
     const frame = $("#filmFrame"), intro = $("#filmIntro"), stage = $("#filmStage");
-    const backdrop = $(".film__backdrop", film), vid = $("#filmVid");
+    const backdrop = $(".film__backdrop", film);
     const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
     const smooth = (e0, e1, x) => { const t = clamp((x - e0) / (e1 - e0), 0, 1); return t * t * (3 - 2 * t); };
     let coverScale = 1, startScale = 0.5, ticking = false;
@@ -424,24 +425,40 @@
     const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
     addEventListener("scroll", onScroll, { passive: true });
     addEventListener("resize", () => { measure(); update(); });
-    if (vid) vid.addEventListener("loadedmetadata", () => { measure(); update(); });
     measure(); update();
 
-    // autoplay only while on screen
-    if (vid) {
-      new IntersectionObserver((es) => es.forEach(e => {
-        if (e.isIntersecting) vid.play().catch(() => {}); else vid.pause();
-      }), { threshold: 0.04 }).observe(film);
-
-      const sound = $("#filmSound");
-      sound?.addEventListener("click", (e) => {
-        e.preventDefault(); e.stopPropagation();
-        vid.muted = !vid.muted;
-        sound.classList.toggle("is-on", !vid.muted);
-        sound.setAttribute("aria-pressed", String(!vid.muted));
-        if (!vid.muted) vid.play().catch(() => {});
+    // ---- YouTube background player: autoplay muted, start at 1:00, loop from 1:00 ----
+    const VID = frame.dataset.yt, START = +(frame.dataset.start || 0);
+    let ytPlayer = null, ytReady = false, inView = false;
+    const sound = $("#filmSound");
+    window.onYouTubeIframeAPIReady = () => {
+      ytPlayer = new YT.Player("ytPlayer", {
+        videoId: VID,
+        playerVars: { autoplay: 1, mute: 1, controls: 0, start: START, playsinline: 1, modestbranding: 1, rel: 0, fs: 0, disablekb: 1, iv_load_policy: 3 },
+        events: {
+          onReady: (e) => { ytReady = true; e.target.mute(); if (inView) e.target.playVideo(); },
+          onStateChange: (e) => { if (e.data === YT.PlayerState.ENDED) { e.target.seekTo(START, true); e.target.playVideo(); } },
+        },
       });
+    };
+    if (VID) {
+      if (window.YT && window.YT.Player) window.onYouTubeIframeAPIReady();
+      else if (!document.querySelector('script[src*="iframe_api"]')) {
+        const s = document.createElement("script"); s.src = "https://www.youtube.com/iframe_api"; document.head.appendChild(s);
+      }
     }
+    new IntersectionObserver((es) => es.forEach(e => {
+      inView = e.isIntersecting;
+      if (ytReady) inView ? ytPlayer.playVideo() : ytPlayer.pauseVideo();
+    }), { threshold: 0.04 }).observe(film);
+    sound?.addEventListener("click", (e) => {
+      e.preventDefault(); e.stopPropagation();
+      if (!ytReady) return;
+      const muted = ytPlayer.isMuted();
+      if (muted) { ytPlayer.unMute(); ytPlayer.setVolume(85); } else ytPlayer.mute();
+      sound.classList.toggle("is-on", muted);
+      sound.setAttribute("aria-pressed", String(muted));
+    });
   }
 
   /* =================================================================
