@@ -300,7 +300,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .about{ background:var(--paper); max-width:none; padding-top:0; }
 /* white card that lifts up into the hero */
 .about__card{
-  max-width:var(--maxw); margin:calc(clamp(-72px,-7vh,-44px) + 20px) auto 0;
+  max-width:var(--maxw); margin:calc(clamp(-72px,-7vh,-44px) + 70px) auto 0;
   position:relative; z-index:6;
   background:#fff;
   border-radius:clamp(36px,6vw,80px) clamp(36px,6vw,80px) var(--r) var(--r);
