@@ -295,7 +295,7 @@
     const sizeUp = () => {
       const pw = parseFloat(getComputedStyle(cyl).getPropertyValue("--pw")) || 240;
       // radius so panels tile the cylinder with a comfortable gap
-      const mult = innerWidth <= 760 ? 0.94 : 1.04;   // mobile: slight overlap = seamless curve
+      const mult = innerWidth <= 760 ? 1.06 : 1.04;   // small gap between panels on every screen
       radius = Math.round((pw / 2) / Math.tan((Math.PI / N)) * mult);
       panels.forEach(p => { p.el.style.transform = `rotateY(${p.angle}deg) translateZ(${radius}px)`; });
     };

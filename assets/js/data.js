@@ -99,6 +99,12 @@ const REVIEWS = [
   { name:"Sofia R.", from:"Spain", stars:5, text:"Booked a private custom tour. They listened to exactly what we wanted and built the perfect day. Worth every cent." },
   { name:"Thabo K.", from:"South Africa", stars:5, text:"Professional, safe and so knowledgeable about the desert. The moon landscape tour blew me away." },
   { name:"Amara O.", from:"Nigeria", stars:5, text:"From first WhatsApp to the last photo, faultless. Felt like exploring with friends who happen to be experts." },
+  { name:"Marco V.", from:"Italy", stars:5, text:"Sandwich Harbour at sunrise, then dolphins on the cruise — two different worlds in one day. Our guide's knowledge of the desert was incredible." },
+  { name:"Hannah B.", from:"Netherlands", stars:5, text:"So well organised from start to finish. Comfortable vehicle, great snacks, and they knew exactly where the light would be best for photos." },
+  { name:"David & Sam", from:"Australia", stars:5, text:"The dune driving was a thrill and we never felt unsafe for a second. Proper professionals who clearly love what they do." },
+  { name:"Yuki T.", from:"Japan", stars:5, text:"A quiet, magical morning among the seals at Pelican Point. Unforgettable, and beautifully run." },
+  { name:"Claire D.", from:"France", stars:5, text:"We added the braai school after our tour — such a special evening under the stars. We felt like family by the end of the night." },
+  { name:"Peter & Anke", from:"Germany", stars:5, text:"Our second time booking with Michael's team. Flexible, friendly and they treat the desert with real respect. We'll be back." },
 ];
 
 /* --- Policies (from the brochure) ------------------------------------ */

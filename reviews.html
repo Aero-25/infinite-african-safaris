@@ -44,57 +44,33 @@
   </header>
 
   <main id="top">
-    <header class="pagehead">
+    <header class="pagehead pagehead--reviews">
       <div class="pagehead__inner">
         <p class="pagehead__crumb"><a href="index.html">Home</a> · Reviews</p>
         <h1>Loved by <em>travellers</em></h1>
-        <p>We'd rather let our guests do the talking. Here's what people say after a day on the dunes and the water with us.</p>
+        <p>We'd rather let our guests do the talking. Every word below is from someone who explored Namibia's dunes and coast with us.</p>
+        <div class="revstat" data-reveal>
+          <div class="revstat__score">
+            <b data-to="4.9">0.0</b>
+            <div>
+              <span class="revstat__stars" aria-hidden="true">★★★★★</span>
+              <span>from <b data-to="240">0</b>+ happy travellers</span>
+            </div>
+          </div>
+          <div class="revstat__src">
+            <a class="revstat__badge" href="#" data-social="google" target="_blank" rel="noopener">★ 4.9 · Google</a>
+            <a class="revstat__badge" href="#" data-social="getyourguide" target="_blank" rel="noopener">★ 5.0 · GetYourGuide</a>
+          </div>
+        </div>
       </div>
     </header>
 
-    <!-- ============ SPOTLIGHT ============ -->
-    <section class="reviews section" id="reviews">
-      <div class="rv">
-        <aside class="rv__aside" data-reveal>
-          <p class="eyebrow"><span class="rv__pulse" aria-hidden="true"></span> Live reviews</p>
-          <h2 class="h2">The latest<br>from guests</h2>
-          <div class="rv__score">
-            <b class="rv__num" id="rvNum" data-to="4.9">0.0</b>
-            <div class="rv__rating">
-              <div class="rv__stars" aria-hidden="true">★★★★★</div>
-              <span class="rv__from">from <b id="rvTotal" data-to="240">0</b>+ happy travellers</span>
-            </div>
-          </div>
-          <div class="rv__badges">
-            <a class="rv__badge" href="#" data-social="google"><b>Google</b><span>★ 4.9</span></a>
-            <a class="rv__badge" href="#" data-social="getyourguide"><b>GetYourGuide</b><span>★ 5.0</span></a>
-          </div>
-        </aside>
-        <div class="rv__stage" id="rvStage" data-reveal>
-          <svg class="rv__quote" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.2 6C6.3 7.4 4.5 10 4.5 13.3c0 2.7 1.6 4.7 4 4.7 2 0 3.6-1.5 3.6-3.6 0-2-1.4-3.4-3.2-3.4-.4 0-.9.1-1 .1.3-1.5 1.8-3.2 3.6-4.1L9.2 6zm9 0c-2.9 1.4-4.7 4-4.7 7.3 0 2.7 1.6 4.7 4 4.7 2 0 3.6-1.5 3.6-3.6 0-2-1.4-3.4-3.2-3.4-.4 0-.9.1-1 .1.3-1.5 1.8-3.2 3.6-4.1L18.2 6z"/></svg>
-          <div class="rv__slides" id="rvSlides"><!-- injected --></div>
-          <div class="rv__controls">
-            <div class="rv__dots" id="rvDots" role="tablist" aria-label="Choose a review"></div>
-            <div class="rv__arrows">
-              <button class="rv__arrow" id="rvPrev" aria-label="Previous review">←</button>
-              <button class="rv__arrow" id="rvNext" aria-label="Next review">→</button>
-            </div>
-          </div>
-          <div class="rv__progress" aria-hidden="true"><span id="rvBar"></span></div>
-        </div>
+    <section class="section revpage">
+      <div class="revwall" id="revWall" data-reveal><!-- injected --></div>
+      <div class="revpage__cta" data-reveal>
+        <p>Ready to write your own story?</p>
+        <a class="btn btn--solid" href="#book" data-book data-magnet>Book a safari</a>
       </div>
-    </section>
-
-    <!-- ============ WALL ============ -->
-    <section class="section" style="background:var(--paper)">
-      <div class="section__head">
-        <div data-reveal>
-          <p class="eyebrow">— Every word</p>
-          <h2 class="h2">More from the trail</h2>
-        </div>
-        <a class="section__note section__note--link" href="#book" data-book data-reveal>Ready when you are — book a safari →</a>
-      </div>
-      <div class="revwall" id="revWall"><!-- injected --></div>
     </section>
   </main>
 
