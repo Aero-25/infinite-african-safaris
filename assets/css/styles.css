@@ -531,9 +531,9 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
    ===================================================================== */
 .megafoot{ background:var(--char); color:var(--sand); padding-bottom:1.4rem; overflow:hidden; }
 
-/* elephant family silhouette */
-.skyline{ background:var(--paper); display:flex; justify-content:center; align-items:flex-end; padding:clamp(28px,5vw,66px) var(--pad) 0; line-height:0; }
-.skyline__herd{ width:min(1060px,94%); height:auto; display:block; filter:brightness(0.08); }
+/* elephant family silhouette — feet sit on the dark footer edge */
+.skyline{ background:var(--paper); display:flex; justify-content:center; align-items:flex-end; padding:clamp(26px,4.5vw,60px) var(--pad) 0; line-height:0; }
+.skyline__herd{ width:min(1100px,92%); height:auto; display:block; filter:brightness(0) saturate(0); }
 
 /* kinetic marquee */
 .kinetic{ border-block:1px solid rgba(255,255,255,.1); padding:1.3rem 0; overflow:hidden; }
@@ -577,7 +577,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .pass__code{ font-size:.7rem; letter-spacing:.04em; font-weight:700; }
 
 /* columns */
-.mf-cols{ max-width:var(--maxw); margin:clamp(3rem,6vw,5rem) auto 0; padding:clamp(2.5rem,5vw,3.5rem) var(--pad) 0; display:grid; grid-template-columns:1.6fr 1fr 1.3fr 1.1fr; gap:2.4rem; border-top:1px solid rgba(255,255,255,.1); }
+.mf-cols{ max-width:var(--maxw); margin:0 auto; padding:clamp(2.4rem,5vw,3.4rem) var(--pad) 0; display:grid; grid-template-columns:1.6fr 1fr 1.3fr 1.1fr; gap:2.4rem; }
 .mf-word{ font-family:var(--display); font-weight:800; letter-spacing:.06em; }
 .mf-tag{ font-family:var(--display); font-style:italic; color:rgba(243,232,214,.7); margin-top:.4rem; font-size:.95rem; }
 .mf-tag em{ color:var(--khaki-soft); }
