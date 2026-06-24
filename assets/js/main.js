@@ -124,46 +124,85 @@
   }));
 
   /* =================================================================
-     HERO — curved image wall
+     HERO — rotating 3D photo cylinder that cycles in new photos
      ================================================================= */
-  const ring = $("#ring");
-  if (ring) {
-    const heroTiles = TOURS.filter(t => t.feature).slice(0, 7);
-    ring.innerHTML = heroTiles.map(t =>
-      `<div class="tile">${scene(t.scene, t.img)}<span class="tile__label">${t.name.split("·")[0].trim()}</span></div>`
-    ).join("");
+  const rotor = $("#rotor"), cyl = $("#cyl");
+  if (rotor && cyl) {
+    const pool = HERO_POOL.map(p => ({ url: IMG(p.id, 700), cap: p.cap }));
+    const N = Math.min(12, pool.length);          // panels on the cylinder
+    const step = 360 / N;
+    let radius = 560;                              // recomputed by sizeUp()
+    let nextIdx = N % pool.length;                 // next photo to feed in
 
-    const tiles = $$(".tile", ring);
-    const layout = () => {
-      const w = innerWidth;
-      const radius = w < 760 ? 360 : w < 1100 ? 520 : 640;
-      const step = w < 760 ? 22 : 17;            // degrees between tiles
-      const mid = (tiles.length - 1) / 2;
-      tiles.forEach((tile, i) => {
-        const angle = (i - mid) * step;
-        tile.style.transform = `rotateY(${angle}deg) translateZ(${radius}px)`;
-        tile.classList.toggle("is-back", Math.abs(angle) > step * 1.6);
-      });
-    };
-    layout();
-    addEventListener("resize", layout);
-
-    /* pointer parallax */
-    if (!reduce) {
-      const hero = $("#hero");
-      let tx = 0, ty = 0, cx = 0, cy = 0;
-      hero.addEventListener("pointermove", (e) => {
-        const r = hero.getBoundingClientRect();
-        tx = ((e.clientX - r.left) / r.width - 0.5) * 16;   // yaw
-        ty = ((e.clientY - r.top) / r.height - 0.5) * -6;   // pitch
-      });
-      hero.addEventListener("pointerleave", () => { tx = 0; ty = 0; });
-      (function loop() {
-        cx += (tx - cx) * 0.06; cy += (ty - cy) * 0.06;
-        ring.style.transform = `rotateX(${7 + cy}deg) rotateY(${cx}deg) translateZ(-120px)`;
-        requestAnimationFrame(loop);
-      })();
+    // build panels
+    const panels = [];
+    for (let i = 0; i < N; i++) {
+      const el = document.createElement("div");
+      el.className = "panel";
+      const img = document.createElement("img");
+      img.loading = "lazy"; img.decoding = "async"; img.alt = "";
+      img.onload = () => img.classList.add("is-loaded");
+      const cap = document.createElement("span");
+      cap.className = "panel__cap";
+      el.append(img, cap);
+      rotor.appendChild(el);
+      const item = pool[i % pool.length];
+      img.src = item.url; cap.textContent = item.cap;
+      panels.push({ el, img, cap, angle: i * step, refreshed: false });
     }
+
+    const sizeUp = () => {
+      const pw = parseFloat(getComputedStyle(cyl).getPropertyValue("--pw")) || 240;
+      // radius so panels tile the cylinder with a comfortable gap
+      radius = Math.round((pw / 2) / Math.tan((Math.PI / N)) * 1.25);
+      panels.forEach(p => { p.el.style.transform = `rotateY(${p.angle}deg) translateZ(${radius}px)`; });
+    };
+    sizeUp();
+    addEventListener("resize", sizeUp);
+
+    let rot = 0;                 // current rotation
+    let vel = reduce ? 0 : 0.05; // idle spin speed (deg/frame)
+    let dragging = false, lastX = 0, dragVel = 0;
+
+    // pointer drag to spin
+    cyl.addEventListener("pointerdown", (e) => { dragging = true; lastX = e.clientX; dragVel = 0; cyl.setPointerCapture(e.pointerId); });
+    cyl.addEventListener("pointermove", (e) => {
+      if (!dragging) return;
+      const dx = e.clientX - lastX; lastX = e.clientX;
+      dragVel = dx * 0.25; rot += dragVel;
+    });
+    const endDrag = () => { dragging = false; };
+    cyl.addEventListener("pointerup", endDrag);
+    cyl.addEventListener("pointercancel", endDrag);
+    cyl.addEventListener("pointerleave", endDrag);
+
+    const frame = () => {
+      if (dragging) {
+        // follow the drag
+      } else {
+        vel += ((reduce ? 0 : 0.05) - vel) * 0.04;  // ease back to idle spin
+        rot += vel + dragVel;
+        dragVel *= 0.92;                              // momentum decay
+      }
+      rotor.style.transform = `translateZ(${-radius}px) rotateY(${rot}deg)`;
+
+      // per-panel: face detection + feed new photos while hidden at the back
+      panels.forEach(p => {
+        let world = ((rot + p.angle) % 360 + 360) % 360;   // 0..360
+        const front = Math.abs(((world + 180) % 360) - 180) < step / 2;
+        p.el.classList.toggle("is-front", front);
+        const atBack = world > 150 && world < 210;
+        if (atBack && !p.refreshed) {
+          const item = pool[nextIdx]; nextIdx = (nextIdx + 1) % pool.length;
+          p.img.classList.remove("is-loaded");
+          p.img.src = item.url; p.cap.textContent = item.cap;
+          p.refreshed = true;
+        }
+        if (!atBack) p.refreshed = false;
+      });
+      requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
   }
 
   /* =================================================================
@@ -184,11 +223,6 @@
 
   /* nav state */
   const nav = $("#nav");
-  const hero = $("#hero");
-  const navIO = new IntersectionObserver(([e]) => {
-    nav.classList.toggle("is-hero", e.isIntersecting && e.intersectionRatio > 0.1);
-  }, { threshold: [0, 0.1, 0.6] });
-  if (hero) navIO.observe(hero);
   addEventListener("scroll", () => nav.classList.toggle("is-stuck", scrollY > 40), { passive: true });
 
   /* burger */
@@ -375,9 +409,10 @@
   /* optional GSAP polish for hero head (graceful if absent) */
   addEventListener("load", () => {
     if (window.gsap && !reduce) {
-      gsap.from(".hero__title .line", { yPercent: 110, opacity: 0, stagger: .12, duration: 1.1, ease: "power3.out", delay: 1.4 });
-      gsap.from(".hero__script", { opacity: 0, y: 20, duration: 1, delay: 1.3 });
-      gsap.from(".tile", { opacity: 0, scale: .85, stagger: .06, duration: 1, ease: "power2.out", delay: 1.6 });
+      gsap.from(".hero__kicker", { opacity: 0, y: 16, duration: .9, delay: 1.25 });
+      gsap.from(".hero__title", { opacity: 0, y: 28, duration: 1.1, ease: "power3.out", delay: 1.35 });
+      gsap.from(".hero__sub", { opacity: 0, y: 16, duration: .9, delay: 1.55 });
+      gsap.from(".panel", { opacity: 0, scale: .8, stagger: .05, duration: 1, ease: "power2.out", delay: 1.6 });
     }
   });
 })();

@@ -6,9 +6,10 @@
   <title>Infinite African Safaris — Where the dunes meet the ocean</title>
   <meta name="description" content="Small-group 4x4 safaris, marine cruises and kayaking adventures from Walvis Bay, Namibia. Guided by locals. Sandwich Harbour, Pelican Point, Sossusvlei and more." />
 
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 90 44'%3E%3Cpath d='M22,22 C22,8 4,8 4,22 C4,36 22,36 22,22 C22,8 41,8 41,22 C41,36 22,36 22,22 Z M45,22 C45,8 64,8 64,22 C64,36 45,36 45,22 C45,8 27,8 27,22' fill='none' stroke='%23141312' stroke-width='3'/%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..700&family=Outfit:wght@300;400;500;600;700&family=Tangerine:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Outfit:wght@300;400;500;600;700&family=Tangerine:wght@700&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
@@ -57,43 +58,28 @@
   </header>
 
   <main id="top">
-    <!-- ============ HERO : CURVED IMAGE WALL ============ -->
+    <!-- ============ HERO : ROTATING 3D PHOTO WALL ============ -->
     <section class="hero" id="hero">
-      <div class="hero__atmosphere" aria-hidden="true">
-        <div class="hero__sun"></div>
-        <div class="hero__grain"></div>
+      <div class="hero__top">
+        <p class="hero__kicker">Tourism &amp; Adventure — Walvis Bay, Namibia</p>
+        <h1 class="hero__title">Infinite<br>African<br>Safaris</h1>
+        <p class="hero__sub">Explore Namibia with the experts. Small-group desert and ocean<br>adventures, guided by locals who know this coast by heart.</p>
       </div>
 
-      <div class="hero__head">
-        <p class="hero__script" data-reveal>Explore Namibia <span>with the experts</span></p>
-        <h1 class="hero__title" data-reveal>
-          <span class="line">Where the dunes</span>
-          <span class="line line--accent">meet the ocean</span>
-        </h1>
-        <p class="hero__sub" data-reveal>
-          Small-group 4×4 safaris, marine cruises and kayaking adventures from Walvis Bay —
-          led by Namibian guides who know this coast by heart.
-        </p>
+      <!-- The signature: a concave wall of photos that rotates and refreshes -->
+      <div class="cyl" id="cyl" aria-label="Rotating gallery of Namibian experiences" role="img">
+        <div class="cyl__rotor" id="rotor"><!-- panels injected --></div>
+        <div class="cyl__fade cyl__fade--l" aria-hidden="true"></div>
+        <div class="cyl__fade cyl__fade--r" aria-hidden="true"></div>
       </div>
 
-      <!-- The signature: a concave wall of experiences that curves with your pointer -->
-      <div class="stage" id="stage">
-        <div class="stage__ring" id="ring">
-          <!-- tiles injected by JS for parallax control -->
+      <div class="hero__bottom">
+        <p class="hero__tag">Adventure. Nature. Ocean. Memories. <span>All in one.</span></p>
+        <div class="hero__links">
+          <a href="#builder" data-magnet>Plan a safari</a>
+          <a href="#experiences" data-magnet>See tours</a>
         </div>
       </div>
-
-      <div class="hero__foot" data-reveal>
-        <p class="hero__lede">Six years guiding. Endless horizons. Every tour built around you — from budget to bespoke.</p>
-        <div class="hero__actions">
-          <a href="#builder" class="btn btn--solid" data-magnet>Build your tour</a>
-          <a href="#experiences" class="btn btn--ghost" data-magnet>See experiences</a>
-        </div>
-      </div>
-
-      <a href="#marquee" class="hero__scroll" aria-label="Scroll down">
-        <span></span>
-      </a>
     </section>
 
     <!-- ============ MARQUEE ============ -->
