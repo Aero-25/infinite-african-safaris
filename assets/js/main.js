@@ -160,8 +160,9 @@
     sizeUp();
     addEventListener("resize", sizeUp);
 
+    const IDLE = 0.18;           // automatic spin speed (deg/frame ≈ 11°/s)
     let rot = 0;                 // current rotation
-    let vel = reduce ? 0 : 0.05; // idle spin speed (deg/frame)
+    let vel = IDLE;              // current spin speed
     let dragging = false, lastX = 0, dragVel = 0;
 
     // pointer drag to spin
@@ -180,7 +181,7 @@
       if (dragging) {
         // follow the drag
       } else {
-        vel += ((reduce ? 0 : 0.05) - vel) * 0.04;  // ease back to idle spin
+        vel += (IDLE - vel) * 0.04;  // always ease back to the automatic spin
         rot += vel + dragVel;
         dragVel *= 0.92;                              // momentum decay
       }
