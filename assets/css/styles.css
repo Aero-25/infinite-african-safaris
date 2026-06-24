@@ -531,11 +531,9 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
    ===================================================================== */
 .megafoot{ background:var(--char); color:var(--sand); padding-bottom:1.4rem; overflow:hidden; }
 
-/* elephant silhouette skyline */
-.skyline{ background:var(--paper-2); line-height:0; color:var(--char); fill:currentColor; }
-.skyline svg{ width:100%; height:clamp(96px,13vw,180px); display:block; }
-.skyline .sky-sun{ fill:var(--khaki); }
-.skyline .bird{ fill:none; stroke:var(--char); stroke-width:3; stroke-linecap:round; }
+/* elephant family silhouette */
+.skyline{ background:var(--paper); display:flex; justify-content:center; align-items:flex-end; padding:clamp(28px,5vw,66px) var(--pad) 0; line-height:0; }
+.skyline__herd{ width:min(1060px,94%); height:auto; display:block; filter:brightness(0.08); }
 
 /* kinetic marquee */
 .kinetic{ border-block:1px solid rgba(255,255,255,.1); padding:1.3rem 0; overflow:hidden; }
