@@ -443,8 +443,14 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .film__frame{ grid-area:1/1; position:relative; width:min(1100px,86vw); aspect-ratio:16/9; border-radius:18px; overflow:hidden;
   box-shadow:0 60px 110px -45px rgba(20,19,18,.7); will-change:transform; z-index:1; background:#0b0a09; }
 .film__vid{ width:100%; height:100%; object-fit:cover; display:block; background:#000; }
-.film__yt, .film__frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
-.film__frame iframe{ pointer-events:none; }
+.film__ytwrap{ position:absolute; inset:0; overflow:hidden; }
+.film__yt{ position:absolute; inset:0; width:100%; height:100%; }
+/* let the 16:9 video COVER the frame (crop, never letterbox) */
+.film__ytwrap iframe{
+  position:absolute !important; top:50% !important; left:50% !important; transform:translate(-50%,-50%) !important;
+  width:auto !important; height:auto !important; min-width:100% !important; min-height:100% !important;
+  aspect-ratio:16/9 !important; border:0; pointer-events:none;
+}
 .film__veil{ position:absolute; inset:0; pointer-events:none; opacity:var(--veil,.5); transition:opacity .15s linear;
   background:linear-gradient(to top, rgba(11,10,9,.66), rgba(11,10,9,.12) 48%, rgba(11,10,9,.4)); }
 .film__intro{ grid-area:1/1; position:relative; z-index:2; text-align:center; color:#fff; pointer-events:none; padding:0 var(--pad); will-change:opacity, transform; }
@@ -899,7 +905,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
   .curate__lead{ font-size:.94rem; margin-bottom:1.25rem; }
   .curate__pager{ right:10px; }
   .film{ height:240vh; }
-  .film__frame{ width:100vw; }
+  .film__frame{ width:auto; height:76svh; aspect-ratio:9/16; }
   .mf-cols{ grid-template-columns:1fr; gap:1.8rem; }
   .pass{ grid-template-columns:1fr; }
   .pass__main{ border-radius:16px 16px 0 0; }
