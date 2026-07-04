@@ -102,7 +102,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 }
 .preloader.is-done{ opacity:0; visibility:hidden; }
 .preloader__inner{ display:grid; place-items:center; gap:1.7rem; padding:24px; }
-.preloader__logo{ width:min(460px,82vw); height:auto; animation:logoIn 1.2s var(--ease) both; }
+.preloader__logo{ width:min(300px,62vw); height:auto; animation:logoIn 1.2s var(--ease) both; }
 @keyframes logoIn{ 0%{opacity:0; transform:scale(.93)} 100%{opacity:1; transform:none} }
 .preloader__fallback{ display:none; place-items:center; gap:1.1rem; }
 .preloader.logo-missing .preloader__logo{ display:none; }
@@ -144,11 +144,12 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 }
 .nav.is-stuck .nav__brand{ gap:0; }
 .nav.is-stuck .nav__word{ opacity:0; max-width:0; margin:0; }
-.nav.is-stuck .nav__emblem{ width:clamp(90px,9vw,122px); margin-block:0; }
+.nav.is-stuck .nav__emblem{ height:clamp(42px,4.6vw,52px); margin-block:0; }
 .nav__brand{ display:flex; align-items:center; gap:.7rem; z-index:2; }
-.nav__emblem{ width:clamp(118px,12vw,162px); margin-block:clamp(-20px,-1.5vw,-12px); color:var(--ink); transition:color .4s, width .5s var(--ease), margin .5s var(--ease); }
-.nav__emblem svg{ width:100%; height:auto; display:block; }
-.nav__emblemimg{ width:100%; height:auto; display:block; }
+/* logo is larger than the bar and bleeds past it (negative margin), so the
+   header stays slim while the mark reads big */
+.nav__emblem{ display:flex; align-items:center; height:clamp(58px,6.2vw,74px); width:auto; margin-block:clamp(-16px,-1.6vw,-11px); color:var(--ink); transition:color .4s, height .5s var(--ease), margin .5s var(--ease); }
+.nav__emblem svg, .nav__emblemimg{ height:100%; width:auto; max-width:220px; display:block; object-fit:contain; }
 .nav__emblem .nav__emblemsvg{ display:none; }
 .nav__brand.mark-missing .nav__emblemimg{ display:none; }
 .nav__brand.mark-missing .nav__emblemsvg{ display:block; }
@@ -938,7 +939,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 }
 @media (max-width:760px){
   .nav__burger{ display:flex; }
-  .nav__emblem{ width:120px; margin-block:-16px; }
+  .nav__emblem{ height:56px; }
 
   /* full-screen mobile menu */
   .nav__links{
@@ -999,7 +1000,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
   .cyl{ --pw:298px; --ph:470px; min-height:clamp(470px,70vh,640px); perspective:920px; perspective-origin:50% 50%; }
   .hero--bare{ padding-block:76px clamp(14px,3vh,28px); }
   .hero__links{ gap:1.4rem; }
-  .nav__emblem{ width:92px; margin-block:-14px; }
+  .nav__emblem{ height:50px; }
 }
 @media (max-width:480px){
   .why{ grid-template-columns:1fr; }
@@ -1008,7 +1009,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
   .bpick__list{ grid-template-columns:1fr; }
   .cyl{ --pw:272px; --ph:430px; }
   .nav__word{ display:none; }
-  .nav__emblem{ width:138px; margin-block:-19px; }
+  .nav__emblem{ height:52px; }
 }
 
 /* burger active */
