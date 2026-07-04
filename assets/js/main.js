@@ -260,9 +260,12 @@
     renderBuilder();
     renderBooking();
   }
-  $$(".cur__btn").forEach(b => b.addEventListener("click", () => {
+  // delegated so injected switchers (e.g. inside the booking popup) work too
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest(".cur__btn");
+    if (!b) return;
     cur = b.dataset.cur; localStorage.setItem("ias_cur", cur); applyCurrency();
-  }));
+  });
 
   /* =================================================================
      HERO — rotating 3D photo cylinder that cycles in new photos
@@ -349,31 +352,75 @@
   }
 
   /* =================================================================
-     CURATE → BRAAI : scroll-driven two-scene crossfade
+     CURATE → BRAAI : cinematic dune-ridge "ember wipe"
      ================================================================= */
   const curate = $("#curate");
   if (curate) {
+    const sticky = $(".curate__sticky", curate);
     const scenes = $$(".curate__scene", curate);
     const bg2 = $(".curate__bg--2", curate);
     const bg1 = $(".curate__bg--1", curate);
     const dots = $$(".curate__pager span", curate);
     const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
     const smooth = (e0, e1, x) => { const t = clamp((x - e0) / (e1 - e0), 0, 1); return t * t * (3 - 2 * t); };
-    let ticking = false;
 
+    // inject the cinematic layers (seam, warm flash, rising embers)
+    const seam  = Object.assign(document.createElement("div"), { className: "curate__seam" });
+    const flash = Object.assign(document.createElement("div"), { className: "curate__flash" });
+    seam.setAttribute("aria-hidden", "true"); flash.setAttribute("aria-hidden", "true");
+    sticky.append(flash, seam);
+    let embers = null;
+    if (!reduce) {
+      embers = Object.assign(document.createElement("div"), { className: "curate__embers" });
+      embers.setAttribute("aria-hidden", "true");
+      let html = "";
+      for (let i = 0; i < 18; i++) {
+        const dur = 3.4 + Math.random() * 3.6, size = 3 + Math.random() * 4.5;
+        html += `<b style="left:${(Math.random() * 100).toFixed(1)}%;width:${size.toFixed(1)}px;height:${size.toFixed(1)}px;` +
+                `--x:${(Math.random() * 90 - 45).toFixed(0)}px;animation-duration:${dur.toFixed(2)}s;animation-delay:${(-Math.random() * dur).toFixed(2)}s"></b>`;
+      }
+      embers.innerHTML = html;
+      sticky.append(embers);
+    }
+    // drive scene motion by hand (no CSS transition fighting per-frame updates)
+    scenes.forEach(s => { s.style.transition = "none"; });
+    bg2.style.opacity = "1";
+
+    let ticking = false;
     const update = () => {
       ticking = false;
       const rect = curate.getBoundingClientRect();
       const runway = curate.offsetHeight - innerHeight;
       if (runway <= 0) return;
-      const p = clamp(-rect.top / runway, 0, 1);     // 0 → 1 through the section
-      const t = smooth(0.34, 0.62, p);               // bg crossfade window
-      bg2.style.opacity = t;
-      // gentle opposing drift / zoom for depth
-      bg1.style.transform = `translateY(${p * -22}px) scale(${1.05 + p * 0.05})`;
-      bg2.style.transform = `translateY(${(p - 1) * -22}px) scale(${1.1 - t * 0.05})`;
+      const p = clamp(-rect.top / runway, 0, 1);       // 0 → 1 through the section
+
+      // the wipe: braai scene revealed behind a slanted dune-ridge edge
+      const e = smooth(0.28, 0.74, p);
+      const lead = 0.16, top = e * (1 + lead), bot = top - lead;
+      bg2.style.clipPath = `polygon(-2% -2%, ${(top * 100).toFixed(2)}% -2%, ${(bot * 100).toFixed(2)}% 102%, -2% 102%)`;
+
+      // opposing drift + zoom for depth
+      bg1.style.transform = `translateY(${(p * -26).toFixed(1)}px) scale(${(1.06 + p * 0.06).toFixed(3)})`;
+      bg2.style.transform = `translateY(${((p - 1) * -26).toFixed(1)}px) scale(${(1.12 - e * 0.06).toFixed(3)})`;
+
+      // the ember seam rides the wipe edge; flash + embers bloom at the crossover
+      const burn = Math.sin(clamp(e, 0, 1) * Math.PI);   // 0 at ends → 1 mid-wipe
+      seam.style.left = `${(((top + bot) / 2) * 100).toFixed(2)}%`;
+      seam.style.opacity = (burn * 0.95).toFixed(3);
+      flash.style.opacity = (burn * 0.8).toFixed(3);
+      if (embers) embers.style.opacity = burn.toFixed(3);
+
+      // headlines pass each other with blur + scale, not a flat crossfade
+      const o1 = 1 - smooth(0.30, 0.48, p), o2 = smooth(0.54, 0.72, p);
+      scenes[0].style.opacity = o1.toFixed(3);
+      scenes[0].style.transform = `translateY(${((1 - o1) * -44).toFixed(1)}px) scale(${(1 - (1 - o1) * 0.05).toFixed(3)})`;
+      scenes[0].style.filter = `blur(${((1 - o1) * 5).toFixed(1)}px)`;
+      scenes[1].style.opacity = o2.toFixed(3);
+      scenes[1].style.transform = `translateY(${((1 - o2) * 46).toFixed(1)}px) scale(${(1 - (1 - o2) * 0.05).toFixed(3)})`;
+      scenes[1].style.filter = `blur(${((1 - o2) * 5).toFixed(1)}px)`;
+
       const two = p >= 0.5;
-      scenes[0].classList.toggle("is-on", !two);
+      scenes[0].classList.toggle("is-on", !two);       // pointer-events only
       scenes[1].classList.toggle("is-on", two);
       dots[0].classList.toggle("is-on", !two);
       dots[1].classList.toggle("is-on", two);
@@ -441,12 +488,20 @@
         },
       });
     };
-    if (VID) {
+    // Lazy: don't fetch YouTube's heavy player JS until the showreel nears view
+    let ytRequested = false;
+    const loadYT = () => {
+      if (ytRequested || !VID) return;
+      ytRequested = true;
       if (window.YT && window.YT.Player) window.onYouTubeIframeAPIReady();
       else if (!document.querySelector('script[src*="iframe_api"]')) {
         const s = document.createElement("script"); s.src = "https://www.youtube.com/iframe_api"; document.head.appendChild(s);
       }
-    }
+    };
+    // preload ~one screen early so it's ready by the time it's on screen
+    new IntersectionObserver((es) => es.forEach(e => {
+      if (e.isIntersecting) loadYT();
+    }), { rootMargin: "700px 0px" }).observe(film);
     new IntersectionObserver((es) => es.forEach(e => {
       inView = e.isIntersecting;
       if (ytReady) inView ? ytPlayer.playVideo() : ytPlayer.pauseVideo();
@@ -467,7 +522,7 @@
   const fab = $(".fab");
   if (fab) {
     fab.classList.add("fab--inf");
-    const d = "M50,25 C50,8 25,8 25,25 C25,42 50,42 50,25 C50,8 75,8 75,25 C75,42 50,42 50,25";
+    const d = "M50,25 C44,12 20,12 12,25 C20,38 44,38 50,25 C56,12 80,12 88,25 C80,38 56,38 50,25 Z";
     fab.innerHTML = `<svg class="fab__inf" viewBox="0 0 100 50" aria-hidden="true">
       <path class="fab__base" d="${d}"/>
       <path class="fab__trace" pathLength="100" d="${d}"/>
@@ -740,10 +795,14 @@
     wrap.innerHTML = `
       <div class="bookmodal__scrim" data-close></div>
       <aside class="bookmodal__panel" role="dialog" aria-modal="true" aria-label="Book a safari">
-        <button class="bookmodal__x" data-close aria-label="Close">✕</button>
-        <p class="eyebrow">— Book a safari</p>
-        <h3 class="bookmodal__title">Reserve your day</h3>
-        <p class="bookmodal__sub">Pick a tour and we'll confirm by WhatsApp or email. No payment now.</p>
+        <button class="bookmodal__x" data-close aria-label="Close">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
+        <div class="bookmodal__head">
+          <p class="eyebrow">— Book a safari</p>
+          <h3 class="bookmodal__title">Reserve your day</h3>
+          <p class="bookmodal__sub">Pick a tour and we'll confirm by WhatsApp or email. No payment now.</p>
+        </div>
         <form class="bkf" id="bookForm" novalidate>
           <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden"><label>Company<input name="_hp" tabindex="-1" autocomplete="off"></label></div>
           <label class="bk">Experience<select id="bookTour" name="tour" required></select></label>
@@ -764,7 +823,20 @@
             <label class="bk">Nationality<input name="country"></label>
           </div>
           <label class="bk">Requests<textarea name="notes" rows="2" placeholder="Anything special?"></textarea></label>
-          <div class="book__total"><div><span>Estimated total</span><strong id="bookTotal">—</strong></div><p id="bookHint">Select a tour to see your estimate.</p></div>
+          <div class="book__total">
+            <div class="book__total-l">
+              <span>Estimated total</span>
+              <strong id="bookTotal">—</strong>
+            </div>
+            <div class="book__total-r">
+              <div class="cur cur--book" role="group" aria-label="Currency">
+                <button type="button" data-cur="NAD" class="cur__btn">N$</button>
+                <button type="button" data-cur="EUR" class="cur__btn">€</button>
+                <button type="button" data-cur="USD" class="cur__btn">$</button>
+              </div>
+              <p id="bookHint">Select a tour to see your estimate.</p>
+            </div>
+          </div>
           <button class="btn btn--solid btn--block" type="submit">Request booking</button>
           <p class="bk__note" id="bookNote">We reply within a few hours · no payment now.</p>
         </form>

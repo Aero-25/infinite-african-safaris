@@ -33,6 +33,7 @@
   <link rel="preconnect" href="https://kbmgpqwmgthswjkfmqfe.supabase.co" crossorigin />
   <link rel="dns-prefetch" href="https://unpkg.com" />
   <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
+  <link rel="preload" as="image" fetchpriority="high" href="https://kbmgpqwmgthswjkfmqfe.supabase.co/storage/v1/render/image/public/Infinite/Big%20logo.png?width=560&quality=88" />
 
   <link rel="stylesheet" href="assets/css/styles.css" />
 
@@ -92,7 +93,7 @@
   <!-- ============ PRELOADER ============ -->
   <div class="preloader" id="preloader" aria-hidden="true">
     <div class="preloader__inner">
-      <img src="https://kbmgpqwmgthswjkfmqfe.supabase.co/storage/v1/object/public/Infinite/Big%20logo.png" alt="Infinite African Safaris" class="preloader__logo"
+      <img src="https://kbmgpqwmgthswjkfmqfe.supabase.co/storage/v1/render/image/public/Infinite/Big%20logo.png?width=560&quality=88" alt="Infinite African Safaris" class="preloader__logo" fetchpriority="high" decoding="async"
            onerror="document.getElementById('preloader').classList.add('logo-missing')" />
       <div class="preloader__fallback">
         <svg viewBox="0 0 100 50" class="infinity" aria-hidden="true">
@@ -108,7 +109,7 @@
   <header class="nav" id="nav">
     <a href="#top" class="nav__brand" aria-label="Infinite African Safaris — home">
       <span class="nav__emblem" aria-hidden="true">
-        <img src="https://kbmgpqwmgthswjkfmqfe.supabase.co/storage/v1/object/public/Infinite/small%20logo.png" alt="" class="nav__emblemimg"
+        <img src="https://kbmgpqwmgthswjkfmqfe.supabase.co/storage/v1/render/image/public/Infinite/small%20logo.png?width=360&quality=88" alt="" class="nav__emblemimg"
              onerror="this.closest('.nav__brand').classList.add('mark-missing')" />
         <svg class="nav__emblemsvg" viewBox="0 0 100 50"><path d="M50,25 C50,8 25,8 25,25 C25,42 50,42 50,25 C50,8 75,8 75,25 C75,42 50,42 50,25" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>
       </span>
@@ -321,7 +322,6 @@
 
   <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
   <script src="assets/js/config.js" defer></script>
   <script src="assets/js/integrations.js" defer></script>
   <script src="assets/js/data.js" defer></script>
