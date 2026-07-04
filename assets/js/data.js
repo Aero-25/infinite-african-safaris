@@ -18,19 +18,19 @@ const CURRENCY = {
 
 /* --- The rotating hero photo wall. Add/replace freely. ----------------
    Use full URLs in `url`, or an Unsplash id in `id`.                    */
-/* Supabase image transform endpoint: resizes + auto-serves WebP, so the
-   original ~2 MB hero PNGs ship to browsers as ~50 KB. */
-const SB_RENDER = "https://snkvszndxwpozrefnpnv.supabase.co/storage/v1/render/image/public/";
-const heroImg = (file, w = 760, q = 70) => `${SB_RENDER}Images/Hero/${file}?width=${w}&quality=${q}`;
+/* Pre-optimized WebP hosted on Supabase Storage (Infinite African Safaris project).
+   Served straight from /object/public (no transform dependency), already ~30-60 KB each. */
+const MEDIA = "https://uksddraybxgpgnhocqyc.supabase.co/storage/v1/object/public/media/";
+const heroImg = (name) => `${MEDIA}hero/${name}.webp`;
 const HERO_POOL = [
-  { url: heroImg("dune.png"),      cap: "The dunes" },
-  { url: heroImg("Sunset.png"),    cap: "Desert sunsets" },
-  { url: heroImg("Flamingos.png"), cap: "Flamingos" },
-  { url: heroImg("Chameleon.png"), cap: "Chameleons" },
-  { url: heroImg("Trail.png"),     cap: "On the trail" },
-  { url: heroImg("Gecko.png"),     cap: "Desert geckos" },
-  { url: heroImg("Jakkals.png"),   cap: "Jackals" },
-  { url: heroImg("Birds.png"),     cap: "Birdlife" },
+  { url: heroImg("dune"),      cap: "The dunes" },
+  { url: heroImg("sunset"),    cap: "Desert sunsets" },
+  { url: heroImg("flamingos"), cap: "Flamingos" },
+  { url: heroImg("chameleon"), cap: "Chameleons" },
+  { url: heroImg("trail"),     cap: "On the trail" },
+  { url: heroImg("gecko"),     cap: "Desert geckos" },
+  { url: heroImg("jakkals"),   cap: "Jackals" },
+  { url: heroImg("birds"),     cap: "Birdlife" },
 ];
 
 /* --- Tours / experiences (adult/child in NAD; null = "On request") ----

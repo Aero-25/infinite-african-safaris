@@ -760,8 +760,8 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 /* crossfading, slowly drifting backgrounds */
 .curate__bg{ position:absolute; inset:-4% 0; z-index:-2; background-size:cover; background-position:center;
   will-change:opacity, transform; transition:opacity .5s linear; }
-.curate__bg--1{ background-image:url("https://snkvszndxwpozrefnpnv.supabase.co/storage/v1/render/image/public/Images/Hilux%20dunes.png?width=1600&quality=70"); opacity:1; }
-.curate__bg--2{ background-image:url("https://snkvszndxwpozrefnpnv.supabase.co/storage/v1/render/image/public/Images/Braai.png?width=1600&quality=70");
+.curate__bg--1{ background-image:url("https://uksddraybxgpgnhocqyc.supabase.co/storage/v1/object/public/media/hilux-dunes.webp"); opacity:1; }
+.curate__bg--2{ background-image:url("https://uksddraybxgpgnhocqyc.supabase.co/storage/v1/object/public/media/braai.webp");
   opacity:1; clip-path:polygon(-2% -2%, -2% -2%, -2% 102%, -2% 102%); will-change:clip-path, transform; }
 .curate__overlay{ position:absolute; inset:0; z-index:-1; background:linear-gradient(rgba(20,19,18,.55), rgba(20,19,18,.8)); }
 
