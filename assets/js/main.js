@@ -505,6 +505,75 @@
   stagger(".safari-grid .card", 60);
   stagger(".revwall .rw", 60);
 
+  /* =================================================================
+     SCROLL FX — progress bar · parallax depth · cinematic headlines
+     ================================================================= */
+  // 1) thin progress bar that fills as you scroll the page
+  (() => {
+    const bar = document.createElement("div");
+    bar.className = "scrollprog"; bar.setAttribute("aria-hidden", "true");
+    bar.innerHTML = "<span></span>";
+    document.body.appendChild(bar);
+    const fill = bar.firstElementChild;
+    let t = false;
+    const draw = () => {
+      t = false;
+      const max = (document.documentElement.scrollHeight - innerHeight) || 1;
+      fill.style.transform = `scaleX(${Math.min(1, Math.max(0, scrollY / max))})`;
+    };
+    const on = () => { if (!t) { t = true; requestAnimationFrame(draw); } };
+    addEventListener("scroll", on, { passive: true });
+    addEventListener("resize", on);
+    draw();
+  })();
+
+  // 2) parallax depth — any [data-parallax] element drifts against the scroll.
+  //    data-parallax = px of travel, data-scale = baseline zoom so edges never show.
+  if (!reduce) {
+    const items = $$("[data-parallax]").map(el => ({
+      el, speed: parseFloat(el.dataset.parallax) || 24, scale: parseFloat(el.dataset.scale) || 1.2,
+    }));
+    if (items.length) {
+      items.forEach(i => i.el.classList.add("is-parallax"));
+      let t = false;
+      const draw = () => {
+        t = false;
+        const vh = innerHeight;
+        items.forEach(i => {
+          const r = i.el.getBoundingClientRect();
+          if (r.bottom < -120 || r.top > vh + 120) return;
+          const prog = (r.top + r.height / 2 - vh / 2) / (vh / 2 + r.height / 2); // ~ -1..1
+          i.el.style.transform = `translate3d(0, ${(-prog * i.speed).toFixed(1)}px, 0) scale(${i.scale})`;
+        });
+      };
+      const on = () => { if (!t) { t = true; requestAnimationFrame(draw); } };
+      addEventListener("scroll", on, { passive: true });
+      addEventListener("resize", on);
+      draw();
+    }
+  }
+
+  // 3) cinematic headline reveals — big titles rise line-by-line out of a mask
+  if (!reduce) {
+    const heads = $$(".h2, .pagehead h1");
+    heads.forEach(h => {
+      h.innerHTML = h.innerHTML.split(/<br\s*\/?>/i)
+        .map(p => `<span class="lh-line"><span class="lh-in">${p.trim()}</span></span>`).join("");
+      h.classList.add("lh");
+    });
+    if (heads.length) {
+      const hIO = new IntersectionObserver((es) => {
+        es.forEach(e => {
+          if (!e.isIntersecting) return;
+          $$(".lh-line", e.target).forEach((ln, i) => ln.style.setProperty("--d", (i * 0.09) + "s"));
+          e.target.classList.add("is-in");
+          hIO.unobserve(e.target);
+        });
+      }, { threshold: 0.25, rootMargin: "0px 0px -6% 0px" });
+      heads.forEach(h => hIO.observe(h));
+    }
+  }
+
   /* 3D tilt on cards */
   if (!reduce && matchMedia("(pointer:fine)").matches) {
     const tilt = (el, max = 7) => {

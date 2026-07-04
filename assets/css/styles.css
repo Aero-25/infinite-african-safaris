@@ -124,11 +124,27 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
   position:fixed; top:0; left:0; right:0; z-index:100;
   display:flex; align-items:center; justify-content:space-between;
   padding:.85rem var(--pad);
-  transition:background .4s var(--ease), box-shadow .4s, padding .4s;
+  border-radius:0; margin-inline:0;
+  transition:top .5s var(--ease), margin .5s var(--ease), padding .5s var(--ease),
+             border-radius .5s var(--ease), background .4s var(--ease), box-shadow .4s var(--ease);
 }
-.nav.is-stuck{ background:rgba(250,245,236,.88); backdrop-filter:blur(14px); box-shadow:0 1px 0 var(--line); padding-top:.6rem; padding-bottom:.6rem; }
+/* on scroll: the whole header detaches into a floating pill — brand collapses
+   to just the infinity emblem, but the menu items stay in the bar */
+.nav.is-stuck{
+  top:clamp(10px,1.5vw,16px);
+  margin-inline:clamp(12px,3.2vw,26px);
+  padding:.5rem 1.4rem;
+  border-radius:100px;
+  background:rgba(250,245,236,.82);
+  backdrop-filter:blur(16px) saturate(1.3);
+  -webkit-backdrop-filter:blur(16px) saturate(1.3);
+  box-shadow:0 22px 48px -22px rgba(20,19,18,.45), inset 0 0 0 1px rgba(255,255,255,.55);
+}
+.nav.is-stuck .nav__brand{ gap:0; }
+.nav.is-stuck .nav__word{ opacity:0; max-width:0; margin:0; }
+.nav.is-stuck .nav__emblem{ width:clamp(52px,5.4vw,74px); margin-block:0; }
 .nav__brand{ display:flex; align-items:center; gap:.7rem; z-index:2; }
-.nav__emblem{ width:clamp(118px,12vw,162px); margin-block:clamp(-20px,-1.5vw,-12px); color:var(--ink); transition:color .4s; }
+.nav__emblem{ width:clamp(118px,12vw,162px); margin-block:clamp(-20px,-1.5vw,-12px); color:var(--ink); transition:color .4s, width .5s var(--ease), margin .5s var(--ease); }
 .nav__emblem svg{ width:100%; height:auto; display:block; }
 .nav__emblemimg{ width:100%; height:auto; display:block; }
 .nav__emblem .nav__emblemsvg{ display:none; }
@@ -136,7 +152,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .nav__brand.mark-missing .nav__emblemsvg{ display:block; }
 .nav.is-hero .nav__emblem{ color:var(--paper); }
 .nav.is-hero .nav__word{ color:var(--paper); }
-.nav__word{ display:flex; flex-direction:column; line-height:1; color:var(--ink); transition:color .4s; }
+.nav__word{ display:flex; flex-direction:column; line-height:1; color:var(--ink); overflow:hidden; white-space:nowrap; max-width:240px; transition:color .4s, opacity .35s var(--ease), max-width .5s var(--ease); }
 .nav__word strong{ font-family:var(--display); font-weight:600; letter-spacing:.18em; font-size:1.02rem; }
 .nav__word em{ font-style:normal; font-size:.62rem; letter-spacing:.34em; text-transform:uppercase; opacity:.8; margin-top:2px; }
 
@@ -683,19 +699,13 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .fab:hover{ transform:scale(1.08) rotate(-4deg); }
 .fab svg{ width:32px; height:32px; fill:#fff; }
 
-/* infinity FAB — a glowing pulse tracing the mark */
-.fab--inf{ background:radial-gradient(circle at 32% 28%, #232120, #0c0b0a); border:1px solid rgba(202,189,156,.4);
-  box-shadow:0 14px 34px -10px rgba(0,0,0,.65); animation:fabpulse 3s var(--ease) infinite; }
+/* infinity FAB — just the mark with an electric pulse tracing it, no background */
+.fab--inf{ background:none; border:none; box-shadow:none; animation:none; width:76px; height:auto; }
 .fab--inf:hover{ transform:scale(1.1); }
-@keyframes fabpulse{
-  0%{ box-shadow:0 14px 34px -10px rgba(0,0,0,.65), 0 0 0 0 rgba(179,160,121,.5); }
-  70%{ box-shadow:0 14px 34px -10px rgba(0,0,0,.65), 0 0 0 16px rgba(179,160,121,0); }
-  100%{ box-shadow:0 14px 34px -10px rgba(0,0,0,.65), 0 0 0 0 rgba(179,160,121,0); }
-}
-.fab svg.fab__inf{ width:64%; height:auto; fill:none; overflow:visible; }
-.fab__base{ fill:none; stroke:rgba(202,189,156,.28); stroke-width:5; stroke-linecap:round; }
+.fab svg.fab__inf{ width:100%; height:auto; fill:none; overflow:visible; }
+.fab__base{ fill:none; stroke:rgba(138,122,85,.4); stroke-width:5; stroke-linecap:round; }
 .fab__trace{ fill:none; stroke:var(--khaki-soft); stroke-width:5; stroke-linecap:round; stroke-dasharray:20 80;
-  filter:drop-shadow(0 0 4px var(--khaki)) drop-shadow(0 0 9px rgba(179,160,121,.7)); animation:fabtrace 2.2s linear infinite; }
+  filter:drop-shadow(0 0 4px var(--khaki)) drop-shadow(0 0 11px rgba(179,160,121,.9)); animation:fabtrace 1.8s linear infinite; }
 @keyframes fabtrace{ to{ stroke-dashoffset:-100; } }
 
 .lightbox{ position:fixed; inset:0; z-index:150; background:rgba(8,16,20,.94); display:none; place-items:center; padding:4vw; }
@@ -714,6 +724,21 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
    ===================================================================== */
 [data-reveal]{ opacity:0; transform:translateY(28px); transition:opacity .9s var(--ease), transform .9s var(--ease); }
 [data-reveal].is-in{ opacity:1; transform:none; }
+
+/* ---------- scroll fx: progress bar ---------- */
+.scrollprog{ position:fixed; top:0; left:0; right:0; height:3px; z-index:150; pointer-events:none; }
+.scrollprog span{ display:block; height:100%; transform:scaleX(0); transform-origin:0 50%; will-change:transform;
+  background:linear-gradient(90deg, var(--khaki-deep), var(--khaki-soft));
+  box-shadow:0 0 10px rgba(179,160,121,.7); }
+
+/* ---------- scroll fx: parallax depth ---------- */
+[data-parallax]{ will-change:transform; }
+.is-parallax{ transition:none !important; }
+
+/* ---------- scroll fx: cinematic headline reveal (line-by-line mask rise) ---------- */
+.lh .lh-line{ display:block; overflow:hidden; padding-bottom:.08em; margin-bottom:-.08em; }
+.lh .lh-in{ display:block; transform:translateY(118%); transition:transform 1s var(--ease); transition-delay:var(--d,0s); }
+.lh.is-in .lh-in{ transform:translateY(0); }
 
 /* =====================================================================
    CURATE YOUR OWN TOUR — pinned background
