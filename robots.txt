@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://infiniteafricansafaris.com/sitemap.xml

@@ -676,6 +676,7 @@
         <h3 class="bookmodal__title">Reserve your day</h3>
         <p class="bookmodal__sub">Pick a tour and we'll confirm by WhatsApp or email. No payment now.</p>
         <form class="bkf" id="bookForm" novalidate>
+          <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden"><label>Company<input name="_hp" tabindex="-1" autocomplete="off"></label></div>
           <label class="bk">Experience<select id="bookTour" name="tour" required></select></label>
           <div class="bk__row--2">
             <label class="bk">Date<input type="date" name="date" required></label>
@@ -758,6 +759,12 @@
     if (!t || !d.name || !d.email || !d.date) { $("#bookNote").textContent = "Please choose a tour, date, your name and email."; return; }
     const a = +$("#bookAdults").value, k = +$("#bookKids").value;
     const total = t.adult == null ? null : t.adult * a + t.child * k;
+    // Save the booking request to Supabase (no-op until configured)
+    window.iasSaveLead?.({
+      source: "booking", name: d.name, email: d.email, phone: d.phone, country: d.country,
+      preferred_date: d.date, tour: t.name, message: d.notes, group_size: a + k,
+      _hp: d._hp, raw: { ...d, adults: a, kids: k, tour_id: t.id, estimated_total: total },
+    });
     let m = `BOOKING REQUEST — Infinite African Safaris%0A%0A`;
     m += `Tour: ${t.name}%0ADate: ${d.date}%0ATime: ${d.time}%0A`;
     m += `Guests: ${a} adult${a>1?"s":""}${k?`, ${k} child${k>1?"ren":""}`:""}%0A`;
@@ -781,6 +788,12 @@
     e.preventDefault();
     const f = e.target, d = Object.fromEntries(new FormData(f));
     if (!d.name || !d.email) { $("#formNote").textContent = "Please add your name and email."; return; }
+    // Save the lead to Supabase (no-op until configured) — never blocks the email handoff
+    window.iasSaveLead?.({
+      source: "contact", name: d.name, email: d.email, country: d.country,
+      group_size: d.size, preferred_date: d.date, tour: d.interest, message: d.message,
+      _hp: d._hp, raw: d,
+    });
     let body = `Name: ${d.name}\nEmail: ${d.email}\nCountry: ${d.country||"-"}\nGroup size: ${d.size||"-"}\nDate: ${d.date||"-"}\nInterested in: ${d.interest||"-"}\n\n${d.message||""}`;
     location.href = `mailto:${CONTACT.email}?subject=${encodeURIComponent("Website enquiry — "+d.name)}&body=${encodeURIComponent(body)}`;
     $("#formNote").textContent = "Opening your email app… or message us on WhatsApp.";
