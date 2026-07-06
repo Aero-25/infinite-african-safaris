@@ -727,6 +727,19 @@
       }
       emberHost.innerHTML = html;
     }
+    const reviewsDustHost = $("#reviewsDust");
+    if (reviewsDustHost) {
+      let html = "";
+      for (let i = 0; i < 22; i++) {
+        const size = 1.5 + Math.random() * 2.8;
+        const left = Math.random() * 100;
+        const dur = 10 + Math.random() * 9;
+        const delay = -Math.random() * dur;
+        const dx = (Math.random() * 2 - 1) * 36;
+        html += `<span style="left:${left.toFixed(1)}%;width:${size.toFixed(1)}px;height:${size.toFixed(1)}px;--dx:${dx.toFixed(0)}px;animation-duration:${dur.toFixed(1)}s;animation-delay:${delay.toFixed(1)}s"></span>`;
+      }
+      reviewsDustHost.innerHTML = html;
+    }
   }
 
   /* =================================================================
