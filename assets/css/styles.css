@@ -805,6 +805,45 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .curate__pager span.is-on{ background:var(--khaki); border-color:var(--khaki); transform:scale(1.25); }
 
 /* =====================================================================
+   SIGNATURE ADD-ONS
+   ===================================================================== */
+.signature{ background:linear-gradient(180deg, var(--paper) 0%, #fff 46%, var(--paper-2) 100%); }
+.sig{ max-width:var(--maxw); margin:0 auto; display:grid; gap:clamp(1.3rem,3vw,2.2rem); }
+.sig__item{
+  display:grid; grid-template-columns:minmax(0,1.02fr) minmax(360px,.78fr); align-items:stretch;
+  min-height:clamp(460px,58vh,640px); background:#fff; border:1px solid var(--line);
+  border-radius:18px; overflow:hidden; box-shadow:0 34px 76px -58px rgba(20,19,18,.58);
+}
+.sig__item--braai{ grid-template-columns:minmax(360px,.78fr) minmax(0,1.02fr); }
+.sig__item--braai .sig__media{ order:2; }
+.sig__media{ position:relative; min-height:360px; background:var(--sand); overflow:hidden; }
+.sig__media::after{ content:""; position:absolute; inset:0; background:linear-gradient(180deg, transparent 52%, rgba(20,19,18,.18)); pointer-events:none; }
+.sig__media img{ width:100%; height:100%; object-fit:cover; transition:transform 1.1s var(--ease); }
+.sig__item:hover .sig__media img{ transform:scale(1.045); }
+.sig__body{
+  display:flex; flex-direction:column; justify-content:center; align-items:flex-start;
+  padding:clamp(1.6rem,4vw,3.4rem); color:var(--txt);
+}
+.sig__body .eyebrow{ margin-bottom:.7rem; }
+.sig__body h3{
+  font-family:var(--display); font-weight:800; font-size:clamp(2rem,4.6vw,4.1rem);
+  line-height:.96; letter-spacing:0; color:var(--ink); max-width:9ch;
+}
+.sig__body p{ margin-top:1.1rem; max-width:44ch; color:var(--txt-soft); font-size:clamp(1rem,1.2vw,1.08rem); }
+.sig__list{ list-style:none; width:100%; display:grid; gap:.8rem; margin:clamp(1.4rem,3vw,2rem) 0; }
+.sig__list li{
+  display:grid; grid-template-columns:54px 1fr; gap:.95rem; align-items:start;
+  border-top:1px solid var(--line); padding-top:.8rem;
+}
+.sig__list span{
+  display:inline-grid; place-items:center; min-width:44px; height:32px; border-radius:100px;
+  background:var(--sand); color:var(--khaki-deep); font-family:var(--display); font-weight:800;
+  font-size:.78rem; line-height:1; text-transform:uppercase;
+}
+.sig__list b{ display:block; font-family:var(--display); font-size:1.05rem; line-height:1.1; color:var(--ink); }
+.sig__list small{ display:block; margin-top:.2rem; color:var(--txt-soft); font-size:.9rem; line-height:1.35; }
+
+/* =====================================================================
    BOOKING
    ===================================================================== */
 .book{ background:radial-gradient(120% 100% at 20% 0%, #2a2620, var(--ink)); color:var(--paper); }
@@ -1003,6 +1042,12 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
   .curate__title{ font-size:clamp(2rem,10vw,2.9rem); margin-bottom:.85rem; }
   .curate__lead{ font-size:.94rem; margin-bottom:1.25rem; }
   .curate__pager{ right:10px; }
+  .sig__item,
+  .sig__item--braai{ grid-template-columns:1fr; min-height:auto; }
+  .sig__item--braai .sig__media{ order:0; }
+  .sig__media{ min-height:clamp(260px,48vh,420px); }
+  .sig__body h3{ max-width:12ch; }
+  .sig__list li{ grid-template-columns:48px 1fr; }
   .film{ height:240vh; }
   .film__frame{ width:auto; height:76svh; aspect-ratio:9/16; }
   .mf-cols{ grid-template-columns:1fr; gap:1.8rem; }
