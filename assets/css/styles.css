@@ -1,9 +1,9 @@
 /* =====================================================================
    INFINITE AFRICAN SAFARIS
-   Design system — desert meets ocean
+   Design system â€” desert meets ocean
    ===================================================================== */
 :root{
-  /* palette — black / white / khaki */
+  /* palette â€” black / white / khaki */
   --black:      #141312;
   --ink:        #141312;   /* dark sections */
   --ink-2:      #1d1c1a;
@@ -13,9 +13,9 @@
   --khaki:      #b3a079;   /* the accent */
   --khaki-soft: #cabd9c;
   --khaki-deep: #8a7a55;
-  --gold:       #8a7a55;   /* legacy alias → khaki-deep */
-  --gold-soft:  #cabd9c;   /* legacy alias → khaki-soft */
-  --amber:      #141312;   /* legacy alias → primary CTA = black */
+  --gold:       #8a7a55;   /* legacy alias â†’ khaki-deep */
+  --gold-soft:  #cabd9c;   /* legacy alias â†’ khaki-soft */
+  --amber:      #141312;   /* legacy alias â†’ primary CTA = black */
 
   --sand:       #ece4d3;
   --sand-deep:  #ddd0b6;
@@ -130,7 +130,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 }
 /* on scroll: the header eases into a floating pill. It stays full-width and
    insets via margin-inline (which IS animatable) while keeping space-between,
-   so nothing snaps. (width / justify-content can't be transitioned — that was
+   so nothing snaps. (width / justify-content can't be transitioned â€” that was
    what made it jump.) */
 .nav.is-stuck{
   top:clamp(10px,1.5vw,16px);
@@ -179,7 +179,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .nav.is-hero .nav__burger span{ background:var(--paper); }
 
 /* =====================================================================
-   HERO — rotating 3D photo wall (black / white / khaki)
+   HERO â€” rotating 3D photo wall (black / white / khaki)
    ===================================================================== */
 .hero{
   position:relative; min-height:100svh;
@@ -253,7 +253,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .hero__links a{ font-weight:600; letter-spacing:.01em; border-bottom:2px solid var(--khaki); padding-bottom:3px; transition:color .25s, border-color .25s; }
 .hero__links a:hover{ color:var(--khaki-deep); border-color:var(--khaki-deep); }
 
-/* text-free hero — the photo wall is the whole stage */
+/* text-free hero â€” the photo wall is the whole stage */
 .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
 .hero--bare{ justify-content:flex-start; min-height:100svh; padding-block:clamp(112px,15vh,164px) clamp(40px,8vh,90px); padding-inline:0; }
 .hero--bare .cyl{ margin-top:0; }
@@ -267,7 +267,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 @keyframes cue{ 0%{transform:translateY(0);opacity:1} 70%{transform:translateY(14px);opacity:0} 100%{opacity:0} }
 
 /* =====================================================================
-   SCENES — built-in landscape artwork (swap with photos anytime)
+   SCENES â€” built-in landscape artwork (swap with photos anytime)
    ===================================================================== */
 .scene{ position:absolute; inset:0; background-size:cover; background-position:center; }
 .scene--sunrise{ background:
@@ -356,10 +356,13 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .card{ position:relative; border-radius:var(--r); overflow:hidden; background:var(--ink); min-height:320px; display:flex; flex-direction:column; justify-content:flex-end; isolation:isolate; transition:transform .5s var(--ease), box-shadow .5s var(--ease); will-change:transform; }
 .card:hover{ box-shadow:0 40px 70px -40px rgba(20,19,18,.6); }
 
-/* Our Safaris — horizontal rail */
+/* Our Safaris â€” horizontal rail */
 .cards--rail{ display:flex; grid-template-columns:none; overflow-x:auto; scroll-snap-type:x mandatory; gap:1.3rem; padding:4px 4px 1.2rem; scrollbar-width:none; scroll-behavior:smooth; }
 .cards--rail::-webkit-scrollbar{ display:none; }
 .cards--rail .card{ flex:0 0 clamp(270px,30vw,360px); scroll-snap-align:start; min-height:clamp(420px,52vh,520px); }
+/* rail fills the whole page width (full-bleed) while still scrolling */
+.exp .section__head{ max-width:none; }
+.exp .cards--rail{ max-width:none; margin-inline:calc(var(--pad) * -1); padding:4px var(--pad) 1.2rem; scroll-padding-inline:var(--pad); }
 .rail__arrows{ display:flex; gap:.6rem; align-self:flex-end; }
 .rail__arrow{ width:48px; height:48px; border-radius:50%; border:1.5px solid var(--line); color:var(--ink); font-size:1.15rem; display:grid; place-items:center; transition:.25s; }
 .rail__arrow:hover{ background:var(--ink); color:var(--paper); border-color:var(--ink); transform:translateY(-2px); }
@@ -381,7 +384,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .rates>summary{ list-style:none; cursor:pointer; padding:1.1rem 1.5rem; font-weight:600; color:var(--ink); display:flex; justify-content:space-between; align-items:center; }
 .rates>summary::-webkit-details-marker{ display:none; }
 .rates>summary::after{ content:"+"; font-size:1.4rem; color:var(--gold); }
-.rates[open]>summary::after{ content:"–"; }
+.rates[open]>summary::after{ content:"â€“"; }
 .rates__inner{ padding:0 1.5rem 1.5rem; }
 .rates__table{ width:100%; border-collapse:collapse; font-size:.92rem; }
 .rates__table th, .rates__table td{ text-align:left; padding:.7rem .6rem; border-bottom:1px solid var(--line); }
@@ -393,7 +396,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .rates__catering h4 span{ font-family:var(--body); font-weight:400; color:var(--txt-soft); font-size:.85rem; }
 .rates__catering ul{ list-style:none; display:flex; flex-wrap:wrap; gap:.6rem 1.4rem; margin-top:.7rem; }
 .rates__catering li{ position:relative; padding-left:1.3rem; font-size:.92rem; }
-.rates__catering li::before{ content:"✓"; position:absolute; left:0; color:var(--amber); font-weight:700; }
+.rates__catering li::before{ content:"âœ“"; position:absolute; left:0; color:var(--amber); font-weight:700; }
 
 /* =====================================================================
    BUILDER
@@ -494,7 +497,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .client__hint{ font-size:.84rem; color:rgba(243,232,214,.6); }
 
 /* =====================================================================
-   REVIEWS — live spotlight
+   REVIEWS â€” live spotlight
    ===================================================================== */
 .reviews{ background:linear-gradient(180deg,var(--ink) 0%, var(--char) 100%); color:var(--paper); overflow:hidden; }
 .rv{ max-width:var(--maxw); margin:0 auto; display:grid; grid-template-columns:.85fr 1.15fr; gap:clamp(2rem,5vw,4.5rem); align-items:center; }
@@ -592,7 +595,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .pol summary{ list-style:none; cursor:pointer; padding:1.2rem 1.4rem; font-family:var(--display); font-weight:600; font-size:1.12rem; color:var(--ink); display:flex; justify-content:space-between; gap:1rem; align-items:center; }
 .pol summary::-webkit-details-marker{ display:none; }
 .pol summary::after{ content:"+"; color:var(--gold); font-size:1.3rem; }
-.pol[open] summary::after{ content:"–"; }
+.pol[open] summary::after{ content:"â€“"; }
 .pol p{ padding:0 1.4rem 1.3rem; color:var(--txt-soft); font-size:.95rem; }
 
 /* =====================================================================
@@ -626,8 +629,8 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
    ===================================================================== */
 .megafoot{ background:var(--char); color:var(--sand); padding-bottom:1.4rem; overflow:hidden; }
 
-/* elephant family silhouette — feet sit on the dark footer edge */
-/* the herd stands on a dusk horizon that melts into the footer — no hard seam */
+/* elephant family silhouette â€” feet sit on the dark footer edge */
+/* the herd stands on a dusk horizon that melts into the footer â€” no hard seam */
 .skyline{ display:flex; justify-content:center; align-items:flex-end; padding:clamp(22px,3.5vw,48px) clamp(8px,2vw,28px) 0; line-height:0;
   background:linear-gradient(to bottom, var(--paper) 0%, var(--paper) 60%, #201e1b 88%, var(--char) 100%); }
 .skyline__herd{ width:min(1360px,96%); height:auto; display:block; filter:brightness(0) saturate(0); margin-bottom:-2px;
@@ -697,26 +700,105 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 /* =====================================================================
    FAB + LIGHTBOX
    ===================================================================== */
-.fab{ position:fixed; right:20px; bottom:20px; z-index:90; width:62px; height:62px; border-radius:50%; background:#25d366; display:grid; place-items:center; box-shadow:0 12px 30px -8px rgba(37,211,102,.7); transition:transform .3s; }
-.fab:hover{ transform:scale(1.08) rotate(-4deg); }
-.fab svg{ width:32px; height:32px; fill:#fff; }
+.fab{
+  position:fixed; right:clamp(14px,2.4vw,26px); bottom:clamp(14px,2.4vw,26px); z-index:90;
+  display:flex; align-items:center; gap:.7rem; color:var(--paper);
+}
+.fab--hourglass{
+  width:auto; height:auto; border-radius:0; background:none; box-shadow:none;
+  filter:drop-shadow(0 18px 28px rgba(20,19,18,.32));
+  transform-origin:center; transition:transform .5s var(--ease);
+}
+.fab__label{
+  order:-1; font-family:var(--display); font-weight:700; font-size:.82rem; letter-spacing:0;
+  color:var(--paper); background:linear-gradient(135deg, rgba(20,19,18,.96), rgba(48,42,34,.96));
+  padding:.58rem .92rem; border-radius:100px; white-space:nowrap;
+  box-shadow:0 0 0 1px rgba(255,255,255,.14), 0 16px 34px -18px rgba(20,19,18,.7);
+  opacity:0; transform:translateX(16px) scale(.96); pointer-events:none;
+  transition:opacity .42s var(--ease), transform .42s var(--ease);
+}
+.fab--hourglass:hover .fab__label,
+.fab--hourglass:focus-visible .fab__label{ opacity:1; transform:none; }
+.fab--hourglass:hover{ transform:translateY(-3px) scale(1.035); }
+.hg{
+  width:auto; height:clamp(118px,15vh,154px); display:block; overflow:visible;
+  transform-origin:center; animation:hgTurn 120s cubic-bezier(.7,0,.25,1) infinite;
+  transition:filter .5s var(--ease);
+}
+.fab--hourglass:hover .hg{ filter:brightness(1.05) saturate(1.08); }
+.hg__rot{ transform-box:view-box; transform-origin:60px 85px; }
+.hg__aura{
+  fill:rgba(243,232,214,.18); stroke:rgba(202,189,156,.35); stroke-width:1;
+  transform-box:fill-box; transform-origin:center; animation:hgAura 4.8s ease-in-out infinite;
+}
+.hg__glass{
+  fill:url(#hgGlass); stroke:rgba(255,255,255,.72); stroke-width:1.4;
+  filter:drop-shadow(0 0 9px rgba(255,255,255,.22));
+}
+.hg__frame{
+  fill:none; stroke:url(#hgBrass); stroke-width:4.6; stroke-linecap:round; stroke-linejoin:round;
+  filter:url(#hgGlow);
+}
+.hg__cap{ fill:url(#hgBrass); stroke:#5d4624; stroke-width:1; }
+.hg__rivet{ fill:#fff1b8; stroke:#6f5329; stroke-width:.7; }
+.hg__sand{ fill:url(#hgSand); transform-box:fill-box; }
+.hg__sand--top{ transform-origin:50% 100%; animation:hgTopSand 60s linear infinite; }
+.hg__sand--bottom{ transform-origin:50% 100%; animation:hgBottomSand 60s linear infinite; }
+.hg__stream{
+  fill:none; stroke:#efc16b; stroke-width:2.4; stroke-linecap:round;
+  stroke-dasharray:2 7; filter:url(#hgGlow); opacity:.95;
+  animation:hgStream 1.35s linear infinite, hgStreamFade 60s linear infinite;
+}
+.hg__grains circle{
+  fill:#f2c46a; filter:url(#hgGlow); opacity:.85;
+  animation:hgGrainFall 3.8s linear infinite;
+}
+.hg__grains circle:nth-child(2){ animation-delay:-.9s; animation-duration:4.4s; }
+.hg__grains circle:nth-child(3){ animation-delay:-1.7s; animation-duration:5.2s; }
+.hg__grains circle:nth-child(4){ animation-delay:-.4s; animation-duration:4.8s; }
+.hg__grains circle:nth-child(5){ animation-delay:-2.2s; animation-duration:3.9s; }
+.hg__grains circle:nth-child(6){ animation-delay:-3.1s; animation-duration:4.6s; }
+.hg__shine{
+  fill:none; stroke:rgba(255,255,255,.72); stroke-width:1.8; stroke-linecap:round;
+  stroke-dasharray:26 52; animation:hgShine 7s ease-in-out infinite;
+}
+.hg__shine--right{ animation-delay:-3.5s; opacity:.6; }
+.hg__neck{ fill:rgba(255,255,255,.2); stroke:rgba(255,255,255,.48); stroke-width:.8; }
 
-/* hourglass FAB — a real, working 1-minute hourglass; no background, hover label */
-.fab--inf{ right:24px; bottom:24px; background:none; border:none; box-shadow:none; animation:none;
-  width:auto; height:auto; display:flex; align-items:center; gap:.6rem; }
-.fab--inf:hover{ transform:none; }
-.fab__label{ font-family:var(--display); font-weight:700; font-size:.82rem; letter-spacing:.01em;
-  color:var(--paper); background:var(--ink); padding:.52rem .9rem; border-radius:100px; white-space:nowrap;
-  box-shadow:0 0 0 1px rgba(255,255,255,.12), 0 14px 28px -12px rgba(20,19,18,.6);
-  opacity:0; transform:translateX(14px); pointer-events:none;
-  transition:opacity .4s var(--ease), transform .4s var(--ease); }
-.fab--inf:hover .fab__label, .fab--inf:focus-visible .fab__label{ opacity:1; transform:none; }
-.hg{ height:clamp(118px,15vh,152px); width:auto; display:block; overflow:visible;
-  filter:drop-shadow(0 10px 22px rgba(20,19,18,.24)); transition:transform .45s var(--ease); }
-.fab--inf:hover .hg{ transform:scale(1.05); }
-.hg__rot{ transform-box:fill-box; transform-origin:center; }
-.hg-grain{ fill:#e6b45f; }
-
+@keyframes hgTurn{
+  0%,48%{ transform:rotate(0deg); }
+  50%,98%{ transform:rotate(180deg); }
+  100%{ transform:rotate(360deg); }
+}
+@keyframes hgTopSand{
+  0%{ transform:scaleY(1); opacity:1; }
+  92%{ transform:scaleY(.08); opacity:1; }
+  98%,100%{ transform:scaleY(.02); opacity:.65; }
+}
+@keyframes hgBottomSand{
+  0%{ transform:scaleY(.03); }
+  92%{ transform:scaleY(.9); }
+  98%,100%{ transform:scaleY(.98); }
+}
+@keyframes hgStream{ to{ stroke-dashoffset:18; } }
+@keyframes hgStreamFade{
+  0%,92%{ opacity:.96; }
+  98%,100%{ opacity:.12; }
+}
+@keyframes hgGrainFall{
+  0%{ transform:translateY(-8px) translateX(0); opacity:0; }
+  12%{ opacity:.9; }
+  72%{ opacity:.86; }
+  100%{ transform:translateY(34px) translateX(2px); opacity:0; }
+}
+@keyframes hgShine{
+  0%,100%{ stroke-dashoffset:42; opacity:.28; }
+  45%,58%{ stroke-dashoffset:-8; opacity:.95; }
+}
+@keyframes hgAura{
+  0%,100%{ transform:scale(.96); opacity:.38; }
+  50%{ transform:scale(1.05); opacity:.72; }
+}
 .lightbox{ position:fixed; inset:0; z-index:150; background:rgba(8,16,20,.94); display:none; place-items:center; padding:4vw; }
 .lightbox.is-open{ display:grid; }
 .lightbox__fig{ width:min(900px,90vw); aspect-ratio:3/2; border-radius:14px; overflow:hidden; box-shadow:0 40px 100px rgba(0,0,0,.6); position:relative; }
@@ -749,7 +831,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .lh.is-in .lh-in{ transform:translateY(0); }
 
 /* =====================================================================
-   CURATE YOUR OWN TOUR — pinned background
+   CURATE YOUR OWN TOUR â€” pinned background
    ===================================================================== */
 /* tall section so we have scroll runway for the two scenes */
 .curate{ position:relative; isolation:isolate; color:var(--paper); height:260vh; }
@@ -812,7 +894,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .book__lead{ color:rgba(243,232,214,.82); max-width:42ch; }
 .book__trust{ list-style:none; margin:1.6rem 0; display:grid; gap:.7rem; }
 .book__trust li{ position:relative; padding-left:1.6rem; color:rgba(243,232,214,.9); }
-.book__trust li::before{ content:"✓"; position:absolute; left:0; color:var(--khaki-soft); font-weight:700; }
+.book__trust li::before{ content:"âœ“"; position:absolute; left:0; color:var(--khaki-soft); font-weight:700; }
 .book__or{ display:flex; gap:.6rem; align-items:center; font-size:.95rem; color:rgba(243,232,214,.7); }
 .book__or a{ color:var(--khaki-soft); font-weight:600; border-bottom:1.5px solid currentColor; }
 .book__form{ background:var(--mist); color:var(--txt); border-radius:var(--r); padding:clamp(1.4rem,3vw,2.2rem); box-shadow:0 40px 80px -40px rgba(0,0,0,.6); }
@@ -832,7 +914,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .book__total p{ font-size:.78rem; color:var(--txt-soft); margin:0; text-align:right; max-width:18ch; }
 .bk__note{ text-align:center; font-size:.8rem; color:var(--txt-soft); margin-top:.8rem; }
 
-/* booking popup — slim, floating, elegant drawer */
+/* booking popup â€” slim, floating, elegant drawer */
 .bookmodal{ position:fixed; inset:0; z-index:170; display:none; }
 .bookmodal.is-open{ display:block; }
 .bookmodal__scrim{ position:absolute; inset:0; background:rgba(12,11,10,.5); opacity:0;
@@ -887,7 +969,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .cur--book .cur__btn{ padding:.34rem .62rem; font-size:.82rem; }
 
 /* =====================================================================
-   REVIEWS PAGE — elegant, light, all quotes (masonry)
+   REVIEWS PAGE â€” elegant, light, all quotes (masonry)
    ===================================================================== */
 .pagehead--reviews{ padding-bottom:clamp(32px,5vh,56px); }
 .revstat{ display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:clamp(1.4rem,5vw,3.2rem); margin-top:clamp(2rem,4vw,2.8rem); }
@@ -981,7 +1063,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
   .bkf .bk__row--2{ grid-template-columns:1fr; }
   .revwall{ grid-template-columns:1fr; }
   .about__stats{ grid-template-columns:1fr 1fr; }
-  /* mobile: KEEP the pinned two-scene crossfade — just compact it to fit */
+  /* mobile: KEEP the pinned two-scene crossfade â€” just compact it to fit */
   .curate__sticky{ padding-block:clamp(3.4rem,9vh,5rem); }
   .curate__steps{ grid-template-columns:1fr; gap:.65rem; margin-bottom:1.5rem; }
   .curate__steps li{ padding-top:.5rem; }
