@@ -522,7 +522,8 @@
   const fab = $(".fab");
   if (fab) {
     fab.classList.add("fab--inf");
-    const d = "M50,25 C45,10 25,10 18,25 C25,40 45,40 50,25 C55,10 75,10 82,25 C75,40 55,40 50,25 Z";
+    // self-crossing ribbon infinity — matches the woven ∞ in the brand logo
+    const d = "M8,25 C8,13 26,12 50,25 C74,38 92,37 92,25 C92,13 74,12 50,25 C26,38 8,37 8,25 Z";
     fab.innerHTML = `<span class="fab__label">Chat with us</span>
       <svg class="fab__inf" viewBox="0 0 100 50" aria-hidden="true">
         <path class="fab__base" d="${d}"/>

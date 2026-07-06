@@ -727,7 +727,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .lightbox{ position:fixed; inset:0; z-index:150; background:rgba(8,16,20,.94); display:none; place-items:center; padding:4vw; }
 .lightbox.is-open{ display:grid; }
 .lightbox__fig{ width:min(900px,90vw); aspect-ratio:3/2; border-radius:14px; overflow:hidden; box-shadow:0 40px 100px rgba(0,0,0,.6); position:relative; }
-.lightbox__fig .scene{ position:absolute; inset:0; }
+.lightbox__fig .scene{ position:absolute; inset:0; background-size:contain; background-repeat:no-repeat; background-color:#0b0a09; }
 .lightbox__fig figcaption{ position:absolute; left:0; right:0; bottom:0; padding:1.2rem; background:linear-gradient(transparent, rgba(0,0,0,.7)); color:#fff; font-weight:500; }
 .lightbox__close{ position:absolute; top:20px; right:24px; font-size:1.6rem; color:#fff; width:44px; height:44px; }
 .lightbox__nav{ position:absolute; top:50%; transform:translateY(-50%); font-size:2.4rem; color:#fff; width:54px; height:54px; opacity:.7; transition:opacity .2s; }
