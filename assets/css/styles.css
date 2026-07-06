@@ -143,11 +143,11 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
   box-shadow:0 22px 48px -22px rgba(20,19,18,.45), inset 0 0 0 1px rgba(255,255,255,.55);
 }
 .nav.is-stuck .nav__word{ opacity:0; max-width:0; margin:0; }
-.nav.is-stuck .nav__emblem{ height:clamp(42px,4.6vw,52px); margin-block:0; }
+.nav.is-stuck .nav__emblem{ height:100%; min-height:clamp(58px,7vw,76px); margin-block:0; transform:translateX(30px); }
 .nav__brand{ display:flex; align-items:center; gap:.7rem; z-index:2; }
 /* logo is larger than the bar and bleeds past it (negative margin), so the
    header stays slim while the mark reads big */
-.nav__emblem{ display:flex; align-items:center; height:clamp(68px,7.2vw,90px); width:auto; margin-block:clamp(-24px,-2.4vw,-16px); color:var(--ink); transition:color .4s, height .5s var(--ease), margin .5s var(--ease); }
+.nav__emblem{ display:flex; align-items:center; height:clamp(68px,7.2vw,90px); width:auto; margin-block:clamp(-24px,-2.4vw,-16px); color:var(--ink); transition:color .4s, height .5s var(--ease), margin .5s var(--ease), transform .5s var(--ease); }
 .nav__emblem svg, .nav__emblemimg{ height:100%; width:auto; max-width:220px; display:block; object-fit:contain; }
 .nav__emblem .nav__emblemsvg{ display:none; }
 .nav__brand.mark-missing .nav__emblemimg{ display:none; }
