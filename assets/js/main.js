@@ -174,16 +174,39 @@
     start();
   }
 
-  /* RENDER: full reviews wall (reviews.html) */
+  /* RENDER: full reviews wall (reviews.html) — auto-scrolling marquee columns,
+     alternating direction; static columns if the user prefers reduced motion */
   const revWall = $("#revWall");
   if (revWall) {
     const initial = (s) => (s.match(/\b\w/g) || []).slice(0, 2).join("").toUpperCase();
-    revWall.innerHTML = REVIEWS.map(r => `
+    const card = (r) => `
       <blockquote class="rw">
         <div class="rw__stars">${"★".repeat(r.stars)}</div>
         <p class="rw__text">“${r.text}”</p>
         <footer class="rw__by"><span class="rw__avatar">${initial(r.name)}</span><span><b>${r.name}</b><small>${r.from}</small></span></footer>
-      </blockquote>`).join("");
+      </blockquote>`;
+    const colCount = () => (innerWidth <= 760 ? 1 : innerWidth <= 1024 ? 2 : 3);
+    let built = 0;
+    const build = () => {
+      const n = colCount();
+      if (n === built) return;
+      built = n;
+      const cols = Array.from({ length: n }, () => []);
+      REVIEWS.forEach((r, i) => cols[i % n].push(r));
+      if (reduce) {
+        revWall.classList.add("revwall--static");
+        revWall.innerHTML = cols.map(list => `<div class="revcol"><div class="revcol__track">${list.map(card).join("")}</div></div>`).join("");
+        return;
+      }
+      revWall.innerHTML = cols.map((list, i) => {
+        const html = list.map(card).join("");
+        return `<div class="revcol ${i % 2 ? "revcol--down" : ""}" style="--dur:${42 + ((i * 13) % 21)}s">
+          <div class="revcol__track">${html}${html}</div>
+        </div>`;
+      }).join("");
+    };
+    build();
+    addEventListener("resize", build);
   }
 
   /* count-up animation (data-to) for the review score + total */
@@ -545,7 +568,6 @@
   stagger(".gallery__grid .gtile", 60);
   stagger(".policy__grid .pol", 50);
   stagger(".safari-grid .card", 60);
-  stagger(".revwall .rw", 60);
 
   /* =================================================================
      SCROLL FX — progress bar · parallax depth · cinematic headlines
