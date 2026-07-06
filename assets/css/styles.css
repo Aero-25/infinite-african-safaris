@@ -703,105 +703,10 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 /* =====================================================================
    FAB + LIGHTBOX
    ===================================================================== */
-.fab{
-  position:fixed; right:clamp(14px,2.4vw,26px); bottom:clamp(14px,2.4vw,26px); z-index:90;
-  display:flex; align-items:center; gap:.7rem; color:var(--paper);
-}
-.fab--hourglass{
-  width:auto; height:auto; border-radius:0; background:none; box-shadow:none;
-  filter:drop-shadow(0 18px 28px rgba(20,19,18,.32));
-  transform-origin:center; transition:transform .5s var(--ease);
-}
-.fab__label{
-  order:-1; font-family:var(--display); font-weight:700; font-size:.82rem; letter-spacing:0;
-  color:var(--paper); background:linear-gradient(135deg, rgba(20,19,18,.96), rgba(48,42,34,.96));
-  padding:.58rem .92rem; border-radius:100px; white-space:nowrap;
-  box-shadow:0 0 0 1px rgba(255,255,255,.14), 0 16px 34px -18px rgba(20,19,18,.7);
-  opacity:0; transform:translateX(16px) scale(.96); pointer-events:none;
-  transition:opacity .42s var(--ease), transform .42s var(--ease);
-}
-.fab--hourglass:hover .fab__label,
-.fab--hourglass:focus-visible .fab__label{ opacity:1; transform:none; }
-.fab--hourglass:hover{ transform:translateY(-3px) scale(1.035); }
-.hg{
-  width:auto; height:clamp(118px,15vh,154px); display:block; overflow:visible;
-  transform-origin:center; animation:hgTurn 120s cubic-bezier(.7,0,.25,1) infinite;
-  transition:filter .5s var(--ease);
-}
-.fab--hourglass:hover .hg{ filter:brightness(1.05) saturate(1.08); }
-.hg__rot{ transform-box:view-box; transform-origin:60px 85px; }
-.hg__aura{
-  fill:rgba(243,232,214,.18); stroke:rgba(202,189,156,.35); stroke-width:1;
-  transform-box:fill-box; transform-origin:center; animation:hgAura 4.8s ease-in-out infinite;
-}
-.hg__glass{
-  fill:url(#hgGlass); stroke:rgba(255,255,255,.72); stroke-width:1.4;
-  filter:drop-shadow(0 0 9px rgba(255,255,255,.22));
-}
-.hg__frame{
-  fill:none; stroke:url(#hgBrass); stroke-width:4.6; stroke-linecap:round; stroke-linejoin:round;
-  filter:url(#hgGlow);
-}
-.hg__cap{ fill:url(#hgBrass); stroke:#5d4624; stroke-width:1; }
-.hg__rivet{ fill:#fff1b8; stroke:#6f5329; stroke-width:.7; }
-.hg__sand{ fill:url(#hgSand); transform-box:fill-box; }
-.hg__sand--top{ transform-origin:50% 100%; animation:hgTopSand 60s linear infinite; }
-.hg__sand--bottom{ transform-origin:50% 100%; animation:hgBottomSand 60s linear infinite; }
-.hg__stream{
-  fill:none; stroke:#efc16b; stroke-width:2.4; stroke-linecap:round;
-  stroke-dasharray:2 7; filter:url(#hgGlow); opacity:.95;
-  animation:hgStream 1.35s linear infinite, hgStreamFade 60s linear infinite;
-}
-.hg__grains circle{
-  fill:#f2c46a; filter:url(#hgGlow); opacity:.85;
-  animation:hgGrainFall 3.8s linear infinite;
-}
-.hg__grains circle:nth-child(2){ animation-delay:-.9s; animation-duration:4.4s; }
-.hg__grains circle:nth-child(3){ animation-delay:-1.7s; animation-duration:5.2s; }
-.hg__grains circle:nth-child(4){ animation-delay:-.4s; animation-duration:4.8s; }
-.hg__grains circle:nth-child(5){ animation-delay:-2.2s; animation-duration:3.9s; }
-.hg__grains circle:nth-child(6){ animation-delay:-3.1s; animation-duration:4.6s; }
-.hg__shine{
-  fill:none; stroke:rgba(255,255,255,.72); stroke-width:1.8; stroke-linecap:round;
-  stroke-dasharray:26 52; animation:hgShine 7s ease-in-out infinite;
-}
-.hg__shine--right{ animation-delay:-3.5s; opacity:.6; }
-.hg__neck{ fill:rgba(255,255,255,.2); stroke:rgba(255,255,255,.48); stroke-width:.8; }
+.fab{ position:fixed; right:20px; bottom:20px; z-index:90; width:62px; height:62px; border-radius:50%; background:#25d366; display:grid; place-items:center; box-shadow:0 12px 30px -8px rgba(37,211,102,.7); transition:transform .3s; }
+.fab:hover{ transform:scale(1.08) rotate(-4deg); }
+.fab svg{ width:32px; height:32px; fill:#fff; }
 
-@keyframes hgTurn{
-  0%,48%{ transform:rotate(0deg); }
-  50%,98%{ transform:rotate(180deg); }
-  100%{ transform:rotate(360deg); }
-}
-@keyframes hgTopSand{
-  0%{ transform:scaleY(1); opacity:1; }
-  92%{ transform:scaleY(.08); opacity:1; }
-  98%,100%{ transform:scaleY(.02); opacity:.65; }
-}
-@keyframes hgBottomSand{
-  0%{ transform:scaleY(.03); }
-  92%{ transform:scaleY(.9); }
-  98%,100%{ transform:scaleY(.98); }
-}
-@keyframes hgStream{ to{ stroke-dashoffset:18; } }
-@keyframes hgStreamFade{
-  0%,92%{ opacity:.96; }
-  98%,100%{ opacity:.12; }
-}
-@keyframes hgGrainFall{
-  0%{ transform:translateY(-8px) translateX(0); opacity:0; }
-  12%{ opacity:.9; }
-  72%{ opacity:.86; }
-  100%{ transform:translateY(34px) translateX(2px); opacity:0; }
-}
-@keyframes hgShine{
-  0%,100%{ stroke-dashoffset:42; opacity:.28; }
-  45%,58%{ stroke-dashoffset:-8; opacity:.95; }
-}
-@keyframes hgAura{
-  0%,100%{ transform:scale(.96); opacity:.38; }
-  50%{ transform:scale(1.05); opacity:.72; }
-}
 .lightbox{ position:fixed; inset:0; z-index:150; background:rgba(8,16,20,.94); display:none; place-items:center; padding:4vw; }
 .lightbox.is-open{ display:grid; }
 .lightbox__fig{ width:min(900px,90vw); aspect-ratio:3/2; border-radius:14px; overflow:hidden; box-shadow:0 40px 100px rgba(0,0,0,.6); position:relative; }
