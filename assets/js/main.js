@@ -522,13 +522,15 @@
   const fab = $(".fab");
   if (fab) {
     fab.classList.add("fab--inf");
-    // self-crossing ribbon infinity — matches the woven ∞ in the brand logo
-    const d = "M8,25 C8,13 26,12 50,25 C74,38 92,37 92,25 C92,13 74,12 50,25 C26,38 8,37 8,25 Z";
+    // hand-brushed filled infinity mark (matches the reference artwork)
     fab.innerHTML = `<span class="fab__label">Chat with us</span>
-      <svg class="fab__inf" viewBox="0 0 100 50" aria-hidden="true">
-        <path class="fab__base" d="${d}"/>
-        <path class="fab__trace" pathLength="100" d="${d}"/>
+      <svg class="fab__inf" viewBox="0 0 700 400" aria-hidden="true">
+        <path class="fab__ink" fill-rule="evenodd" d="M48,200 C48,118 118,66 194,70 C260,74 310,120 350,170 C390,120 440,74 506,70 C582,66 652,118 652,200 C652,282 582,334 506,330 C440,326 390,280 350,230 C310,280 260,326 194,330 C118,334 48,282 48,200 Z M105,212 C105,156 158,130 220,150 C285,170 320,188 344,203 C318,218 276,240 212,258 C152,274 105,266 105,212 Z M595,212 C595,156 542,130 480,150 C415,170 380,188 356,203 C382,218 424,240 488,258 C548,274 595,266 595,212 Z"/>
+        <g class="fab__hi"><path d="M120,150 C162,118 214,116 254,140 C212,131 166,137 133,163 Z"/><path d="M580,150 C538,118 486,116 446,140 C488,131 534,137 567,163 Z"/></g>
       </svg>`;
+    const foot = $(".megafoot");
+    if (foot) new IntersectionObserver((es) => es.forEach(e => fab.classList.toggle("on-dark", e.isIntersecting)),
+      { rootMargin: "-88% 0px 0px 0px" }).observe(foot);
   }
 
   /* =================================================================

@@ -705,9 +705,10 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .fab:hover{ transform:scale(1.08) rotate(-4deg); }
 .fab svg{ width:32px; height:32px; fill:#fff; }
 
-/* infinity FAB — background-free mark, flowing gold pulse, hover "chat" label */
+/* infinity FAB — hand-brushed filled mark, no background, hover "chat" label */
 .fab--inf{ right:24px; bottom:24px; background:none; border:none; box-shadow:none; animation:none;
-  width:auto; height:auto; display:flex; align-items:center; gap:.55rem; }
+  width:auto; height:auto; display:flex; align-items:center; gap:.55rem; color:var(--ink);
+  transition:color .45s var(--ease); }
 .fab--inf:hover{ transform:none; }
 .fab__label{ font-family:var(--display); font-weight:700; font-size:.82rem; letter-spacing:.01em;
   color:var(--paper); background:var(--ink); padding:.52rem .9rem; border-radius:100px; white-space:nowrap;
@@ -715,13 +716,14 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
   opacity:0; transform:translateX(14px); pointer-events:none;
   transition:opacity .4s var(--ease), transform .4s var(--ease); }
 .fab--inf:hover .fab__label, .fab--inf:focus-visible .fab__label{ opacity:1; transform:none; }
-.fab--inf .fab__inf{ width:clamp(80px,8.5vw,104px); height:auto; fill:none; overflow:visible;
-  filter:drop-shadow(0 5px 12px rgba(20,19,18,.16)); transition:transform .45s var(--ease); }
-.fab--inf:hover .fab__inf{ transform:scale(1.07); }
-.fab__base{ fill:none; stroke:var(--khaki-deep); stroke-width:3.6; stroke-linecap:round; stroke-linejoin:round; opacity:.5; }
-.fab__trace{ fill:none; stroke:#e9cf9c; stroke-width:4.2; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:13 87;
-  filter:drop-shadow(0 0 5px rgba(212,180,120,.95)) drop-shadow(0 0 13px rgba(212,180,120,.55)); animation:fabtrace 2.4s linear infinite; }
-@keyframes fabtrace{ to{ stroke-dashoffset:-100; } }
+.fab--inf .fab__inf{ width:clamp(78px,8.2vw,100px); height:auto; overflow:visible;
+  filter:drop-shadow(0 5px 12px rgba(20,19,18,.18)); transition:transform .45s var(--ease); }
+.fab--inf:hover .fab__inf{ transform:scale(1.06); }
+.fab__ink{ fill:currentColor; }
+.fab__hi{ fill:#fff; opacity:.9; }
+/* over the dark footer, flip the mark to cream so it stays visible */
+.fab--inf.on-dark{ color:var(--paper); }
+.fab--inf.on-dark .fab__hi{ opacity:.25; }
 
 .lightbox{ position:fixed; inset:0; z-index:150; background:rgba(8,16,20,.94); display:none; place-items:center; padding:4vw; }
 .lightbox.is-open{ display:grid; }
