@@ -513,47 +513,163 @@
     addEventListener("resize", () => { measure(); update(); });
     measure(); update();
 
-    // ---- YouTube background player: autoplay muted, start at 1:00, loop from 1:00 ----
-    const VID = frame.dataset.yt, START = +(frame.dataset.start || 0);
-    let ytPlayer = null, ytReady = false, inView = false;
+    // ---- self-hosted background video: autoplay muted, loop ----
+    const vid = $("#filmVideo");
+    let inView = false, loaded = false;
     const sound = $("#filmSound");
-    window.onYouTubeIframeAPIReady = () => {
-      ytPlayer = new YT.Player("ytPlayer", {
-        videoId: VID,
-        playerVars: { autoplay: 1, mute: 1, controls: 0, start: START, playsinline: 1, modestbranding: 1, rel: 0, fs: 0, disablekb: 1, iv_load_policy: 3 },
-        events: {
-          onReady: (e) => { ytReady = true; e.target.mute(); if (inView) e.target.playVideo(); },
-          onStateChange: (e) => { if (e.data === YT.PlayerState.ENDED) { e.target.seekTo(START, true); e.target.playVideo(); } },
-        },
-      });
-    };
-    // Lazy: don't fetch YouTube's heavy player JS until the showreel nears view
-    let ytRequested = false;
-    const loadYT = () => {
-      if (ytRequested || !VID) return;
-      ytRequested = true;
-      if (window.YT && window.YT.Player) window.onYouTubeIframeAPIReady();
-      else if (!document.querySelector('script[src*="iframe_api"]')) {
-        const s = document.createElement("script"); s.src = "https://www.youtube.com/iframe_api"; document.head.appendChild(s);
-      }
+    const loadVideo = () => {
+      if (loaded || !vid) return;
+      loaded = true;
+      vid.preload = "auto";
+      vid.load();
+      const pr = vid.play(); if (pr && pr.catch) pr.catch(() => {});
     };
     // preload ~one screen early so it's ready by the time it's on screen
     new IntersectionObserver((es) => es.forEach(e => {
-      if (e.isIntersecting) loadYT();
+      if (e.isIntersecting) loadVideo();
     }), { rootMargin: "700px 0px" }).observe(film);
     new IntersectionObserver((es) => es.forEach(e => {
       inView = e.isIntersecting;
-      if (ytReady) inView ? ytPlayer.playVideo() : ytPlayer.pauseVideo();
+      if (!vid || !loaded) return;
+      if (inView) { const pr = vid.play(); if (pr && pr.catch) pr.catch(() => {}); }
+      else vid.pause();
     }), { threshold: 0.04 }).observe(film);
     sound?.addEventListener("click", (e) => {
       e.preventDefault(); e.stopPropagation();
-      if (!ytReady) return;
-      const muted = ytPlayer.isMuted();
-      if (muted) { ytPlayer.unMute(); ytPlayer.setVolume(85); } else ytPlayer.mute();
+      if (!vid) return;
+      const muted = vid.muted;
+      vid.muted = !muted; if (muted) vid.volume = 0.85;
       sound.classList.toggle("is-on", muted);
       sound.setAttribute("aria-pressed", String(muted));
     });
   }
+
+  /* =================================================================
+     CHAT FAB — a single elephant footprint pressed in sand.
+     The site's own signature mark: replaces the generic WhatsApp bubble
+     with a detailed, textured impression unique to this brand.
+     ================================================================= */
+  $$(".fab").forEach((fab, fabIdx) => {
+    fab.classList.add("fab--foot");
+    const uid = "fp" + fabIdx;
+    fab.innerHTML = `
+      <svg class="fab__foot" viewBox="0 0 300 300" aria-hidden="true">
+        <defs>
+          <filter id="${uid}Glow" x="-150%" y="-150%" width="400%" height="400%">
+            <feGaussianBlur stdDeviation="2.6" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <radialGradient id="${uid}Base" cx="50%" cy="50%" r="60%">
+            <stop offset="0" stop-color="#241b14"/><stop offset="1" stop-color="#0c0a07"/>
+          </radialGradient>
+          <path id="${uid}Pad" d="M150,30 C186,30 214,46 228,72 C242,98 246,128 240,158 C234,190 220,216 196,234
+            C178,247 122,247 104,234 C80,216 66,190 60,158 C54,128 58,98 72,72 C86,46 114,30 150,30 Z"/>
+          <clipPath id="${uid}Clip"><use href="#${uid}Pad"/></clipPath>
+        </defs>
+        <use href="#${uid}Pad" fill="url(#${uid}Base)"/>
+        <g clip-path="url(#${uid}Clip)">
+          <g id="${uid}Veins"></g>
+          <g id="${uid}Pulses"></g>
+        </g>
+        <use href="#${uid}Pad" fill="none" stroke="#4a4030" stroke-width="2"/>
+      </svg>`;
+
+    const NS = "http://www.w3.org/2000/svg";
+    const veinsG = fab.querySelector(`#${uid}Veins`), pulsesG = fab.querySelector(`#${uid}Pulses`);
+    let seed = 11 + fabIdx;
+    const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+
+    // recursive branch generator — each call is one "edge" (a jittered polyline)
+    // that forks into 1-2 children, exactly like a Lichtenberg / root network.
+    function buildEdge(x, y, angle, len, depth) {
+      if (depth <= 0 || len < 5) return null;
+      const steps = 2 + Math.floor(rnd() * 2);
+      let cx = x, cy = y, cang = angle, d = `M${x.toFixed(1)},${y.toFixed(1)}`, L = 0;
+      for (let s = 0; s < steps; s++) {
+        cang += (rnd() - 0.5) * 0.55;
+        const stepLen = len / steps;
+        const nx = cx + Math.cos(cang) * stepLen, ny = cy + Math.sin(cang) * stepLen;
+        d += ` L${nx.toFixed(1)},${ny.toFixed(1)}`;
+        L += Math.hypot(nx - cx, ny - cy);
+        cx = nx; cy = ny;
+      }
+      const edge = { d, len: L, depth, children: [] };
+      const nBranches = depth > 5 ? 2 : (rnd() < 0.6 ? 2 : 1);
+      for (let i = 0; i < nBranches; i++) {
+        const spread = (i - (nBranches - 1) / 2) * 0.75 + (rnd() - 0.5) * 0.4;
+        const child = buildEdge(cx, cy, cang + spread, len * (0.76 + rnd() * 0.08), depth - 1);
+        if (child) edge.children.push(child);
+      }
+      return edge;
+    }
+
+    const roots = [];
+    const cx0 = 150, cy0 = 150, DIRS = 7;
+    for (let a = 0; a < DIRS; a++) {
+      const e = buildEdge(cx0, cy0, (a / DIRS) * Math.PI * 2 + rnd() * 0.2, 40, 8);
+      if (e) roots.push(e);
+    }
+
+    // render static dim network + a matching (initially hidden) glow path per edge
+    function renderStatic(edge) {
+      const w = Math.max(0.7, edge.depth * 0.55);
+      const op = 0.35 + Math.min(0.35, edge.depth * 0.035);
+      const line = document.createElementNS(NS, "path");
+      line.setAttribute("d", edge.d); line.setAttribute("fill", "none");
+      line.setAttribute("stroke", "#b89a68"); line.setAttribute("stroke-opacity", op.toFixed(2));
+      line.setAttribute("stroke-width", w.toFixed(2)); line.setAttribute("stroke-linecap", "round");
+      veinsG.appendChild(line);
+
+      const pulse = document.createElementNS(NS, "path");
+      pulse.setAttribute("d", edge.d); pulse.setAttribute("fill", "none");
+      pulse.setAttribute("stroke", "#fff2cc"); pulse.setAttribute("stroke-linecap", "round");
+      pulse.setAttribute("stroke-width", (w + 1.1).toFixed(2));
+      pulse.setAttribute("filter", `url(#${uid}Glow)`);
+      pulse.setAttribute("stroke-dasharray", edge.len.toFixed(1) + " " + edge.len.toFixed(1));
+      pulse.setAttribute("stroke-dashoffset", edge.len.toFixed(1));
+      pulse.setAttribute("opacity", "0");
+      pulsesG.appendChild(pulse);
+      edge.pulseEl = pulse;
+      edge.children.forEach(renderStatic);
+    }
+    roots.forEach(renderStatic);
+
+    if (reduce) return; // static dim network only — no animation
+
+    // ---- cascading pulse scheduler: a bolt starts at center, forks at every
+    // branch point (multiple veins lit at once), then the whole tree fades
+    // together, pauses, and fires again. ----
+    const SPEED = 0.19, FADE_MS = 550, HOLD_MS = 260;
+    let active = [], cycleFadeStart = 0, cycleFadeEnd = 0, cyclePauseEnd = 0, lastBoltEnd = -1;
+    function scheduleEdge(edge, startTime) {
+      edge._start = startTime;
+      edge._dur = Math.max(120, edge.len / SPEED);
+      active.push(edge);
+      edge.children.forEach(c => scheduleEdge(c, startTime + edge._dur * 0.72));
+    }
+    function fireBolt(now) {
+      active = [];
+      roots.forEach(r => scheduleEdge(r, now));
+      const maxFinish = Math.max(...active.map(e => e._start + e._dur));
+      cycleFadeStart = maxFinish + HOLD_MS;
+      cycleFadeEnd = cycleFadeStart + FADE_MS;
+      cyclePauseEnd = cycleFadeEnd + 500;
+    }
+    function frame(now) {
+      if (now > lastBoltEnd) { fireBolt(now); lastBoltEnd = cyclePauseEnd; }
+      active.forEach(edge => {
+        let reveal, op;
+        if (now < edge._start) { reveal = 0; op = 0; }
+        else if (now < cycleFadeStart) { reveal = Math.min(1, (now - edge._start) / edge._dur); op = 1; }
+        else if (now < cycleFadeEnd) { reveal = 1; op = 1 - (now - cycleFadeStart) / FADE_MS; }
+        else { reveal = 1; op = 0; }
+        edge.pulseEl.setAttribute("stroke-dashoffset", (edge.len * (1 - reveal)).toFixed(1));
+        edge.pulseEl.setAttribute("opacity", Math.max(0, op).toFixed(2));
+      });
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  });
 
   /* =================================================================
      PRELOADER + reveals + nav
@@ -584,6 +700,38 @@
   stagger(".gallery__grid .gtile", 60);
   stagger(".policy__grid .pol", 50);
   stagger(".safari-grid .card", 60);
+
+  /* =================================================================
+     SIGNATURE PANELS — drifting dust (day) + rising embers (night)
+     ================================================================= */
+  if (!reduce) {
+    const dustHost = $("#sigDustDay");
+    if (dustHost) {
+      let html = "";
+      for (let i = 0; i < 16; i++) {
+        const size = 2 + Math.random() * 3.2;
+        const left = Math.random() * 100;
+        const dur = 9 + Math.random() * 8;
+        const delay = -Math.random() * dur;
+        const dx = (Math.random() * 2 - 1) * 40;
+        html += `<span style="left:${left.toFixed(1)}%;width:${size.toFixed(1)}px;height:${size.toFixed(1)}px;--dx:${dx.toFixed(0)}px;animation-duration:${dur.toFixed(1)}s;animation-delay:${delay.toFixed(1)}s"></span>`;
+      }
+      dustHost.innerHTML = html;
+    }
+    const emberHost = $("#sigEmbers");
+    if (emberHost) {
+      let html = "";
+      for (let i = 0; i < 20; i++) {
+        const size = 2 + Math.random() * 3.6;
+        const left = Math.random() * 100;
+        const dur = 4 + Math.random() * 5;
+        const delay = -Math.random() * dur;
+        const dx = (Math.random() * 2 - 1) * 50;
+        html += `<span style="left:${left.toFixed(1)}%;width:${size.toFixed(1)}px;height:${size.toFixed(1)}px;--dx:${dx.toFixed(0)}px;animation-duration:${dur.toFixed(1)}s;animation-delay:${delay.toFixed(1)}s"></span>`;
+      }
+      emberHost.innerHTML = html;
+    }
+  }
 
   /* =================================================================
      SCROLL FX — progress bar · parallax depth · cinematic headlines
