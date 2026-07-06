@@ -7,6 +7,65 @@
   const $$ = (s, c = document) => [...c.querySelectorAll(s)];
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  /* ---------- living hourglass chat button ---------- */
+  const hourglassFab = `
+    <span class="fab__label">Plan your safari</span>
+    <svg class="hg" viewBox="0 0 120 170" aria-hidden="true">
+      <defs>
+        <linearGradient id="hgBrass" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#fff0bf" />
+          <stop offset="0.28" stop-color="#c9a85e" />
+          <stop offset="0.56" stop-color="#7e6234" />
+          <stop offset="0.78" stop-color="#ead79a" />
+          <stop offset="1" stop-color="#8a6a38" />
+        </linearGradient>
+        <linearGradient id="hgGlass" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#ffffff" stop-opacity="0.82" />
+          <stop offset="0.46" stop-color="#cfe7ec" stop-opacity="0.16" />
+          <stop offset="1" stop-color="#ffffff" stop-opacity="0.48" />
+        </linearGradient>
+        <linearGradient id="hgSand" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ffe8a8" />
+          <stop offset="0.5" stop-color="#d9a34a" />
+          <stop offset="1" stop-color="#8d6229" />
+        </linearGradient>
+        <filter id="hgGlow" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="2.2" result="blur" />
+          <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
+        <clipPath id="hgTopClip"><path d="M36 30 C38 54 50 66 58 77 C48 72 39 65 34 47 C32 39 32 33 36 30 Z M84 30 C82 54 70 66 62 77 C72 72 81 65 86 47 C88 39 88 33 84 30 Z" /></clipPath>
+        <clipPath id="hgBottomClip"><path d="M58 93 C49 104 39 116 35 140 C43 148 77 148 85 140 C81 116 71 104 62 93 Z" /></clipPath>
+        <clipPath id="hgGlassClip"><path d="M33 27 C35 54 48 68 58 83 C48 98 35 113 33 143 C39 151 81 151 87 143 C85 113 72 98 62 83 C72 68 85 54 87 27 Z" /></clipPath>
+      </defs>
+      <g class="hg__rot">
+        <ellipse class="hg__aura" cx="60" cy="85" rx="45" ry="70" />
+        <path class="hg__glass" d="M33 27 C35 54 48 68 58 83 C48 98 35 113 33 143 C39 151 81 151 87 143 C85 113 72 98 62 83 C72 68 85 54 87 27 Z" />
+        <g clip-path="url(#hgTopClip)">
+          <rect class="hg__sand hg__sand--top" x="28" y="30" width="64" height="52" rx="10" />
+        </g>
+        <g clip-path="url(#hgBottomClip)">
+          <path class="hg__sand hg__sand--bottom" d="M33 146 C42 126 51 110 60 99 C69 110 78 126 87 146 Z" />
+        </g>
+        <path class="hg__stream" d="M60 78 L60 123" />
+        <g class="hg__grains" clip-path="url(#hgGlassClip)">
+          <circle cx="53" cy="53" r="1.2" /><circle cx="66" cy="58" r="1" /><circle cx="46" cy="42" r=".8" />
+          <circle cx="72" cy="136" r="1.1" /><circle cx="51" cy="130" r=".9" /><circle cx="60" cy="121" r="1" />
+        </g>
+        <path class="hg__shine hg__shine--left" d="M43 34 C47 55 54 67 58 74 M43 138 C46 119 53 103 58 96" />
+        <path class="hg__shine hg__shine--right" d="M77 34 C73 55 66 67 62 74 M77 138 C74 119 67 103 62 96" />
+        <path class="hg__neck" d="M52 83 C56 80 64 80 68 83 C64 87 56 87 52 83 Z" />
+        <path class="hg__frame" d="M28 21 H92 M28 149 H92 M37 21 C35 54 48 68 58 83 C48 98 35 113 37 149 M83 21 C85 54 72 68 62 83 C72 98 85 113 83 149" />
+        <rect class="hg__cap hg__cap--top" x="24" y="13" width="72" height="15" rx="7.5" />
+        <rect class="hg__cap hg__cap--bottom" x="24" y="142" width="72" height="15" rx="7.5" />
+        <circle class="hg__rivet" cx="34" cy="20.5" r="2" /><circle class="hg__rivet" cx="86" cy="20.5" r="2" />
+        <circle class="hg__rivet" cx="34" cy="149.5" r="2" /><circle class="hg__rivet" cx="86" cy="149.5" r="2" />
+      </g>
+    </svg>`;
+  $$(".fab").forEach((fab) => {
+    fab.classList.add("fab--hourglass");
+    fab.innerHTML = hourglassFab;
+  });
+
   /* ---------- smooth scrolling (Lenis) ---------- */
   let lenis = null;
   if (window.Lenis && !reduce) {
