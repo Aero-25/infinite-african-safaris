@@ -45,7 +45,7 @@ const TOURS = [
     scene:"sunrise", img:`${MEDIA}Sunset%20SW.png`,
     blurb:"Golden hour on the dunes — the coast set alight as the sun drops into the sea." },
   { id:"sh-full",   name:"Full-Day Sandwich Harbour", adult:3500, child:1750, hours:"6 hours", min:2, feature:true,
-    scene:"sunrise", img:IMG("1547234935-80c7145ec969"),
+    scene:"sunrise", img:`${MEDIA}Full%20day.png`,
     blurb:"The complete Sandwich Harbour day: dunes, lagoon, wildlife and a long lunch." },
   { id:"sh-private",name:"Private Sandwich Harbour Custom", adult:3500, child:1750, hours:"4 hours", min:2,
     scene:"dune", img:IMG("1471922694854-ff1b63b20054"),
