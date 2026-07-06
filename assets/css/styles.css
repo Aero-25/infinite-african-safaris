@@ -135,7 +135,9 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .nav.is-stuck{
   top:clamp(10px,1.5vw,16px);
   margin-inline:clamp(56px,8vw,150px);
+  height:clamp(70px,7vw,86px);
   padding:0 clamp(.75rem,1.5vw,1.15rem);
+  overflow:hidden;
   border-radius:100px;
   background:rgba(250,245,236,.86);
   backdrop-filter:blur(16px) saturate(1.3);
