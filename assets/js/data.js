@@ -23,6 +23,7 @@ const CURRENCY = {
 const MEDIA = "https://uksddraybxgpgnhocqyc.supabase.co/storage/v1/object/public/media/";
 const heroImg = (name) => `${MEDIA}hero/${name}.webp`;
 const galleryImg = (name) => `assets/img/gallery/${name}.jpg`;
+const pad3 = (n) => String(n).padStart(3, "0");
 const HERO_POOL = [
   { url: heroImg("dune"),      cap: "The dunes" },
   { url: heroImg("sunset"),    cap: "Desert sunsets" },
@@ -84,29 +85,10 @@ const EXTRAS = [
 ];
 
 /* --- Gallery tiles --------------------------------------------------- */
-const INFINITE_GALLERY = [
-  { img:galleryImg("infinite-01-52"),     label:"Dune tracks above the Atlantic" },
-  { img:galleryImg("infinite-02-545"),    label:"Coastline lookout" },
-  { img:galleryImg("infinite-03-556"),    label:"Soft desert ridges" },
-  { img:galleryImg("infinite-04-wa0256"), label:"Sandwich Harbour shoreline" },
-  { img:galleryImg("infinite-05-wa0262"), label:"Dune descent" },
-  { img:galleryImg("infinite-06-wa0263"), label:"Where sand meets sea" },
-  { img:galleryImg("infinite-07-wa0264"), label:"Open desert crossing" },
-  { img:galleryImg("infinite-08-wa0265"), label:"Lagoon light" },
-  { img:galleryImg("infinite-09-wa0266"), label:"Beach stop" },
-  { img:galleryImg("infinite-10-wa0267"), label:"Ocean-side tracks" },
-  { img:galleryImg("infinite-11-wa0268"), label:"Atlantic dune road" },
-  { img:galleryImg("infinite-12-wa0270"), label:"High dune coastline" },
-  { img:galleryImg("infinite-13-wa0271"), label:"Desert panorama" },
-  { img:galleryImg("infinite-14-wa0272"), label:"Dune ridge walk" },
-  { img:galleryImg("infinite-15-wa0273"), label:"Misty coastal drive" },
-  { img:galleryImg("infinite-16-wa0274"), label:"Golden dune weather" },
-];
-
-const GALLERY = [
-  ...INFINITE_GALLERY,
-  ...HERO_POOL.map(h => ({ img:h.url, label:h.cap })),
-];
+const GALLERY = Array.from({ length: 118 }, (_, i) => ({
+  img: galleryImg(`infinite-${pad3(i + 1)}`),
+  label: "",
+}));
 
 /* --- Reviews (replace with real Google / GetYourGuide quotes) -------- */
 const REVIEWS = [

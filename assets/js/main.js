@@ -117,7 +117,7 @@
   const galEl = $("#galleryGrid");
   if (galEl) {
     galEl.innerHTML = GALLERY.map((g, i) => `
-      <figure class="gtile" data-lb="${i}">${scene(g.scene, g.img)}<span>${g.label}</span></figure>`).join("");
+      <figure class="gtile" data-lb="${i}">${scene(g.scene, g.img)}</figure>`).join("");
   }
 
   /* RENDER: reviews — live spotlight */
@@ -517,20 +517,106 @@
   }
 
   /* =================================================================
-     FLOATING INFINITY — pulse tracing the mark (replaces WA icon)
+     FLOATING HOURGLASS — a real, working 1-minute hourglass (replaces WA icon)
      ================================================================= */
   const fab = $(".fab");
   if (fab) {
     fab.classList.add("fab--inf");
-    // hand-brushed filled infinity mark (matches the reference artwork)
+    const glassPath = "M28,22 L92,22 C92,54 74,72 63,86 C74,100 92,118 92,150 L28,150 C28,118 46,100 57,86 C46,72 28,54 28,22 Z";
     fab.innerHTML = `<span class="fab__label">Chat with us</span>
-      <svg class="fab__inf" viewBox="0 0 700 400" aria-hidden="true">
-        <path class="fab__ink" fill-rule="evenodd" d="M48,200 C48,118 118,66 194,70 C260,74 310,120 350,170 C390,120 440,74 506,70 C582,66 652,118 652,200 C652,282 582,334 506,330 C440,326 390,280 350,230 C310,280 260,326 194,330 C118,334 48,282 48,200 Z M105,212 C105,156 158,130 220,150 C285,170 320,188 344,203 C318,218 276,240 212,258 C152,274 105,266 105,212 Z M595,212 C595,156 542,130 480,150 C415,170 380,188 356,203 C382,218 424,240 488,258 C548,274 595,266 595,212 Z"/>
-        <g class="fab__hi"><path d="M120,150 C162,118 214,116 254,140 C212,131 166,137 133,163 Z"/><path d="M580,150 C538,118 486,116 446,140 C488,131 534,137 567,163 Z"/></g>
+      <svg class="hg" viewBox="0 0 120 176" aria-hidden="true">
+        <defs>
+          <linearGradient id="hgSand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f8e4b3"/><stop offset=".4" stop-color="#e7c073"/><stop offset="1" stop-color="#c58f36"/></linearGradient>
+          <linearGradient id="hgSandB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eecb84"/><stop offset="1" stop-color="#bd8531"/></linearGradient>
+          <linearGradient id="hgBrass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9d8a1"/><stop offset=".35" stop-color="#ab9459"/><stop offset=".7" stop-color="#7c6a3c"/><stop offset="1" stop-color="#4c3f22"/></linearGradient>
+          <linearGradient id="hgBrassV" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#584a25"/><stop offset=".42" stop-color="#d4bf80"/><stop offset=".6" stop-color="#a58f55"/><stop offset="1" stop-color="#5c4d29"/></linearGradient>
+          <radialGradient id="hgFin" cx=".35" cy=".3" r=".85"><stop offset="0" stop-color="#ecdaa3"/><stop offset="1" stop-color="#665631"/></radialGradient>
+          <linearGradient id="hgGlass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".36"/><stop offset=".5" stop-color="#d3e2e8" stop-opacity=".10"/><stop offset="1" stop-color="#9fb6c0" stop-opacity=".20"/></linearGradient>
+          <linearGradient id="hgTopShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a3238" stop-opacity=".22"/><stop offset="1" stop-color="#2a3238" stop-opacity="0"/></linearGradient>
+          <clipPath id="hgClip"><path d="${glassPath}"/></clipPath>
+        </defs>
+        <ellipse cx="60" cy="171" rx="46" ry="4.5" fill="#2a2a2a" opacity=".14"/>
+        <g class="hg__rot">
+          <rect x="15.5" y="18" width="6.5" height="138" rx="3.25" fill="url(#hgBrassV)"/>
+          <rect x="98" y="18" width="6.5" height="138" rx="3.25" fill="url(#hgBrassV)"/>
+          <path d="${glassPath}" fill="url(#hgGlass)"/>
+          <path d="M28,22 L92,22 C92,40 86,52 80,60 C70,48 50,48 40,60 C34,52 28,40 28,22 Z" fill="url(#hgTopShade)" clip-path="url(#hgClip)"/>
+          <g clip-path="url(#hgClip)">
+            <path id="hgPile" fill="url(#hgSand)"/>
+            <path id="hgPileShade" fill="#b7842f" opacity=".4"/>
+            <path id="hgTop" fill="url(#hgSand)"/>
+            <rect id="hgStreamHaze" x="55.5" y="86" width="9" height="0" fill="url(#hgSandB)" opacity=".3"/>
+            <rect id="hgStream" x="58.2" y="86" width="3.6" height="0" fill="url(#hgSandB)"/>
+            <g id="hgGrains"></g>
+          </g>
+          <path d="M35,28 C29,44 30,64 45,84" stroke="#fff" stroke-width="4.2" fill="none" opacity=".72" stroke-linecap="round"/>
+          <path d="M41,29 C37,40 37,52 44,66" stroke="#fff" stroke-width="1.5" fill="none" opacity=".55" stroke-linecap="round"/>
+          <path d="M88,26 C92,44 92,64 84,82" stroke="#fff" stroke-width="1.6" fill="none" opacity=".28" stroke-linecap="round"/>
+          <path d="M42,151 C35,131 34,114 47,95" stroke="#fff" stroke-width="2.4" fill="none" opacity=".34" stroke-linecap="round"/>
+          <path d="${glassPath}" fill="none" stroke="#586a73" stroke-width="1.2" opacity=".34"/>
+          <circle cx="18.7" cy="18" r="5.2" fill="url(#hgFin)"/><circle cx="101.3" cy="18" r="5.2" fill="url(#hgFin)"/>
+          <circle cx="18.7" cy="156" r="5.2" fill="url(#hgFin)"/><circle cx="101.3" cy="156" r="5.2" fill="url(#hgFin)"/>
+          <rect x="6" y="150" width="108" height="7" rx="3" fill="#463a1e"/><rect x="8" y="150" width="104" height="20" rx="7" fill="url(#hgBrass)"/><rect x="12" y="153" width="96" height="2.4" rx="1.2" fill="#f2e4b6" opacity=".65"/>
+          <rect x="6" y="15" width="108" height="7" rx="3" fill="#463a1e"/><rect x="8" y="2" width="104" height="20" rx="7" fill="url(#hgBrass)"/><rect x="12" y="4.5" width="96" height="2.4" rx="1.2" fill="#f6eabf" opacity=".75"/>
+        </g>
       </svg>`;
-    const foot = $(".megafoot");
-    if (foot) new IntersectionObserver((es) => es.forEach(e => fab.classList.toggle("on-dark", e.isIntersecting)),
-      { rootMargin: "-88% 0px 0px 0px" }).observe(foot);
+
+    const NS = "http://www.w3.org/2000/svg";
+    const rot = fab.querySelector(".hg__rot");
+    const elTop = fab.querySelector("#hgTop"), elPile = fab.querySelector("#hgPile"), elPileShade = fab.querySelector("#hgPileShade");
+    const elStream = fab.querySelector("#hgStream"), elHaze = fab.querySelector("#hgStreamHaze"), elGrains = fab.querySelector("#hgGrains");
+    const TOPY = 24, NECK = 86, PEMPTY = 152, PFULL = 107, DURATION = 60000;
+
+    const grains = [];
+    for (let i = 0; i < 24; i++) {
+      const e = document.createElementNS(NS, "ellipse");
+      const rx = 0.5 + Math.random() * 0.7;
+      e.setAttribute("rx", rx.toFixed(2)); e.setAttribute("ry", (rx * 2.4).toFixed(2));
+      e.setAttribute("class", "hg-grain");
+      elGrains.appendChild(e);
+      grains.push({ el: e, p: Math.random(), sp: 2.0 + Math.random() * 2.2, x0: Math.random() * 2 - 1 });
+    }
+
+    const draw = (d) => {
+      d = Math.max(0, Math.min(1, d));
+      const surf = TOPY + d * (NECK - TOPY), dip = Math.min(NECK - surf, 3 + 11 * d);
+      elTop.setAttribute("d", `M14,${surf.toFixed(1)} Q60,${(surf + dip).toFixed(1)} 106,${surf.toFixed(1)} L106,88 L14,88 Z`);
+      const py = PEMPTY - d * (PEMPTY - PFULL);
+      elPile.setAttribute("d", `M14,154 H106 V${(py + 3).toFixed(1)} Q60,${(py - 11).toFixed(1)} 14,${(py + 3).toFixed(1)} Z`);
+      elPileShade.setAttribute("d", `M60,${(py - 10).toFixed(1)} Q44,${(py + 1).toFixed(1)} 38,${(py + 4).toFixed(1)} L82,${(py + 4).toFixed(1)} Q76,${(py + 1).toFixed(1)} 60,${(py - 10).toFixed(1)} Z`);
+      elPileShade.style.opacity = d > 0.08 ? 0.4 : 0;
+      const flowing = d > 0.001 && d < 0.999, sh = flowing ? Math.max(0, py - NECK) : 0;
+      elStream.setAttribute("height", sh.toFixed(1)); elHaze.setAttribute("height", sh.toFixed(1));
+      elStream.style.opacity = elHaze.style.opacity = flowing ? 1 : 0; elGrains.style.opacity = flowing ? 1 : 0;
+      grains.forEach(gr => { const spread = 1 + gr.p * 3.4; gr.el.setAttribute("cx", (60 + gr.x0 * spread).toFixed(1)); gr.el.setAttribute("cy", (NECK + gr.p * (py - NECK)).toFixed(1)); });
+    };
+
+    if (reduce) {
+      draw(0.5);
+    } else {
+      let start = performance.now(), last = start, flipping = false;
+      const FLIP_MS = 850;
+      const startFlip = () => {
+        flipping = true;
+        rot.style.transition = `transform ${FLIP_MS}ms cubic-bezier(.5,.02,.28,1)`;
+        rot.style.transform = "rotate(180deg)";
+        setTimeout(() => {
+          rot.style.transition = "none"; rot.style.transform = "rotate(0deg)";
+          void rot.getBoundingClientRect(); start = performance.now(); last = start; flipping = false;
+        }, FLIP_MS + 60);
+      };
+      const loop = (now) => {
+        const dt = Math.min(0.05, (now - last) / 1000); last = now;
+        let d;
+        if (flipping) { d = 1; }
+        else { d = (now - start) / DURATION; if (d >= 1) { d = 1; startFlip(); } }
+        if (!flipping && d > 0 && d < 1) grains.forEach(gr => { gr.p += gr.sp * dt; if (gr.p > 1) gr.p = Math.random() * 0.05; });
+        draw(d);
+        requestAnimationFrame(loop);
+      };
+      draw(0);
+      requestAnimationFrame(loop);
+    }
   }
 
   /* =================================================================
@@ -961,7 +1047,7 @@
   const openLB = (i) => {
     lbIndex = (i + GALLERY.length) % GALLERY.length;
     const g = GALLERY[lbIndex];
-    lbFig.innerHTML = `${scene(g.scene, g.img)}<figcaption>${g.label}</figcaption>`;
+    lbFig.innerHTML = scene(g.scene, g.img);
     lb.classList.add("is-open"); lb.setAttribute("aria-hidden", "false");
   };
   $$(".gtile").forEach(t => t.addEventListener("click", () => openLB(+t.dataset.lb)));

@@ -446,10 +446,6 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .gtile:nth-child(6){ grid-column:span 2; }
 .gtile .scene{ transition:transform .7s var(--ease); }
 .gtile:hover .scene{ transform:scale(1.08); }
-.gtile::after{ content:""; position:absolute; inset:0; background:linear-gradient(to top, rgba(8,20,25,.55), transparent 60%); opacity:0; transition:.4s; }
-.gtile:hover::after{ opacity:1; }
-.gtile span{ position:absolute; left:14px; bottom:12px; color:#fff; font-weight:600; font-size:.9rem; opacity:0; transform:translateY(6px); transition:.4s; z-index:2; text-shadow:0 1px 8px rgba(0,0,0,.6); }
-.gtile:hover span{ opacity:1; transform:none; }
 
 /* =====================================================================
    FILM
@@ -705,10 +701,9 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .fab:hover{ transform:scale(1.08) rotate(-4deg); }
 .fab svg{ width:32px; height:32px; fill:#fff; }
 
-/* infinity FAB — hand-brushed filled mark, no background, hover "chat" label */
+/* hourglass FAB — a real, working 1-minute hourglass; no background, hover label */
 .fab--inf{ right:24px; bottom:24px; background:none; border:none; box-shadow:none; animation:none;
-  width:auto; height:auto; display:flex; align-items:center; gap:.55rem; color:var(--ink);
-  transition:color .45s var(--ease); }
+  width:auto; height:auto; display:flex; align-items:center; gap:.6rem; }
 .fab--inf:hover{ transform:none; }
 .fab__label{ font-family:var(--display); font-weight:700; font-size:.82rem; letter-spacing:.01em;
   color:var(--paper); background:var(--ink); padding:.52rem .9rem; border-radius:100px; white-space:nowrap;
@@ -716,20 +711,16 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
   opacity:0; transform:translateX(14px); pointer-events:none;
   transition:opacity .4s var(--ease), transform .4s var(--ease); }
 .fab--inf:hover .fab__label, .fab--inf:focus-visible .fab__label{ opacity:1; transform:none; }
-.fab--inf .fab__inf{ width:clamp(78px,8.2vw,100px); height:auto; overflow:visible;
-  filter:drop-shadow(0 5px 12px rgba(20,19,18,.18)); transition:transform .45s var(--ease); }
-.fab--inf:hover .fab__inf{ transform:scale(1.06); }
-.fab__ink{ fill:currentColor; }
-.fab__hi{ fill:#fff; opacity:.9; }
-/* over the dark footer, flip the mark to cream so it stays visible */
-.fab--inf.on-dark{ color:var(--paper); }
-.fab--inf.on-dark .fab__hi{ opacity:.25; }
+.hg{ height:clamp(118px,15vh,152px); width:auto; display:block; overflow:visible;
+  filter:drop-shadow(0 10px 22px rgba(20,19,18,.24)); transition:transform .45s var(--ease); }
+.fab--inf:hover .hg{ transform:scale(1.05); }
+.hg__rot{ transform-box:fill-box; transform-origin:center; }
+.hg-grain{ fill:#e6b45f; }
 
 .lightbox{ position:fixed; inset:0; z-index:150; background:rgba(8,16,20,.94); display:none; place-items:center; padding:4vw; }
 .lightbox.is-open{ display:grid; }
 .lightbox__fig{ width:min(900px,90vw); aspect-ratio:3/2; border-radius:14px; overflow:hidden; box-shadow:0 40px 100px rgba(0,0,0,.6); position:relative; }
 .lightbox__fig .scene{ position:absolute; inset:0; background-size:contain; background-repeat:no-repeat; background-color:#0b0a09; }
-.lightbox__fig figcaption{ position:absolute; left:0; right:0; bottom:0; padding:1.2rem; background:linear-gradient(transparent, rgba(0,0,0,.7)); color:#fff; font-weight:500; }
 .lightbox__close{ position:absolute; top:20px; right:24px; font-size:1.6rem; color:#fff; width:44px; height:44px; }
 .lightbox__nav{ position:absolute; top:50%; transform:translateY(-50%); font-size:2.4rem; color:#fff; width:54px; height:54px; opacity:.7; transition:opacity .2s; }
 .lightbox__nav:hover{ opacity:1; }
