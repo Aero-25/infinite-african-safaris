@@ -362,7 +362,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 /* Our Safaris â€” horizontal rail */
 .cards--rail{ display:flex; grid-template-columns:none; overflow-x:auto; scroll-snap-type:x mandatory; gap:1.3rem; padding:4px 4px 1.2rem; scrollbar-width:none; scroll-behavior:smooth; }
 .cards--rail::-webkit-scrollbar{ display:none; }
-.cards--rail .card{ flex:0 0 clamp(270px,30vw,360px); scroll-snap-align:start; min-height:clamp(420px,52vh,520px); }
+.cards--rail .card{ flex:0 0 clamp(320px,38vw,480px); scroll-snap-align:start; min-height:clamp(500px,64vh,640px); }
 /* rail fills the whole page width (full-bleed) while still scrolling */
 .exp .section__head{ max-width:none; }
 .exp .cards--rail{ max-width:none; margin-inline:calc(var(--pad) * -1); padding:4px var(--pad) 1.2rem; scroll-padding-inline:var(--pad); }
