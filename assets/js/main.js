@@ -267,6 +267,7 @@
   const socHTML = (s) => `<a class="soc" href="${s.url}" target="_blank" rel="noopener" aria-label="${s.label}">${socSVG[s.key] || ""}<span>${s.label}</span></a>`;
   if ($("#socialRow"))   $("#socialRow").innerHTML   = SOCIALS.map(socHTML).join("");
   if ($("#footerSocial"))$("#footerSocial").innerHTML= SOCIALS.map(socHTML).join("");
+  if ($("#signatureSocial"))$("#signatureSocial").innerHTML= SOCIALS.map(socHTML).join("");
   $$("[data-social]").forEach(a => {
     const s = SOCIALS.find(x => x.key === a.dataset.social);
     if (s) a.href = s.url;
