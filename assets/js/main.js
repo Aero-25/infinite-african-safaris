@@ -514,8 +514,10 @@
     measure(); update();
 
     // ---- self-hosted background video: autoplay muted, loop ----
+    // Plays continuously once started (never paused by scroll position) so the
+    // full clip always gets to play through, however fast someone scrolls past.
     const vid = $("#filmVideo");
-    let inView = false, loaded = false;
+    let loaded = false;
     const sound = $("#filmSound");
     const loadVideo = () => {
       if (loaded || !vid) return;
@@ -528,12 +530,6 @@
     new IntersectionObserver((es) => es.forEach(e => {
       if (e.isIntersecting) loadVideo();
     }), { rootMargin: "700px 0px" }).observe(film);
-    new IntersectionObserver((es) => es.forEach(e => {
-      inView = e.isIntersecting;
-      if (!vid || !loaded) return;
-      if (inView) { const pr = vid.play(); if (pr && pr.catch) pr.catch(() => {}); }
-      else vid.pause();
-    }), { threshold: 0.04 }).observe(film);
     sound?.addEventListener("click", (e) => {
       e.preventDefault(); e.stopPropagation();
       if (!vid) return;
