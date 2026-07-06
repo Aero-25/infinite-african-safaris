@@ -39,7 +39,7 @@ const HERO_POOL = [
    scene = built-in fallback artwork. img = the photo actually shown.    */
 const TOURS = [
   { id:"sh-half",   name:"Half-Day Sandwich Harbour", adult:2500, child:1250, hours:"4 hours", min:2, feature:true,
-    scene:"dune", img:IMG("1516026672322-bc52d61a55d5"),
+    scene:"dune", img:`${MEDIA}cards/sandwich-harbour.webp`,
     blurb:"Drive the towering dunes where the desert pours straight into the Atlantic." },
   { id:"sh-sunset", name:"Sunset Sandwich Harbour",   adult:3500, child:1750, hours:"4 hours", min:2, feature:true,
     scene:"sunrise", img:IMG("1547471080-7cc2caa01a7e"),
