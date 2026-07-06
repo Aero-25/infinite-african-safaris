@@ -186,7 +186,14 @@
         <div data-reveal>
           <p class="eyebrow">— Our safaris</p>
           <h2 class="h2">Curated adventures</h2>
-          <p class="section__note">Discover the essence of Walvis Bay. Prices in <b id="curName">Namibian Dollar</b>.</p>
+          <div class="section__note section__note--currency">
+            <span>Discover the essence of Walvis Bay. Prices in <b id="curName">Namibian Dollar</b>.</span>
+            <div class="cur cur--section" role="group" aria-label="Currency">
+              <button type="button" data-cur="NAD" class="cur__btn">N$</button>
+              <button type="button" data-cur="EUR" class="cur__btn">€</button>
+              <button type="button" data-cur="USD" class="cur__btn">$</button>
+            </div>
+          </div>
         </div>
         <div class="rail__arrows" data-reveal>
           <button class="rail__arrow" id="railPrev" aria-label="Previous safaris">←</button>

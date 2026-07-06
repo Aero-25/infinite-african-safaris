@@ -74,8 +74,9 @@
       "moon":"desert","sossus":"desert","spitz":"desert","sh-dune":"combo",
       "cruise":"ocean","kayak":"ocean","fishing":"ocean","cruise-sh":"combo","kayak-sh":"combo",
     };
-    safariGrid.innerHTML = TOURS.map(t => `
-      <article class="card" data-cat="${CAT[t.id] || "desert"}">
+    const isCombo = (t) => (CAT[t.id] || "desert") === "combo";
+    const cardHTML = (t) => `
+      <article class="card" data-cat="${CAT[t.id] || "desert"}" data-group="${isCombo(t) ? "combo" : "normal"}">
         <div class="card__scene">${scene(t.scene, t.img)}</div>
         <div class="card__body">
           <div class="card__meta"><span>◷ ${t.hours}</span><span>min ${t.min}</span></div>
@@ -89,7 +90,20 @@
             <a class="card__add" href="#book" data-book="${t.id}">Book</a>
           </div>
         </div>
-      </article>`).join("");
+      </article>`;
+    const normalTours = TOURS.filter(t => !isCombo(t));
+    const comboTours = TOURS.filter(isCombo);
+    safariGrid.innerHTML = `
+      <div class="safari-break" data-group-heading="normal">
+        <span>Normal safaris</span>
+        <small>Single experiences across dunes, ocean, wildlife and desert landscapes.</small>
+      </div>
+      ${normalTours.map(cardHTML).join("")}
+      <div class="safari-break safari-break--combo" data-group-heading="combo">
+        <span>Combo safaris</span>
+        <small>Fuller days that pair the coast, dunes and ocean into one itinerary.</small>
+      </div>
+      ${comboTours.map(cardHTML).join("")}`;
 
     const fbar = $("#filterBar");
     fbar?.addEventListener("click", (e) => {
@@ -97,6 +111,7 @@
       const f = b.dataset.filter;
       $$("#filterBar button").forEach(x => x.classList.toggle("is-active", x === b));
       $$(".card", safariGrid).forEach(c => c.classList.toggle("is-hidden", f !== "all" && c.dataset.cat !== f));
+      $$(".safari-break", safariGrid).forEach(h => h.classList.toggle("is-hidden", f !== "all"));
     });
   }
 
