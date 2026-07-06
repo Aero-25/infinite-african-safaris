@@ -148,7 +148,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .nav__brand{ display:flex; align-items:center; gap:.7rem; z-index:2; }
 /* logo is larger than the bar and bleeds past it (negative margin), so the
    header stays slim while the mark reads big */
-.nav__emblem{ display:flex; align-items:center; height:clamp(58px,6.2vw,74px); width:auto; margin-block:clamp(-16px,-1.6vw,-11px); color:var(--ink); transition:color .4s, height .5s var(--ease), margin .5s var(--ease); }
+.nav__emblem{ display:flex; align-items:center; height:clamp(68px,7.2vw,90px); width:auto; margin-block:clamp(-24px,-2.4vw,-16px); color:var(--ink); transition:color .4s, height .5s var(--ease), margin .5s var(--ease); }
 .nav__emblem svg, .nav__emblemimg{ height:100%; width:auto; max-width:220px; display:block; object-fit:contain; }
 .nav__emblem .nav__emblemsvg{ display:none; }
 .nav__brand.mark-missing .nav__emblemimg{ display:none; }
@@ -706,13 +706,22 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .fab:hover{ transform:scale(1.08) rotate(-4deg); }
 .fab svg{ width:32px; height:32px; fill:#fff; }
 
-/* infinity FAB — just the mark with an electric pulse tracing it, no background */
-.fab--inf{ background:none; border:none; box-shadow:none; animation:none; width:clamp(104px,12vw,140px); height:auto; }
-.fab--inf:hover{ transform:scale(1.08); }
-.fab svg.fab__inf{ width:100%; height:auto; fill:none; overflow:visible; }
-.fab__base{ fill:none; stroke:rgba(138,122,85,.38); stroke-width:3.4; stroke-linecap:round; stroke-linejoin:round; }
-.fab__trace{ fill:none; stroke:var(--khaki-soft); stroke-width:3.6; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:15 85;
-  filter:drop-shadow(0 0 4px var(--khaki)) drop-shadow(0 0 11px rgba(179,160,121,.9)); animation:fabtrace 2s linear infinite; }
+/* infinity FAB — background-free mark, flowing gold pulse, hover "chat" label */
+.fab--inf{ right:24px; bottom:24px; background:none; border:none; box-shadow:none; animation:none;
+  width:auto; height:auto; display:flex; align-items:center; gap:.55rem; }
+.fab--inf:hover{ transform:none; }
+.fab__label{ font-family:var(--display); font-weight:700; font-size:.82rem; letter-spacing:.01em;
+  color:var(--paper); background:var(--ink); padding:.52rem .9rem; border-radius:100px; white-space:nowrap;
+  box-shadow:0 0 0 1px rgba(255,255,255,.12), 0 14px 28px -12px rgba(20,19,18,.6);
+  opacity:0; transform:translateX(14px); pointer-events:none;
+  transition:opacity .4s var(--ease), transform .4s var(--ease); }
+.fab--inf:hover .fab__label, .fab--inf:focus-visible .fab__label{ opacity:1; transform:none; }
+.fab--inf .fab__inf{ width:clamp(80px,8.5vw,104px); height:auto; fill:none; overflow:visible;
+  filter:drop-shadow(0 5px 12px rgba(20,19,18,.16)); transition:transform .45s var(--ease); }
+.fab--inf:hover .fab__inf{ transform:scale(1.07); }
+.fab__base{ fill:none; stroke:var(--khaki-deep); stroke-width:3.6; stroke-linecap:round; stroke-linejoin:round; opacity:.5; }
+.fab__trace{ fill:none; stroke:#e9cf9c; stroke-width:4.2; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:13 87;
+  filter:drop-shadow(0 0 5px rgba(212,180,120,.95)) drop-shadow(0 0 13px rgba(212,180,120,.55)); animation:fabtrace 2.4s linear infinite; }
 @keyframes fabtrace{ to{ stroke-dashoffset:-100; } }
 
 .lightbox{ position:fixed; inset:0; z-index:150; background:rgba(8,16,20,.94); display:none; place-items:center; padding:4vw; }

@@ -522,11 +522,12 @@
   const fab = $(".fab");
   if (fab) {
     fab.classList.add("fab--inf");
-    const d = "M50,25 C44,12 20,12 12,25 C20,38 44,38 50,25 C56,12 80,12 88,25 C80,38 56,38 50,25 Z";
-    fab.innerHTML = `<svg class="fab__inf" viewBox="0 0 100 50" aria-hidden="true">
-      <path class="fab__base" d="${d}"/>
-      <path class="fab__trace" pathLength="100" d="${d}"/>
-    </svg>`;
+    const d = "M50,25 C45,10 25,10 18,25 C25,40 45,40 50,25 C55,10 75,10 82,25 C75,40 55,40 50,25 Z";
+    fab.innerHTML = `<span class="fab__label">Chat with us</span>
+      <svg class="fab__inf" viewBox="0 0 100 50" aria-hidden="true">
+        <path class="fab__base" d="${d}"/>
+        <path class="fab__trace" pathLength="100" d="${d}"/>
+      </svg>`;
   }
 
   /* =================================================================
