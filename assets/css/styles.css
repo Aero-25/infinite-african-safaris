@@ -597,7 +597,6 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 }
 .safari-break:first-child{ margin-top:0; padding-top:0; border-top:0; }
 .safari-break span{ font-family:var(--display); font-size:clamp(1.65rem,3vw,2.35rem); font-weight:800; line-height:.95; color:var(--ink); }
-.safari-break small{ max-width:42ch; color:var(--txt-soft); font-size:.9rem; text-align:right; }
 .safari-break.is-hidden{ display:none; }
 
 /* =====================================================================
@@ -1212,7 +1211,6 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
   .bk__row--2{ grid-template-columns:1fr; }
   .bkf .bk__row--2{ grid-template-columns:1fr; }
   .safari-break{ align-items:flex-start; flex-direction:column; gap:.45rem; }
-  .safari-break small{ text-align:left; }
   .revwall{ grid-template-columns:1fr; }
   .about__stats{ grid-template-columns:1fr 1fr; }
   /* mobile: KEEP the pinned two-scene crossfade — just compact it to fit */

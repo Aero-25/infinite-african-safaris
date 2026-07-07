@@ -96,12 +96,10 @@
     safariGrid.innerHTML = `
       <div class="safari-break" data-group-heading="normal">
         <span>Normal safaris</span>
-        <small>Single experiences across dunes, ocean, wildlife and desert landscapes.</small>
       </div>
       ${normalTours.map(cardHTML).join("")}
       <div class="safari-break safari-break--combo" data-group-heading="combo">
         <span>Combo safaris</span>
-        <small>Fuller days that pair the coast, dunes and ocean into one itinerary.</small>
       </div>
       ${comboTours.map(cardHTML).join("")}`;
 
