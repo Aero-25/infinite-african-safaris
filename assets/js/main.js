@@ -104,15 +104,6 @@
         <span>Combo safaris</span>
       </div>
       ${comboTours.map(cardHTML).join("")}`;
-
-    const fbar = $("#filterBar");
-    fbar?.addEventListener("click", (e) => {
-      const b = e.target.closest("button"); if (!b) return;
-      const f = b.dataset.filter;
-      $$("#filterBar button").forEach(x => x.classList.toggle("is-active", x === b));
-      $$(".card", safariGrid).forEach(c => c.classList.toggle("is-hidden", f !== "all" && c.dataset.cat !== f));
-      $$(".safari-break", safariGrid).forEach(h => h.classList.toggle("is-hidden", f !== "all"));
-    });
   }
 
   /* RENDER: rates table */
@@ -735,22 +726,36 @@
     };
     $$(".cards--rail .card").forEach(c => tilt(c, 6));
 
-    /* richer 3D tilt + moving glare highlight for the About section photo */
+    /* About section photo: a persistent 3D tilt that always orients toward
+       the mouse anywhere on the page (not just while hovering the image
+       itself), smoothly eased frame-by-frame rather than snapping. */
     const aboutTilt = $("#aboutTilt");
     if (aboutTilt) {
-      aboutTilt.addEventListener("pointermove", (e) => {
+      const MAX = 16, REACH = 650;
+      let curRX = 0, curRY = 0, curGX = 50, curGY = 50;
+      let targetRX = 0, targetRY = 0, targetGX = 50, targetGY = 50;
+      const setTarget = (x, y) => {
         const r = aboutTilt.getBoundingClientRect();
-        const px = (e.clientX - r.left) / r.width;
-        const py = (e.clientY - r.top) / r.height;
-        aboutTilt.style.transform = `perspective(1000px) rotateY(${(px - .5) * 14}deg) rotateX(${-(py - .5) * 14}deg) scale3d(1.02,1.02,1.02)`;
-        aboutTilt.style.setProperty("--gx", (px * 100).toFixed(1) + "%");
-        aboutTilt.style.setProperty("--gy", (py * 100).toFixed(1) + "%");
-        aboutTilt.classList.add("is-tilting");
-      });
-      aboutTilt.addEventListener("pointerleave", () => {
-        aboutTilt.style.transform = "";
-        aboutTilt.classList.remove("is-tilting");
-      });
+        const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+        const dx = Math.max(-1, Math.min(1, (x - cx) / REACH));
+        const dy = Math.max(-1, Math.min(1, (y - cy) / REACH));
+        targetRY = dx * MAX;
+        targetRX = -dy * MAX;
+        targetGX = Math.max(0, Math.min(1, (x - r.left) / r.width)) * 100;
+        targetGY = Math.max(0, Math.min(1, (y - r.top) / r.height)) * 100;
+      };
+      addEventListener("mousemove", (e) => setTarget(e.clientX, e.clientY), { passive: true });
+      (function raf() {
+        curRX += (targetRX - curRX) * 0.07;
+        curRY += (targetRY - curRY) * 0.07;
+        curGX += (targetGX - curGX) * 0.1;
+        curGY += (targetGY - curGY) * 0.1;
+        aboutTilt.style.transform = `perspective(1000px) rotateY(${curRY.toFixed(2)}deg) rotateX(${curRX.toFixed(2)}deg)`;
+        aboutTilt.style.setProperty("--gx", curGX.toFixed(1) + "%");
+        aboutTilt.style.setProperty("--gy", curGY.toFixed(1) + "%");
+        aboutTilt.classList.toggle("is-tilting", Math.abs(curRX) > 0.4 || Math.abs(curRY) > 0.4);
+        requestAnimationFrame(raf);
+      })();
     }
   }
 

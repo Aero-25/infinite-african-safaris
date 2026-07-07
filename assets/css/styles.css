@@ -623,10 +623,6 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
    SAFARIS PAGE
    ===================================================================== */
 .safaris{ background:var(--paper); }
-.filterbar{ display:flex; flex-wrap:wrap; gap:.6rem; justify-content:center; max-width:var(--maxw); margin:0 auto clamp(2rem,4vw,3rem); }
-.filterbar button{ padding:.6em 1.3em; border-radius:100px; border:1.4px solid var(--line); font-weight:600; font-size:.92rem; color:var(--txt-soft); transition:.25s; }
-.filterbar button:hover{ border-color:var(--ink); color:var(--ink); }
-.filterbar button.is-active{ background:var(--black); color:#fff; border-color:var(--black); }
 .safari-grid{ max-width:var(--maxw); margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:1.4rem; perspective:1300px; }
 .safari-grid .card{ min-height:clamp(380px,46vh,460px); }
 .safari-grid .card.is-hidden{ display:none; }
