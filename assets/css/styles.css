@@ -742,7 +742,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .fab--inf{ border-radius:0; background:none; box-shadow:none; display:block;
   animation:infBreathe 5s ease-in-out infinite; transition:transform .45s var(--ease), filter .45s var(--ease); }
 .fab--inf:hover{ transform:translateY(-4px) scale(1.05); }
-.fab__inf{ width:clamp(72px,8.4vw,96px); height:auto; display:block; overflow:visible;
+.fab__inf{ width:clamp(120px,13vw,168px); height:auto; display:block; overflow:visible;
   filter:drop-shadow(0 14px 18px rgba(20,15,5,.32)) drop-shadow(0 0 0 rgba(233,197,131,0)); }
 .fab--inf:hover .fab__inf{ filter:drop-shadow(0 20px 26px rgba(20,15,5,.4)) drop-shadow(0 0 20px rgba(233,197,131,.5)); }
 @keyframes infBreathe{
@@ -879,9 +879,6 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 }
 .sig__item--night .sig__body{ transform:translateX(calc(var(--split) * var(--throw))) scale(calc(1 - var(--split) * 0.08)); }
 .sig__item--night .sig__media{ transform:translateX(calc(var(--split) * var(--throw) * -1)) scale(calc(1 - var(--split) * 0.08)); }
-@media (prefers-reduced-motion:reduce){
-  .sig__item .sig__body, .sig__item .sig__media{ transform:none !important; opacity:1 !important; filter:none !important; }
-}
 
 .sig__eyebrow{ font-size:.72rem; font-weight:700; letter-spacing:.22em; text-transform:uppercase; margin-bottom:.6rem; }
 .sig__title{

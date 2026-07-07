@@ -560,24 +560,32 @@
     const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
 
     // points sampled along the ∞ outline that veins reach toward, so the
-    // branch network visibly traces/reinforces the infinity shape.
+    // branch network visibly traces/reinforces the infinity shape. Split into
+    // a left-loop and right-loop set so each loop's branches are only ever
+    // pulled toward their own half of the outline — otherwise both loops'
+    // branches converge on whichever target is globally nearest (usually the
+    // crossing), leaving the rest of each loop bare.
     const L = infPath.getTotalLength();
-    const targets = [];
-    for (let i = 0; i < 60; i++) { const p = infPath.getPointAtLength((i / 60) * L); targets.push([p.x, p.y]); }
+    const targetsLeft = [], targetsRight = [];
+    for (let i = 0; i < 90; i++) {
+      const p = infPath.getPointAtLength((i / 90) * L);
+      (p.x <= 230 ? targetsLeft : targetsRight).push([p.x, p.y]);
+    }
+    let activeTargets = targetsLeft;
     const nearestTarget = (x, y) => {
       let best = null, bd = Infinity;
-      for (const t of targets) { const d = (t[0] - x) ** 2 + (t[1] - y) ** 2; if (d < bd) { bd = d; best = t; } }
+      for (const t of activeTargets) { const d = (t[0] - x) ** 2 + (t[1] - y) ** 2; if (d < bd) { bd = d; best = t; } }
       return best;
     };
 
     // recursive branch generator — each call is one "edge" (a jittered polyline),
     // gently steered toward the nearest outline point, forking into 1-2 children.
     function buildEdge(x, y, angle, len, depth) {
-      if (depth <= 0 || len < 9) return null;
+      if (depth <= 0 || len < 7) return null;
       const target = nearestTarget(x, y);
       const distToTarget = Math.hypot(target[0] - x, target[1] - y);
       const targetAngle = Math.atan2(target[1] - y, target[0] - x);
-      const pull = distToTarget < 60 ? 0.4 : 0.14;
+      const pull = distToTarget < 60 ? 0.28 : 0.12;
       const steered = angle + (((targetAngle - angle + Math.PI * 3) % (Math.PI * 2)) - Math.PI) * pull;
       const steps = 2 + Math.floor(rnd() * 2);
       let cx = x, cy = y, cang = steered, d = `M${x.toFixed(1)},${y.toFixed(1)}`, Ltot = 0;
@@ -590,21 +598,22 @@
         cx = nx; cy = ny;
       }
       const edge = { d, len: Ltot, depth, children: [] };
-      const nBranches = depth > 4 ? 2 : (rnd() < 0.45 ? 2 : 1);
+      const nBranches = depth > 4 ? 2 : (rnd() < 0.5 ? 2 : 1);
       for (let i = 0; i < nBranches; i++) {
         const spread = (i - (nBranches - 1) / 2) * 0.6 + (rnd() - 0.5) * 0.25;
-        const child = buildEdge(cx, cy, cang + spread, len * (0.76 + rnd() * 0.06), depth - 1);
+        const child = buildEdge(cx, cy, cang + spread, len * (0.78 + rnd() * 0.06), depth - 1);
         if (child) edge.children.push(child);
       }
       return edge;
     }
 
     const roots = [];
-    const centers = [[135, 150], [325, 150]]; // one per loop of the ∞
-    for (const [cx0, cy0] of centers) {
-      const DIRS = 6;
+    const centers = [[135, 150, targetsLeft], [325, 150, targetsRight]]; // one per loop of the ∞
+    for (const [cx0, cy0, ownTargets] of centers) {
+      activeTargets = ownTargets;
+      const DIRS = 10;
       for (let a = 0; a < DIRS; a++) {
-        const e = buildEdge(cx0, cy0, (a / DIRS) * Math.PI * 2 + rnd() * 0.2, 22, 5);
+        const e = buildEdge(cx0, cy0, (a / DIRS) * Math.PI * 2 + rnd() * 0.2, 30, 6);
         if (e) roots.push(e);
       }
     }
@@ -637,9 +646,7 @@
     }
     roots.forEach(r => render(r, 0));
 
-    if (reduce) return; // static line-art only — no animation
-
-    import("https://cdn.jsdelivr.net/npm/motion@latest/+esm").then(({ animate }) => {
+    import("/assets/js/vendor/motion.min.mjs").then(({ animate }) => {
       const maxOrder = Math.max(...flatEdges.map(e => e.order));
       function runCycle() {
         flatEdges.forEach(e => {
@@ -730,26 +737,27 @@
 
   /* split/merge reveal: body slides in from one side, media from the
      other, converging together as each panel scrolls into view. Tied
-     continuously to scroll position (not a one-shot fade). */
-  if (!reduce) {
-    const sigItems = $$(".sig__item");
-    if (sigItems.length) {
-      let ticking = false;
-      const update = () => {
-        ticking = false;
-        const vh = innerHeight;
-        sigItems.forEach(el => {
-          const r = el.getBoundingClientRect();
-          const raw = (vh * 0.92 - r.top) / (vh * 0.62);
-          const progress = Math.max(0, Math.min(1, raw));
-          el.style.setProperty("--split", (1 - progress).toFixed(3));
-        });
-      };
-      const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
-      addEventListener("scroll", onScroll, { passive: true });
-      addEventListener("resize", onScroll);
-      update();
-    }
+     continuously to scroll position (not a one-shot fade). This is a
+     deliberate brand effect the site always shows — it isn't gated behind
+     `reduce`, since OS-level reduced-motion would otherwise silently pin it
+     to a flat, merged state with no way to notice the effect exists. */
+  const sigItems = $$(".sig__item");
+  if (sigItems.length) {
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const vh = innerHeight;
+      sigItems.forEach(el => {
+        const r = el.getBoundingClientRect();
+        const raw = (vh * 0.92 - r.top) / (vh * 0.62);
+        const progress = Math.max(0, Math.min(1, raw));
+        el.style.setProperty("--split", (1 - progress).toFixed(3));
+      });
+    };
+    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+    addEventListener("scroll", onScroll, { passive: true });
+    addEventListener("resize", onScroll);
+    update();
   }
 
   /* =================================================================
