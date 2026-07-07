@@ -513,25 +513,14 @@
     addEventListener("resize", () => { measure(); update(); });
     measure(); update();
 
-    // ---- self-hosted background video: autoplay muted, loop ----
-    // Plays continuously once started (never paused by scroll position) so the
-    // full clip always gets to play through, however fast someone scrolls past.
+    // ---- self-hosted background video ----
+    // Fully native: `autoplay` + `preload="auto"` in the HTML handle fetching
+    // and starting playback. Every test where JS instead called .play()
+    // imperatively (regardless of load()/preload timing) eventually stalled
+    // the timeline permanently at readyState HAVE_CURRENT_DATA — so this
+    // section no longer touches playback at all, only the mute toggle.
     const vid = $("#filmVideo");
-    let loaded = false;
     const sound = $("#filmSound");
-    const loadVideo = () => {
-      if (loaded || !vid) return;
-      loaded = true;
-      // Let the native `autoplay` attribute start playback once data arrives —
-      // an imperative vid.play() call here reliably stalled the timeline at
-      // its first frame (readyState stuck at HAVE_CURRENT_DATA, never
-      // recovering). Just switching preload to fetch the file is enough.
-      vid.preload = "auto";
-    };
-    // preload ~one screen early so it's ready by the time it's on screen
-    new IntersectionObserver((es) => es.forEach(e => {
-      if (e.isIntersecting) loadVideo();
-    }), { rootMargin: "700px 0px" }).observe(film);
     sound?.addEventListener("click", (e) => {
       e.preventDefault(); e.stopPropagation();
       if (!vid) return;
@@ -760,6 +749,30 @@
         html += `<span style="left:${left.toFixed(1)}%;width:${size.toFixed(1)}px;height:${size.toFixed(1)}px;--dx:${dx.toFixed(0)}px;animation-duration:${dur.toFixed(1)}s;animation-delay:${delay.toFixed(1)}s"></span>`;
       }
       reviewsDustHost.innerHTML = html;
+    }
+  }
+
+  /* split/merge reveal: body slides in from one side, media from the
+     other, converging together as each panel scrolls into view. Tied
+     continuously to scroll position (not a one-shot fade). */
+  if (!reduce) {
+    const sigItems = $$(".sig__item");
+    if (sigItems.length) {
+      let ticking = false;
+      const update = () => {
+        ticking = false;
+        const vh = innerHeight;
+        sigItems.forEach(el => {
+          const r = el.getBoundingClientRect();
+          const raw = (vh * 0.92 - r.top) / (vh * 0.62);
+          const progress = Math.max(0, Math.min(1, raw));
+          el.style.setProperty("--split", (1 - progress).toFixed(3));
+        });
+      };
+      const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+      addEventListener("scroll", onScroll, { passive: true });
+      addEventListener("resize", onScroll);
+      update();
     }
   }
 
