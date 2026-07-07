@@ -70,7 +70,7 @@
   const safariGrid = $("#safariGrid");
   if (safariGrid) {
     const CAT = {
-      "sh-half":"desert","sh-sunset":"desert","sh-full":"desert","sh-private":"desert",
+      "sh-half":"desert","sh-sunset":"desert","sh-full":"desert",
       "moon":"desert","sossus":"desert","spitz":"desert","sh-dune":"combo",
       "cruise":"ocean","kayak":"ocean","fishing":"ocean","cruise-sh":"combo","kayak-sh":"combo",
     };
@@ -1073,11 +1073,6 @@
     };
     tick(); setInterval(tick, 1000 * 20);
   }
-
-  /* back to top */
-  $("#toTop")?.addEventListener("click", () => {
-    if (lenis) lenis.scrollTo(0); else scrollTo({ top: 0, behavior: "smooth" });
-  });
 
   /* init */
   applyCurrency();

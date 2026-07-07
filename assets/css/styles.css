@@ -729,9 +729,6 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .footer__social .soc span{ display:none; }
 
 .mf-bottom{ max-width:var(--maxw); margin:clamp(2rem,4vw,3rem) auto 0; padding:1.4rem var(--pad) 0; border-top:1px solid rgba(255,255,255,.1); display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; font-size:.8rem; color:rgba(243,232,214,.5); }
-.totop{ display:inline-flex; align-items:center; gap:.55rem; color:var(--sand); font-size:.74rem; text-transform:uppercase; letter-spacing:.12em; }
-.totop svg{ width:42px; color:var(--khaki); transition:transform .6s var(--ease); }
-.totop:hover svg{ transform:rotate(180deg); }
 
 /* =====================================================================
    FAB + LIGHTBOX
@@ -1108,16 +1105,6 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
    REVIEWS PAGE — elegant, light, all quotes (masonry)
    ===================================================================== */
 .pagehead--reviews{ padding-bottom:clamp(32px,5vh,56px); }
-.revstat{ display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:clamp(1.4rem,5vw,3.2rem); margin-top:clamp(2rem,4vw,2.8rem); }
-.revstat__score{ display:flex; align-items:center; gap:1rem; }
-.revstat__score > b{ font-family:var(--display); font-weight:800; font-size:clamp(3rem,7vw,4.4rem); line-height:.82; color:var(--ink); font-variant-numeric:tabular-nums; }
-.revstat__score div{ display:flex; flex-direction:column; gap:.25rem; text-align:left; }
-.revstat__stars{ color:var(--khaki-deep); letter-spacing:.2em; font-size:1.15rem; }
-.revstat__score span{ color:var(--txt-soft); font-size:.9rem; }
-.revstat__score span b{ color:var(--khaki-deep); font-weight:700; }
-.revstat__src{ display:flex; gap:.7rem; flex-wrap:wrap; }
-.revstat__badge{ display:inline-flex; align-items:center; gap:.4rem; padding:.7rem 1.2rem; border:1px solid var(--line); border-radius:100px; font-weight:600; font-size:.88rem; color:var(--ink); background:#fff; transition:.25s; }
-.revstat__badge:hover{ border-color:var(--khaki); color:var(--khaki-deep); transform:translateY(-2px); box-shadow:0 14px 24px -18px rgba(20,19,18,.4); }
 
 .revpage{ background:var(--paper); }
 /* auto-scrolling marquee columns; alternate directions; pause on hover */
