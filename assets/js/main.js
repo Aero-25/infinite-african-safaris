@@ -532,132 +532,16 @@
   }
 
   /* =================================================================
-     CHAT FAB — a living infinity sign, drawn as a network of glowing
-     veins that trace the ∞ outline and pulse along its branches.
-     Animated with the Motion library (motion.dev).
+     CHAT FAB — a clean, plain infinity mark. The site's own signature
+     chat button.
      ================================================================= */
-  $$(".fab").forEach((fab, fabIdx) => {
+  $$(".fab").forEach((fab) => {
     fab.classList.add("fab--inf");
-    const uid = "inf" + fabIdx;
     const INF = "M40,150 C40,100 90,72 140,90 C185,106 205,150 230,150 C255,150 275,106 320,90 C370,72 420,100 420,150 C420,200 370,228 320,210 C275,194 255,150 230,150 C205,150 185,194 140,210 C90,228 40,200 40,150 Z";
     fab.innerHTML = `
       <svg class="fab__inf" viewBox="0 0 460 300" aria-hidden="true">
-        <defs>
-          <filter id="${uid}Glow" x="-200%" y="-200%" width="500%" height="500%">
-            <feGaussianBlur stdDeviation="1.8" result="b"/>
-            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-        </defs>
-        <path id="${uid}Path" fill="none" stroke="#8a6a3c" stroke-width="3.4" stroke-linecap="round" opacity=".88" d="${INF}"/>
-        <g id="${uid}Veins" fill="none" stroke-linecap="round"></g>
-        <g id="${uid}Pulses" fill="none" stroke-linecap="round"></g>
+        <path fill="none" stroke="#141312" stroke-width="16" stroke-linecap="round" d="${INF}"/>
       </svg>`;
-
-    const NS = "http://www.w3.org/2000/svg";
-    const infPath = fab.querySelector(`#${uid}Path`);
-    const veinsG = fab.querySelector(`#${uid}Veins`), pulsesG = fab.querySelector(`#${uid}Pulses`);
-    let seed = 13 + fabIdx;
-    const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
-
-    // points sampled along the ∞ outline that veins reach toward, so the
-    // branch network visibly traces/reinforces the infinity shape. Split into
-    // a left-loop and right-loop set so each loop's branches are only ever
-    // pulled toward their own half of the outline — otherwise both loops'
-    // branches converge on whichever target is globally nearest (usually the
-    // crossing), leaving the rest of each loop bare.
-    const L = infPath.getTotalLength();
-    const targetsLeft = [], targetsRight = [];
-    for (let i = 0; i < 90; i++) {
-      const p = infPath.getPointAtLength((i / 90) * L);
-      (p.x <= 230 ? targetsLeft : targetsRight).push([p.x, p.y]);
-    }
-    let activeTargets = targetsLeft;
-    const nearestTarget = (x, y) => {
-      let best = null, bd = Infinity;
-      for (const t of activeTargets) { const d = (t[0] - x) ** 2 + (t[1] - y) ** 2; if (d < bd) { bd = d; best = t; } }
-      return best;
-    };
-
-    // recursive branch generator — each call is one "edge" (a jittered polyline),
-    // gently steered toward the nearest outline point, forking into 1-2 children.
-    function buildEdge(x, y, angle, len, depth) {
-      if (depth <= 0 || len < 7) return null;
-      const target = nearestTarget(x, y);
-      const distToTarget = Math.hypot(target[0] - x, target[1] - y);
-      const targetAngle = Math.atan2(target[1] - y, target[0] - x);
-      const pull = distToTarget < 60 ? 0.28 : 0.12;
-      const steered = angle + (((targetAngle - angle + Math.PI * 3) % (Math.PI * 2)) - Math.PI) * pull;
-      const steps = 2 + Math.floor(rnd() * 2);
-      let cx = x, cy = y, cang = steered, d = `M${x.toFixed(1)},${y.toFixed(1)}`, Ltot = 0;
-      for (let s = 0; s < steps; s++) {
-        cang += (rnd() - 0.5) * 0.35;
-        const stepLen = len / steps;
-        const nx = cx + Math.cos(cang) * stepLen, ny = cy + Math.sin(cang) * stepLen;
-        d += ` L${nx.toFixed(1)},${ny.toFixed(1)}`;
-        Ltot += Math.hypot(nx - cx, ny - cy);
-        cx = nx; cy = ny;
-      }
-      const edge = { d, len: Ltot, depth, children: [] };
-      const nBranches = depth > 4 ? 2 : (rnd() < 0.5 ? 2 : 1);
-      for (let i = 0; i < nBranches; i++) {
-        const spread = (i - (nBranches - 1) / 2) * 0.6 + (rnd() - 0.5) * 0.25;
-        const child = buildEdge(cx, cy, cang + spread, len * (0.78 + rnd() * 0.06), depth - 1);
-        if (child) edge.children.push(child);
-      }
-      return edge;
-    }
-
-    const roots = [];
-    const centers = [[135, 150, targetsLeft], [325, 150, targetsRight]]; // one per loop of the ∞
-    for (const [cx0, cy0, ownTargets] of centers) {
-      activeTargets = ownTargets;
-      const DIRS = 10;
-      for (let a = 0; a < DIRS; a++) {
-        const e = buildEdge(cx0, cy0, (a / DIRS) * Math.PI * 2 + rnd() * 0.2, 30, 6);
-        if (e) roots.push(e);
-      }
-    }
-
-    // flatten the tree into an ordered list (root -> tip per branch) so the
-    // pulse animation can be staggered generation-by-generation.
-    const flatEdges = [];
-    function render(edge, order) {
-      const w = Math.max(0.6, edge.depth * 0.45);
-      const op = 0.42 + Math.min(0.3, edge.depth * 0.06);
-      const line = document.createElementNS(NS, "path");
-      line.setAttribute("d", edge.d);
-      line.setAttribute("stroke", "#8a6a3c"); line.setAttribute("stroke-opacity", op.toFixed(2));
-      line.setAttribute("stroke-width", w.toFixed(2));
-      veinsG.appendChild(line);
-
-      const pulse = document.createElementNS(NS, "path");
-      pulse.setAttribute("d", edge.d);
-      pulse.setAttribute("stroke", "#f3d99b");
-      pulse.setAttribute("stroke-width", (w + 1.1).toFixed(2));
-      pulse.setAttribute("filter", `url(#${uid}Glow)`);
-      pulse.setAttribute("stroke-dasharray", edge.len.toFixed(1));
-      pulse.setAttribute("stroke-dashoffset", edge.len.toFixed(1));
-      pulse.setAttribute("opacity", "0"); // must be an attribute, not inline style —
-      // Motion animates SVG opacity via the presentation attribute, and an inline
-      // style would out-rank it in the cascade and permanently pin it to 0.
-      pulsesG.appendChild(pulse);
-      flatEdges.push({ el: pulse, len: edge.len, order });
-      edge.children.forEach(c => render(c, order + 1));
-    }
-    roots.forEach(r => render(r, 0));
-
-    import("/assets/js/vendor/motion.min.mjs").then(({ animate }) => {
-      const maxOrder = Math.max(...flatEdges.map(e => e.order));
-      function runCycle() {
-        flatEdges.forEach(e => {
-          animate(e.el, { strokeDashoffset: [e.len, 0], opacity: [0, 1, 1, 0] },
-            { duration: 0.9, delay: 0.55 + e.order * 0.42, ease: "easeInOut", times: [0, 0.2, 0.75, 1] });
-        });
-        const cycleLen = 0.55 + maxOrder * 0.42 + 0.9 + 0.7;
-        setTimeout(runCycle, cycleLen * 1000);
-      }
-      runCycle();
-    });
   });
 
   /* =================================================================
