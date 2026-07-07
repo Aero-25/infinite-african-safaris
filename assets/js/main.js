@@ -733,6 +733,24 @@
       el.addEventListener("pointerleave", () => { el.style.transform = ""; });
     };
     $$(".cards--rail .card").forEach(c => tilt(c, 6));
+
+    /* richer 3D tilt + moving glare highlight for the About section photo */
+    const aboutTilt = $("#aboutTilt");
+    if (aboutTilt) {
+      aboutTilt.addEventListener("pointermove", (e) => {
+        const r = aboutTilt.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width;
+        const py = (e.clientY - r.top) / r.height;
+        aboutTilt.style.transform = `perspective(1000px) rotateY(${(px - .5) * 14}deg) rotateX(${-(py - .5) * 14}deg) scale3d(1.02,1.02,1.02)`;
+        aboutTilt.style.setProperty("--gx", (px * 100).toFixed(1) + "%");
+        aboutTilt.style.setProperty("--gy", (py * 100).toFixed(1) + "%");
+        aboutTilt.classList.add("is-tilting");
+      });
+      aboutTilt.addEventListener("pointerleave", () => {
+        aboutTilt.style.transform = "";
+        aboutTilt.classList.remove("is-tilting");
+      });
+    }
   }
 
   /* Our Safaris rail arrows */
@@ -746,8 +764,9 @@
   $("#railPrev")?.addEventListener("click", () => { scrollRail(-1); bumpRailAuto(); });
   $("#railNext")?.addEventListener("click", () => { scrollRail(1); bumpRailAuto(); });
 
-  /* rail auto-scroll: advances one card at a time, loops back to the start,
-     pauses on hover/touch and briefly after a manual arrow click. */
+  /* rail auto-scroll: always advances one card at a time and loops back
+     to the start — a manual arrow click just resets the timer so it
+     doesn't immediately fight the click. */
   let railTimer = null, bumpRailAuto = () => {};
   if (rail) {
     const advance = () => {
@@ -755,11 +774,8 @@
       if (atEnd) rail.scrollTo({ left: 0, behavior: "smooth" });
       else scrollRail(1);
     };
-    const start = () => { stop(); railTimer = setInterval(advance, 4000); };
-    const stop = () => { if (railTimer) clearInterval(railTimer); railTimer = null; };
+    const start = () => { if (railTimer) clearInterval(railTimer); railTimer = setInterval(advance, 4000); };
     bumpRailAuto = () => { start(); };
-    rail.addEventListener("pointerenter", stop);
-    rail.addEventListener("pointerleave", start);
     start();
   }
 
