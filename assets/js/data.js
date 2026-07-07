@@ -57,7 +57,7 @@ const TOURS = [
     scene:"moon", img:"https://images.pexels.com/photos/34780180/pexels-photo-34780180.jpeg",
     blurb:"Lunar valleys and ancient Welwitschia plants on a desert geology tour." },
   { id:"sh-dune",   name:"Sandwich Harbour & Dune Boarding Combo", adult:3500, child:1750, hours:"6 hours", min:2,
-    scene:"dune", img:IMG("1489493887464-892be6d1daae"),
+    scene:"dune", img:"https://images.pexels.com/photos/34799593/pexels-photo-34799593.jpeg",
     blurb:"Big dunes by day, board down them by afternoon. The full sand experience." },
   { id:"cruise-sh", name:"Marine Cruise & Sandwich Harbour Combo", adult:4000, child:2250, hours:"7+ hours", min:2,
     scene:"ocean", img:IMG("1471922694854-ff1b63b20054"),
@@ -69,10 +69,10 @@ const TOURS = [
     scene:"fish", img:IMG("1471922694854-ff1b63b20054"),
     blurb:"Cast a line along the Atlantic shore. Tackle and guidance provided." },
   { id:"sossus",    name:"Sossusvlei & Deadvlei",     adult:null, child:null, hours:"On request", min:2,
-    scene:"sunrise", img:IMG("1516026672322-bc52d61a55d5"),
+    scene:"sunrise", img:"https://images.pexels.com/photos/14032289/pexels-photo-14032289.jpeg",
     blurb:"The world's tallest dunes and the haunting white pan of Deadvlei." },
   { id:"spitz",     name:"Spitzkoppe",                adult:null, child:null, hours:"On request", min:2,
-    scene:"savanna", img:IMG("1547234935-80c7145ec969"),
+    scene:"savanna", img:"https://images.pexels.com/photos/35298609/pexels-photo-35298609.jpeg",
     blurb:"Ancient granite peaks, rock art and some of Namibia's darkest skies." },
 ];
 
