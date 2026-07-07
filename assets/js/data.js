@@ -117,9 +117,6 @@ const SOCIALS = [
   { key:"whatsapp",    label:"WhatsApp",    url:"https://wa.me/264817269221" },
   { key:"instagram",   label:"Instagram",   url:"#" },
   { key:"facebook",    label:"Facebook",    url:"#" },
-  { key:"x",           label:"X (Twitter)", url:"#" },
-  { key:"getyourguide",label:"GetYourGuide",url:"#" },
-  { key:"google",      label:"Google",      url:"#" },
 ];
 
 const CONTACT = { whatsapp: "264817269221", email: "info@infiniteafricansafaris.com" };
