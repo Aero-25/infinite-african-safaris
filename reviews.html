@@ -68,47 +68,29 @@
   </header>
 
   <main id="top">
-    <!-- ============ CINEMATIC SPOTLIGHT HERO ============ -->
-    <section class="reviews reviews--hero" id="reviewsHero">
-      <div class="reviews__dust" aria-hidden="true" id="reviewsDust"></div>
-      <div class="section" style="padding-top:clamp(140px,20vh,190px)">
-        <p class="pagehead__crumb pagehead__crumb--light" style="text-align:center"><a href="index.html">Home</a> · Reviews</p>
-        <div class="rv">
-          <div class="rv__aside" data-reveal>
-            <p class="eyebrow"><span class="rv__pulse"></span> Real, verified stories</p>
-            <h1 class="h2 h2--light">Loved by<br><em>travellers</em></h1>
-            <div class="rv__score">
-              <b class="rv__num" data-to="4.9">0.0</b>
-              <div class="rv__rating">
-                <span class="rv__stars" aria-hidden="true">★★★★★</span>
-                <span class="rv__from">from <b data-to="240">0</b>+ happy travellers</span>
-              </div>
-            </div>
-            <div class="rv__badges">
-              <a class="rv__badge" href="#" data-social="google" target="_blank" rel="noopener"><b>★ 4.9</b><span>Google</span></a>
-              <a class="rv__badge" href="#" data-social="getyourguide" target="_blank" rel="noopener"><b>★ 5.0</b><span>GetYourGuide</span></a>
+    <header class="pagehead pagehead--reviews">
+      <div class="pagehead__inner">
+        <p class="pagehead__crumb"><a href="index.html">Home</a> · Reviews</p>
+        <h1>Loved by <em>travellers</em></h1>
+        <p>We'd rather let our guests do the talking. Every word below is from someone who explored Namibia's dunes and coast with us.</p>
+        <div class="revstat" data-reveal>
+          <div class="revstat__score">
+            <b data-to="4.9">0.0</b>
+            <div>
+              <span class="revstat__stars" aria-hidden="true">★★★★★</span>
+              <span>from <b data-to="240">0</b>+ happy travellers</span>
             </div>
           </div>
-
-          <div class="rv__stage" id="rvStage">
-            <svg class="rv__quote" viewBox="0 0 100 80" aria-hidden="true"><path d="M0 40 Q0 0 40 0 V18 Q20 18 20 40 H40 V80 H0 Z M60 40 Q60 0 100 0 V18 Q80 18 80 40 H100 V80 H60 Z"/></svg>
-            <div class="rv__slides" id="rvSlides"><!-- injected --></div>
-            <div class="rv__controls">
-              <div class="rv__dots" id="rvDots"></div>
-              <div class="rv__arrows">
-                <button class="rv__arrow" id="rvPrev" aria-label="Previous review">←</button>
-                <button class="rv__arrow" id="rvNext" aria-label="Next review">→</button>
-              </div>
-            </div>
-            <div class="rv__progress"><span id="rvBar"></span></div>
+          <div class="revstat__src">
+            <a class="revstat__badge" href="#" data-social="google" target="_blank" rel="noopener">★ 4.9 · Google</a>
+            <a class="revstat__badge" href="#" data-social="getyourguide" target="_blank" rel="noopener">★ 5.0 · GetYourGuide</a>
           </div>
         </div>
       </div>
-    </section>
+    </header>
 
-    <!-- ============ QUOTE WALL — simple, refined ============ -->
+    <!-- ============ QUOTE WALL — simple, beautiful, 3 columns auto-scrolling: outer two up, middle down ============ -->
     <section class="section revpage">
-      <p class="revpage__eyebrow" data-reveal>— In their words</p>
       <div class="revwall" id="revWall" data-reveal><!-- injected --></div>
       <div class="revpage__cta" data-reveal>
         <p>Ready to write your own story?</p>

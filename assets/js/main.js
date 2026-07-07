@@ -522,9 +522,11 @@
     const loadVideo = () => {
       if (loaded || !vid) return;
       loaded = true;
+      // Let the native `autoplay` attribute start playback once data arrives —
+      // an imperative vid.play() call here reliably stalled the timeline at
+      // its first frame (readyState stuck at HAVE_CURRENT_DATA, never
+      // recovering). Just switching preload to fetch the file is enough.
       vid.preload = "auto";
-      vid.load();
-      const pr = vid.play(); if (pr && pr.catch) pr.catch(() => {});
     };
     // preload ~one screen early so it's ready by the time it's on screen
     new IntersectionObserver((es) => es.forEach(e => {
@@ -548,26 +550,27 @@
   $$(".fab").forEach((fab, fabIdx) => {
     fab.classList.add("fab--foot");
     const uid = "fp" + fabIdx;
+    const PAD = "M150,30 C186,30 214,46 228,72 C242,98 246,128 240,158 C234,190 220,216 196,234 C178,247 122,247 104,234 C80,216 66,190 60,158 C54,128 58,98 72,72 C86,46 114,30 150,30 Z";
+    const TOES = [
+      "M92,52 C86,42 88,30 100,26 C112,22 122,30 122,42 C122,50 116,56 108,56 C100,56 94,54 92,52 Z",
+      "M126,34 C124,24 130,14 142,13 C154,12 162,22 160,34 C158,42 150,46 142,44 C134,42 128,40 126,34 Z",
+      "M164,34 C166,24 176,16 188,18 C200,20 206,32 200,42 C196,50 186,52 178,48 C170,44 162,42 164,34 Z",
+      "M200,52 C204,42 216,38 226,44 C236,50 238,62 230,70 C224,76 214,76 208,68 C202,60 198,60 200,52 Z",
+    ];
     fab.innerHTML = `
       <svg class="fab__foot" viewBox="0 0 300 300" aria-hidden="true">
         <defs>
           <filter id="${uid}Glow" x="-150%" y="-150%" width="400%" height="400%">
-            <feGaussianBlur stdDeviation="2.6" result="b"/>
+            <feGaussianBlur stdDeviation="2.4" result="b"/>
             <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
           </filter>
-          <radialGradient id="${uid}Base" cx="50%" cy="50%" r="60%">
-            <stop offset="0" stop-color="#241b14"/><stop offset="1" stop-color="#0c0a07"/>
-          </radialGradient>
-          <path id="${uid}Pad" d="M150,30 C186,30 214,46 228,72 C242,98 246,128 240,158 C234,190 220,216 196,234
-            C178,247 122,247 104,234 C80,216 66,190 60,158 C54,128 58,98 72,72 C86,46 114,30 150,30 Z"/>
-          <clipPath id="${uid}Clip"><use href="#${uid}Pad"/></clipPath>
         </defs>
-        <use href="#${uid}Pad" fill="url(#${uid}Base)"/>
-        <g clip-path="url(#${uid}Clip)">
-          <g id="${uid}Veins"></g>
-          <g id="${uid}Pulses"></g>
+        <g id="${uid}Outline" fill="none" stroke="#8a6a3c" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" opacity=".88">
+          <path d="${PAD}"/>
+          ${TOES.map(t => `<path d="${t}"/>`).join("")}
         </g>
-        <use href="#${uid}Pad" fill="none" stroke="#4a4030" stroke-width="2"/>
+        <g id="${uid}Veins" fill="none" stroke-linecap="round"></g>
+        <g id="${uid}Pulses" fill="none" stroke-linecap="round"></g>
       </svg>`;
 
     const NS = "http://www.w3.org/2000/svg";
@@ -575,14 +578,32 @@
     let seed = 11 + fabIdx;
     const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
 
-    // recursive branch generator — each call is one "edge" (a jittered polyline)
-    // that forks into 1-2 children, exactly like a Lichtenberg / root network.
+    // points along the outline (pad rim + toe knuckles) that veins reach toward,
+    // so the branch network visibly traces/reinforces the footprint shape.
+    const targets = [
+      [150, 30], [190, 32], [228, 72], [240, 120], [240, 158], [220, 216], [178, 247],
+      [122, 247], [80, 216], [60, 158], [60, 120], [72, 72], [110, 32],
+      [100, 26], [142, 13], [188, 18], [226, 44],
+    ];
+    const nearestTarget = (x, y) => {
+      let best = null, bd = Infinity;
+      for (const t of targets) { const d = (t[0] - x) ** 2 + (t[1] - y) ** 2; if (d < bd) { bd = d; best = t; } }
+      return best;
+    };
+
+    // recursive branch generator — each call is one "edge" (a jittered polyline),
+    // gently steered toward the nearest outline point, forking into 1-2 children.
     function buildEdge(x, y, angle, len, depth) {
-      if (depth <= 0 || len < 5) return null;
+      if (depth <= 0 || len < 6) return null;
+      const target = nearestTarget(x, y);
+      const distToTarget = Math.hypot(target[0] - x, target[1] - y);
+      const targetAngle = Math.atan2(target[1] - y, target[0] - x);
+      const pull = distToTarget < 70 ? 0.35 : 0.12;
+      const steered = angle + (((targetAngle - angle + Math.PI * 3) % (Math.PI * 2)) - Math.PI) * pull;
       const steps = 2 + Math.floor(rnd() * 2);
-      let cx = x, cy = y, cang = angle, d = `M${x.toFixed(1)},${y.toFixed(1)}`, L = 0;
+      let cx = x, cy = y, cang = steered, d = `M${x.toFixed(1)},${y.toFixed(1)}`, L = 0;
       for (let s = 0; s < steps; s++) {
-        cang += (rnd() - 0.5) * 0.55;
+        cang += (rnd() - 0.5) * 0.4;
         const stepLen = len / steps;
         const nx = cx + Math.cos(cang) * stepLen, ny = cy + Math.sin(cang) * stepLen;
         d += ` L${nx.toFixed(1)},${ny.toFixed(1)}`;
@@ -590,36 +611,36 @@
         cx = nx; cy = ny;
       }
       const edge = { d, len: L, depth, children: [] };
-      const nBranches = depth > 5 ? 2 : (rnd() < 0.6 ? 2 : 1);
+      const nBranches = depth > 5 ? 2 : (rnd() < 0.5 ? 2 : 1);
       for (let i = 0; i < nBranches; i++) {
-        const spread = (i - (nBranches - 1) / 2) * 0.75 + (rnd() - 0.5) * 0.4;
-        const child = buildEdge(cx, cy, cang + spread, len * (0.76 + rnd() * 0.08), depth - 1);
+        const spread = (i - (nBranches - 1) / 2) * 0.6 + (rnd() - 0.5) * 0.3;
+        const child = buildEdge(cx, cy, cang + spread, len * (0.78 + rnd() * 0.08), depth - 1);
         if (child) edge.children.push(child);
       }
       return edge;
     }
 
     const roots = [];
-    const cx0 = 150, cy0 = 150, DIRS = 7;
+    const cx0 = 150, cy0 = 140, DIRS = 9;
     for (let a = 0; a < DIRS; a++) {
-      const e = buildEdge(cx0, cy0, (a / DIRS) * Math.PI * 2 + rnd() * 0.2, 40, 8);
+      const e = buildEdge(cx0, cy0, (a / DIRS) * Math.PI * 2 + rnd() * 0.2, 30, 7);
       if (e) roots.push(e);
     }
 
     // render static dim network + a matching (initially hidden) glow path per edge
     function renderStatic(edge) {
-      const w = Math.max(0.7, edge.depth * 0.55);
-      const op = 0.35 + Math.min(0.35, edge.depth * 0.035);
+      const w = Math.max(0.6, edge.depth * 0.4);
+      const op = 0.35 + Math.min(0.35, edge.depth * 0.05);
       const line = document.createElementNS(NS, "path");
-      line.setAttribute("d", edge.d); line.setAttribute("fill", "none");
-      line.setAttribute("stroke", "#b89a68"); line.setAttribute("stroke-opacity", op.toFixed(2));
-      line.setAttribute("stroke-width", w.toFixed(2)); line.setAttribute("stroke-linecap", "round");
+      line.setAttribute("d", edge.d);
+      line.setAttribute("stroke", "#8a6a3c"); line.setAttribute("stroke-opacity", op.toFixed(2));
+      line.setAttribute("stroke-width", w.toFixed(2));
       veinsG.appendChild(line);
 
       const pulse = document.createElementNS(NS, "path");
-      pulse.setAttribute("d", edge.d); pulse.setAttribute("fill", "none");
-      pulse.setAttribute("stroke", "#fff2cc"); pulse.setAttribute("stroke-linecap", "round");
-      pulse.setAttribute("stroke-width", (w + 1.1).toFixed(2));
+      pulse.setAttribute("d", edge.d);
+      pulse.setAttribute("stroke", "#f3d99b");
+      pulse.setAttribute("stroke-width", (w + 1).toFixed(2));
       pulse.setAttribute("filter", `url(#${uid}Glow)`);
       pulse.setAttribute("stroke-dasharray", edge.len.toFixed(1) + " " + edge.len.toFixed(1));
       pulse.setAttribute("stroke-dashoffset", edge.len.toFixed(1));
@@ -630,12 +651,12 @@
     }
     roots.forEach(renderStatic);
 
-    if (reduce) return; // static dim network only — no animation
+    if (reduce) return; // static line-art only — no animation
 
     // ---- cascading pulse scheduler: a bolt starts at center, forks at every
     // branch point (multiple veins lit at once), then the whole tree fades
     // together, pauses, and fires again. ----
-    const SPEED = 0.19, FADE_MS = 550, HOLD_MS = 260;
+    const SPEED = 0.16, FADE_MS = 550, HOLD_MS = 260;
     let active = [], cycleFadeStart = 0, cycleFadeEnd = 0, cyclePauseEnd = 0, lastBoltEnd = -1;
     function scheduleEdge(edge, startTime) {
       edge._start = startTime;
