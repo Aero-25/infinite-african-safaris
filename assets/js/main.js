@@ -532,48 +532,38 @@
   }
 
   /* =================================================================
-     CHAT FAB — a single elephant footprint pressed in sand.
-     The site's own signature mark: replaces the generic WhatsApp bubble
-     with a detailed, textured impression unique to this brand.
+     CHAT FAB — a living infinity sign, drawn as a network of glowing
+     veins that trace the ∞ outline and pulse along its branches.
+     Animated with the Motion library (motion.dev).
      ================================================================= */
   $$(".fab").forEach((fab, fabIdx) => {
-    fab.classList.add("fab--foot");
-    const uid = "fp" + fabIdx;
-    const PAD = "M150,30 C186,30 214,46 228,72 C242,98 246,128 240,158 C234,190 220,216 196,234 C178,247 122,247 104,234 C80,216 66,190 60,158 C54,128 58,98 72,72 C86,46 114,30 150,30 Z";
-    const TOES = [
-      "M92,52 C86,42 88,30 100,26 C112,22 122,30 122,42 C122,50 116,56 108,56 C100,56 94,54 92,52 Z",
-      "M126,34 C124,24 130,14 142,13 C154,12 162,22 160,34 C158,42 150,46 142,44 C134,42 128,40 126,34 Z",
-      "M164,34 C166,24 176,16 188,18 C200,20 206,32 200,42 C196,50 186,52 178,48 C170,44 162,42 164,34 Z",
-      "M200,52 C204,42 216,38 226,44 C236,50 238,62 230,70 C224,76 214,76 208,68 C202,60 198,60 200,52 Z",
-    ];
+    fab.classList.add("fab--inf");
+    const uid = "inf" + fabIdx;
+    const INF = "M40,150 C40,100 90,72 140,90 C185,106 205,150 230,150 C255,150 275,106 320,90 C370,72 420,100 420,150 C420,200 370,228 320,210 C275,194 255,150 230,150 C205,150 185,194 140,210 C90,228 40,200 40,150 Z";
     fab.innerHTML = `
-      <svg class="fab__foot" viewBox="0 0 300 300" aria-hidden="true">
+      <svg class="fab__inf" viewBox="0 0 460 300" aria-hidden="true">
         <defs>
-          <filter id="${uid}Glow" x="-150%" y="-150%" width="400%" height="400%">
-            <feGaussianBlur stdDeviation="2.4" result="b"/>
+          <filter id="${uid}Glow" x="-200%" y="-200%" width="500%" height="500%">
+            <feGaussianBlur stdDeviation="1.8" result="b"/>
             <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
           </filter>
         </defs>
-        <g id="${uid}Outline" fill="none" stroke="#8a6a3c" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" opacity=".88">
-          <path d="${PAD}"/>
-          ${TOES.map(t => `<path d="${t}"/>`).join("")}
-        </g>
+        <path id="${uid}Path" fill="none" stroke="#8a6a3c" stroke-width="3.4" stroke-linecap="round" opacity=".88" d="${INF}"/>
         <g id="${uid}Veins" fill="none" stroke-linecap="round"></g>
         <g id="${uid}Pulses" fill="none" stroke-linecap="round"></g>
       </svg>`;
 
     const NS = "http://www.w3.org/2000/svg";
+    const infPath = fab.querySelector(`#${uid}Path`);
     const veinsG = fab.querySelector(`#${uid}Veins`), pulsesG = fab.querySelector(`#${uid}Pulses`);
-    let seed = 11 + fabIdx;
+    let seed = 13 + fabIdx;
     const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
 
-    // points along the outline (pad rim + toe knuckles) that veins reach toward,
-    // so the branch network visibly traces/reinforces the footprint shape.
-    const targets = [
-      [150, 30], [190, 32], [228, 72], [240, 120], [240, 158], [220, 216], [178, 247],
-      [122, 247], [80, 216], [60, 158], [60, 120], [72, 72], [110, 32],
-      [100, 26], [142, 13], [188, 18], [226, 44],
-    ];
+    // points sampled along the ∞ outline that veins reach toward, so the
+    // branch network visibly traces/reinforces the infinity shape.
+    const L = infPath.getTotalLength();
+    const targets = [];
+    for (let i = 0; i < 60; i++) { const p = infPath.getPointAtLength((i / 60) * L); targets.push([p.x, p.y]); }
     const nearestTarget = (x, y) => {
       let best = null, bd = Infinity;
       for (const t of targets) { const d = (t[0] - x) ** 2 + (t[1] - y) ** 2; if (d < bd) { bd = d; best = t; } }
@@ -583,43 +573,48 @@
     // recursive branch generator — each call is one "edge" (a jittered polyline),
     // gently steered toward the nearest outline point, forking into 1-2 children.
     function buildEdge(x, y, angle, len, depth) {
-      if (depth <= 0 || len < 6) return null;
+      if (depth <= 0 || len < 9) return null;
       const target = nearestTarget(x, y);
       const distToTarget = Math.hypot(target[0] - x, target[1] - y);
       const targetAngle = Math.atan2(target[1] - y, target[0] - x);
-      const pull = distToTarget < 70 ? 0.35 : 0.12;
+      const pull = distToTarget < 60 ? 0.4 : 0.14;
       const steered = angle + (((targetAngle - angle + Math.PI * 3) % (Math.PI * 2)) - Math.PI) * pull;
       const steps = 2 + Math.floor(rnd() * 2);
-      let cx = x, cy = y, cang = steered, d = `M${x.toFixed(1)},${y.toFixed(1)}`, L = 0;
+      let cx = x, cy = y, cang = steered, d = `M${x.toFixed(1)},${y.toFixed(1)}`, Ltot = 0;
       for (let s = 0; s < steps; s++) {
-        cang += (rnd() - 0.5) * 0.4;
+        cang += (rnd() - 0.5) * 0.35;
         const stepLen = len / steps;
         const nx = cx + Math.cos(cang) * stepLen, ny = cy + Math.sin(cang) * stepLen;
         d += ` L${nx.toFixed(1)},${ny.toFixed(1)}`;
-        L += Math.hypot(nx - cx, ny - cy);
+        Ltot += Math.hypot(nx - cx, ny - cy);
         cx = nx; cy = ny;
       }
-      const edge = { d, len: L, depth, children: [] };
-      const nBranches = depth > 5 ? 2 : (rnd() < 0.5 ? 2 : 1);
+      const edge = { d, len: Ltot, depth, children: [] };
+      const nBranches = depth > 4 ? 2 : (rnd() < 0.45 ? 2 : 1);
       for (let i = 0; i < nBranches; i++) {
-        const spread = (i - (nBranches - 1) / 2) * 0.6 + (rnd() - 0.5) * 0.3;
-        const child = buildEdge(cx, cy, cang + spread, len * (0.78 + rnd() * 0.08), depth - 1);
+        const spread = (i - (nBranches - 1) / 2) * 0.6 + (rnd() - 0.5) * 0.25;
+        const child = buildEdge(cx, cy, cang + spread, len * (0.76 + rnd() * 0.06), depth - 1);
         if (child) edge.children.push(child);
       }
       return edge;
     }
 
     const roots = [];
-    const cx0 = 150, cy0 = 140, DIRS = 9;
-    for (let a = 0; a < DIRS; a++) {
-      const e = buildEdge(cx0, cy0, (a / DIRS) * Math.PI * 2 + rnd() * 0.2, 30, 7);
-      if (e) roots.push(e);
+    const centers = [[135, 150], [325, 150]]; // one per loop of the ∞
+    for (const [cx0, cy0] of centers) {
+      const DIRS = 6;
+      for (let a = 0; a < DIRS; a++) {
+        const e = buildEdge(cx0, cy0, (a / DIRS) * Math.PI * 2 + rnd() * 0.2, 22, 5);
+        if (e) roots.push(e);
+      }
     }
 
-    // render static dim network + a matching (initially hidden) glow path per edge
-    function renderStatic(edge) {
-      const w = Math.max(0.6, edge.depth * 0.4);
-      const op = 0.35 + Math.min(0.35, edge.depth * 0.05);
+    // flatten the tree into an ordered list (root -> tip per branch) so the
+    // pulse animation can be staggered generation-by-generation.
+    const flatEdges = [];
+    function render(edge, order) {
+      const w = Math.max(0.6, edge.depth * 0.45);
+      const op = 0.42 + Math.min(0.3, edge.depth * 0.06);
       const line = document.createElementNS(NS, "path");
       line.setAttribute("d", edge.d);
       line.setAttribute("stroke", "#8a6a3c"); line.setAttribute("stroke-opacity", op.toFixed(2));
@@ -629,52 +624,33 @@
       const pulse = document.createElementNS(NS, "path");
       pulse.setAttribute("d", edge.d);
       pulse.setAttribute("stroke", "#f3d99b");
-      pulse.setAttribute("stroke-width", (w + 1).toFixed(2));
+      pulse.setAttribute("stroke-width", (w + 1.1).toFixed(2));
       pulse.setAttribute("filter", `url(#${uid}Glow)`);
-      pulse.setAttribute("stroke-dasharray", edge.len.toFixed(1) + " " + edge.len.toFixed(1));
+      pulse.setAttribute("stroke-dasharray", edge.len.toFixed(1));
       pulse.setAttribute("stroke-dashoffset", edge.len.toFixed(1));
-      pulse.setAttribute("opacity", "0");
+      pulse.setAttribute("opacity", "0"); // must be an attribute, not inline style —
+      // Motion animates SVG opacity via the presentation attribute, and an inline
+      // style would out-rank it in the cascade and permanently pin it to 0.
       pulsesG.appendChild(pulse);
-      edge.pulseEl = pulse;
-      edge.children.forEach(renderStatic);
+      flatEdges.push({ el: pulse, len: edge.len, order });
+      edge.children.forEach(c => render(c, order + 1));
     }
-    roots.forEach(renderStatic);
+    roots.forEach(r => render(r, 0));
 
     if (reduce) return; // static line-art only — no animation
 
-    // ---- cascading pulse scheduler: a bolt starts at center, forks at every
-    // branch point (multiple veins lit at once), then the whole tree fades
-    // together, pauses, and fires again. ----
-    const SPEED = 0.16, FADE_MS = 550, HOLD_MS = 260;
-    let active = [], cycleFadeStart = 0, cycleFadeEnd = 0, cyclePauseEnd = 0, lastBoltEnd = -1;
-    function scheduleEdge(edge, startTime) {
-      edge._start = startTime;
-      edge._dur = Math.max(120, edge.len / SPEED);
-      active.push(edge);
-      edge.children.forEach(c => scheduleEdge(c, startTime + edge._dur * 0.72));
-    }
-    function fireBolt(now) {
-      active = [];
-      roots.forEach(r => scheduleEdge(r, now));
-      const maxFinish = Math.max(...active.map(e => e._start + e._dur));
-      cycleFadeStart = maxFinish + HOLD_MS;
-      cycleFadeEnd = cycleFadeStart + FADE_MS;
-      cyclePauseEnd = cycleFadeEnd + 500;
-    }
-    function frame(now) {
-      if (now > lastBoltEnd) { fireBolt(now); lastBoltEnd = cyclePauseEnd; }
-      active.forEach(edge => {
-        let reveal, op;
-        if (now < edge._start) { reveal = 0; op = 0; }
-        else if (now < cycleFadeStart) { reveal = Math.min(1, (now - edge._start) / edge._dur); op = 1; }
-        else if (now < cycleFadeEnd) { reveal = 1; op = 1 - (now - cycleFadeStart) / FADE_MS; }
-        else { reveal = 1; op = 0; }
-        edge.pulseEl.setAttribute("stroke-dashoffset", (edge.len * (1 - reveal)).toFixed(1));
-        edge.pulseEl.setAttribute("opacity", Math.max(0, op).toFixed(2));
-      });
-      requestAnimationFrame(frame);
-    }
-    requestAnimationFrame(frame);
+    import("https://cdn.jsdelivr.net/npm/motion@latest/+esm").then(({ animate }) => {
+      const maxOrder = Math.max(...flatEdges.map(e => e.order));
+      function runCycle() {
+        flatEdges.forEach(e => {
+          animate(e.el, { strokeDashoffset: [e.len, 0], opacity: [0, 1, 1, 0] },
+            { duration: 0.9, delay: 0.55 + e.order * 0.42, ease: "easeInOut", times: [0, 0.2, 0.75, 1] });
+        });
+        const cycleLen = 0.55 + maxOrder * 0.42 + 0.9 + 0.7;
+        setTimeout(runCycle, cycleLen * 1000);
+      }
+      runCycle();
+    });
   });
 
   /* =================================================================

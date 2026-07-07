@@ -738,18 +738,18 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
    FAB + LIGHTBOX
    ===================================================================== */
 .fab{ position:fixed; right:clamp(16px,2.6vw,26px); bottom:clamp(16px,2.6vw,26px); z-index:90; width:auto; height:auto; }
-/* elephant footprint mark — the site's own signature chat button */
-.fab--foot{ border-radius:0; background:none; box-shadow:none; display:block;
-  animation:fpBreathe 5s ease-in-out infinite; transition:transform .45s var(--ease), filter .45s var(--ease); }
-.fab--foot:hover{ transform:translateY(-4px) scale(1.05); }
-.fab__foot{ width:clamp(72px,8.4vw,96px); height:auto; display:block; overflow:visible;
+/* glowing infinity-vein mark — the site's own signature chat button */
+.fab--inf{ border-radius:0; background:none; box-shadow:none; display:block;
+  animation:infBreathe 5s ease-in-out infinite; transition:transform .45s var(--ease), filter .45s var(--ease); }
+.fab--inf:hover{ transform:translateY(-4px) scale(1.05); }
+.fab__inf{ width:clamp(72px,8.4vw,96px); height:auto; display:block; overflow:visible;
   filter:drop-shadow(0 14px 18px rgba(20,15,5,.32)) drop-shadow(0 0 0 rgba(233,197,131,0)); }
-.fab--foot:hover .fab__foot{ filter:drop-shadow(0 20px 26px rgba(20,15,5,.4)) drop-shadow(0 0 20px rgba(233,197,131,.5)); }
-@keyframes fpBreathe{
+.fab--inf:hover .fab__inf{ filter:drop-shadow(0 20px 26px rgba(20,15,5,.4)) drop-shadow(0 0 20px rgba(233,197,131,.5)); }
+@keyframes infBreathe{
   0%,100%{ filter:drop-shadow(0 0 0 rgba(233,197,131,0)); }
   50%{ filter:drop-shadow(0 0 14px rgba(233,197,131,.35)); }
 }
-@media (prefers-reduced-motion:reduce){ .fab--foot{ animation:none; } }
+@media (prefers-reduced-motion:reduce){ .fab--inf{ animation:none; } }
 
 .lightbox{ position:fixed; inset:0; z-index:150; background:rgba(8,16,20,.94); display:none; place-items:center; padding:4vw; }
 .lightbox.is-open{ display:grid; }
