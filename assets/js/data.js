@@ -60,7 +60,7 @@ const TOURS = [
     scene:"dune", img:"https://images.pexels.com/photos/34799593/pexels-photo-34799593.jpeg",
     blurb:"Big dunes by day, board down them by afternoon. The full sand experience." },
   { id:"cruise-sh", name:"Marine Cruise & Sandwich Harbour Combo", adult:4000, child:2250, hours:"7+ hours", min:2,
-    scene:"ocean", img:IMG("1471922694854-ff1b63b20054"),
+    scene:"ocean", img:"https://bsbczajsqmcdfiabdoxa.supabase.co/storage/v1/render/image/public/odyssey-media/Index/Vertigo.png?width=1800&quality=78&resize=contain",
     blurb:"Ocean wildlife in the morning, dune adventure after lunch — the best of both." },
   { id:"kayak-sh",  name:"Kayaking & Sandwich Harbour Combo", adult:4000, child:2250, hours:"7+ hours", min:2,
     scene:"kayak", img:IMG("1502784444187-359ac186c5bb"),
