@@ -55,6 +55,7 @@
           <div class="card__meta"><span>◷ ${t.hours}</span><span>min ${t.min}</span></div>
           <h3>${t.name}</h3>
           <p>${t.blurb}</p>
+          <button type="button" class="card__more" data-more="${t.id}">Learn more</button>
           <div class="card__foot">
             <div class="card__price">
               <b data-nad="${t.adult ?? ""}">${fmt(t.adult)}</b>
@@ -82,6 +83,7 @@
           <div class="card__meta"><span>◷ ${t.hours}</span><span>min ${t.min}</span></div>
           <h3>${t.name}</h3>
           <p>${t.blurb}</p>
+          <button type="button" class="card__more" data-more="${t.id}">Learn more</button>
           <div class="card__foot">
             <div class="card__price">
               <b data-nad="${t.adult ?? ""}">${fmt(t.adult)}</b>
@@ -1028,6 +1030,65 @@
   $$("[data-add]").forEach(a => a.addEventListener("click", () => {
     if (bookTour) { bookTour.value = a.dataset.add; renderBooking(); }
   }));
+
+  /* =================================================================
+     TOUR DETAIL — "Learn more" opens a bigger, focused view of the
+     tour (photo, full description, price) with a straight line to Book.
+     ================================================================= */
+  if (!$("#tourModal") && TOURS.length) {
+    const wrap = document.createElement("div");
+    wrap.className = "tourmodal"; wrap.id = "tourModal"; wrap.setAttribute("aria-hidden", "true");
+    wrap.innerHTML = `
+      <div class="tourmodal__scrim" data-close></div>
+      <div class="tourmodal__panel" role="dialog" aria-modal="true" aria-label="Tour details">
+        <button class="tourmodal__x" data-close aria-label="Close">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
+        <div class="tourmodal__scene" id="tourModalScene"></div>
+        <div class="tourmodal__body">
+          <div class="card__meta" id="tourModalMeta"></div>
+          <h3 id="tourModalName"></h3>
+          <p id="tourModalBlurb"></p>
+          <div class="card__foot">
+            <div class="card__price">
+              <b id="tourModalPrice"></b>
+              <small id="tourModalPriceNote"></small>
+            </div>
+            <button type="button" class="card__add" id="tourModalBook">Book</button>
+          </div>
+        </div>
+      </div>`;
+    document.body.appendChild(wrap);
+  }
+  const tourModal = $("#tourModal");
+  const openTourModal = (id) => {
+    const t = TOURS.find(x => x.id === id);
+    if (!t || !tourModal) return;
+    $("#tourModalScene").innerHTML = scene(t.scene, t.img);
+    $("#tourModalMeta").innerHTML = `<span>◷ ${t.hours}</span><span>min ${t.min}</span>`;
+    $("#tourModalName").textContent = t.name;
+    $("#tourModalBlurb").textContent = t.blurb;
+    $("#tourModalPrice").textContent = fmt(t.adult);
+    $("#tourModalPrice").dataset.nad = t.adult ?? "";
+    $("#tourModalPriceNote").textContent = t.adult == null ? "tailored quote" : "per adult · child " + fmt(t.child);
+    $("#tourModalBook").dataset.book = t.id;
+    tourModal.classList.add("is-open"); tourModal.setAttribute("aria-hidden", "false");
+    document.documentElement.style.overflow = "hidden";
+    lenis && lenis.stop();
+  };
+  const closeTourModal = () => {
+    if (!tourModal) return;
+    tourModal.classList.remove("is-open"); tourModal.setAttribute("aria-hidden", "true");
+    document.documentElement.style.overflow = "";
+    lenis && lenis.start();
+  };
+  document.addEventListener("click", (e) => {
+    const opener = e.target.closest("[data-more]");
+    if (opener) { e.preventDefault(); openTourModal(opener.dataset.more); return; }
+    if (e.target.closest("#tourModal [data-close]")) closeTourModal();
+    if (e.target.closest("#tourModal #tourModalBook")) { closeTourModal(); openBook($("#tourModalBook").dataset.book); }
+  });
+  addEventListener("keydown", (e) => { if (e.key === "Escape") closeTourModal(); });
 
   /* =================================================================
      PRIVATE SAFARI BUILDER — its own themed drawer, matching the

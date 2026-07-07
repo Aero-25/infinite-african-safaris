@@ -385,6 +385,34 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .card__price small{ display:block; font-size:.72rem; color:rgba(243,232,214,.65); letter-spacing:.04em; }
 .card__add{ font-size:.85rem; font-weight:600; color:var(--gold-soft); border:1.4px solid currentColor; border-radius:100px; padding:.45em 1em; transition:.3s; }
 .card__add:hover{ background:var(--amber); color:#fff; border-color:var(--amber); }
+.card__more{ display:inline-block; font-size:.82rem; font-weight:600; color:var(--gold-soft); text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(233,197,131,.4); margin:-.3rem 0 1rem; transition:.2s; }
+.card__more:hover{ text-decoration-color:currentColor; }
+
+/* ---------- tour detail modal ("Learn more") ---------- */
+.tourmodal{ position:fixed; inset:0; z-index:170; display:none; }
+.tourmodal.is-open{ display:grid; place-items:center; padding:4vw; }
+.tourmodal__scrim{ position:absolute; inset:0; background:rgba(8,16,20,.7); opacity:0; -webkit-backdrop-filter:blur(0); backdrop-filter:blur(0); transition:opacity .4s var(--ease), backdrop-filter .4s var(--ease), -webkit-backdrop-filter .4s var(--ease); }
+.tourmodal.is-open .tourmodal__scrim{ opacity:1; -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); }
+.tourmodal__panel{
+  position:relative; width:min(460px,100%); max-height:88vh; overflow-y:auto; border-radius:28px;
+  background:var(--paper); box-shadow:0 40px 90px -30px rgba(0,0,0,.6);
+  transform:translateY(18px) scale(.97); opacity:0; transition:transform .5s var(--ease), opacity .4s var(--ease);
+}
+.tourmodal.is-open .tourmodal__panel{ transform:none; opacity:1; }
+.tourmodal__x{ position:absolute; top:14px; right:14px; z-index:2; width:38px; height:38px; border-radius:50%; display:grid; place-items:center; color:#fff; background:rgba(8,16,20,.4); backdrop-filter:blur(6px); transition:.25s; }
+.tourmodal__x svg{ width:18px; height:18px; }
+.tourmodal__x:hover{ background:rgba(8,16,20,.65); transform:rotate(90deg); }
+.tourmodal__scene{ position:relative; height:240px; background-size:cover; background-position:center; }
+.tourmodal__scene .scene{ position:absolute; inset:0; background-size:cover; background-position:center; }
+.tourmodal__body{ padding:1.6rem clamp(1.4rem,4vw,2rem) 1.8rem; }
+.tourmodal__body h3{ font-family:var(--display); font-weight:700; font-size:1.5rem; line-height:1.1; color:var(--ink); margin:.3rem 0 .6rem; }
+.tourmodal__body .card__meta{ color:var(--khaki-deep); }
+.tourmodal__body > p{ font-size:.96rem; line-height:1.55; color:var(--txt-soft); margin-bottom:1.2rem; }
+.tourmodal__body .card__foot{ border-top-color:rgba(20,19,18,.12); }
+.tourmodal__body .card__price b{ color:var(--ink); }
+.tourmodal__body .card__price small{ color:var(--txt-soft); }
+.tourmodal__body .card__add{ color:var(--khaki-deep); }
+.tourmodal__body .card__add:hover{ background:var(--khaki-deep); color:#fff; border-color:var(--khaki-deep); }
 
 .rates{ max-width:var(--maxw); margin:2.5rem auto 0; border:1px solid var(--line); border-radius:var(--r); background:var(--mist); overflow:hidden; }
 .rates>summary{ list-style:none; cursor:pointer; padding:1.1rem 1.5rem; font-weight:600; color:var(--ink); display:flex; justify-content:space-between; align-items:center; }
