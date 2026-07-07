@@ -538,7 +538,15 @@
     const INF = "M40,150 C40,100 90,72 140,90 C185,106 205,150 230,150 C255,150 275,106 320,90 C370,72 420,100 420,150 C420,200 370,228 320,210 C275,194 255,150 230,150 C205,150 185,194 140,210 C90,228 40,200 40,150 Z";
     fab.innerHTML = `
       <svg class="fab__inf" viewBox="0 0 460 300" aria-hidden="true">
+        <defs>
+          <filter id="fabPulseGlow" x="-200%" y="-200%" width="500%" height="500%">
+            <feGaussianBlur stdDeviation="4" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
         <path fill="none" stroke="#141312" stroke-width="16" stroke-linecap="round" d="${INF}"/>
+        <path class="fab__pulse" fill="none" stroke="#b3a079" stroke-width="16" stroke-linecap="round"
+              pathLength="100" stroke-dasharray="14 86" filter="url(#fabPulseGlow)" d="${INF}"/>
       </svg>`;
   });
 
@@ -733,8 +741,25 @@
     const w = card ? card.offsetWidth + 21 : 320;
     rail.scrollBy({ left: dir * w * 1.15, behavior: "smooth" });
   };
-  $("#railPrev")?.addEventListener("click", () => scrollRail(-1));
-  $("#railNext")?.addEventListener("click", () => scrollRail(1));
+  $("#railPrev")?.addEventListener("click", () => { scrollRail(-1); bumpRailAuto(); });
+  $("#railNext")?.addEventListener("click", () => { scrollRail(1); bumpRailAuto(); });
+
+  /* rail auto-scroll: advances one card at a time, loops back to the start,
+     pauses on hover/touch and briefly after a manual arrow click. */
+  let railTimer = null, bumpRailAuto = () => {};
+  if (rail) {
+    const advance = () => {
+      const atEnd = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 8;
+      if (atEnd) rail.scrollTo({ left: 0, behavior: "smooth" });
+      else scrollRail(1);
+    };
+    const start = () => { stop(); railTimer = setInterval(advance, 4000); };
+    const stop = () => { if (railTimer) clearInterval(railTimer); railTimer = null; };
+    bumpRailAuto = () => { start(); };
+    rail.addEventListener("pointerenter", stop);
+    rail.addEventListener("pointerleave", start);
+    start();
+  }
 
   /* nav state */
   const nav = $("#nav");
@@ -1003,6 +1028,190 @@
   $$("[data-add]").forEach(a => a.addEventListener("click", () => {
     if (bookTour) { bookTour.value = a.dataset.add; renderBooking(); }
   }));
+
+  /* =================================================================
+     PRIVATE SAFARI BUILDER — its own themed drawer, matching the
+     "Build the day around the light" panel (pick a start, shape the
+     route, then the usual date/guests/contact details).
+     ================================================================= */
+  if (!$("#builderModal")) {
+    const wrap = document.createElement("div");
+    wrap.className = "bookmodal bookmodal--builder"; wrap.id = "builderModal"; wrap.setAttribute("aria-hidden", "true");
+    wrap.innerHTML = `
+      <div class="bookmodal__scrim" data-close></div>
+      <aside class="bookmodal__panel" role="dialog" aria-modal="true" aria-label="Plan a private safari">
+        <button class="bookmodal__x" data-close aria-label="Close">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
+        <div class="bookmodal__head">
+          <p class="eyebrow">— Private rhythm</p>
+          <h3 class="bookmodal__title">Design your day</h3>
+          <p class="bookmodal__sub">Tell us the rhythm you want — we'll shape a private route around it.</p>
+        </div>
+        <form class="bkf" id="builderForm" novalidate>
+          <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden"><label>Company<input name="_hp" tabindex="-1" autocomplete="off"></label></div>
+          <div>
+            <p class="bk__step"><b>01</b> Choose your start</p>
+            <div class="builder__pills" id="builderStart" role="radiogroup" aria-label="Preferred start">
+              <button type="button" data-val="Sunrise">Sunrise</button>
+              <button type="button" data-val="Mid-morning">Mid-morning</button>
+              <button type="button" data-val="Golden hour">Golden hour</button>
+            </div>
+          </div>
+          <div>
+            <p class="bk__step"><b>02</b> Shape the route</p>
+            <div class="builder__chips" id="builderRoute" aria-label="Route focus — choose any">
+              <button type="button" data-val="Dunes">Dunes</button>
+              <button type="button" data-val="Ocean">Ocean</button>
+              <button type="button" data-val="Wildlife">Wildlife</button>
+              <button type="button" data-val="Culture">Culture</button>
+            </div>
+          </div>
+          <div>
+            <p class="bk__step"><b>03</b> Your details</p>
+          </div>
+          <div class="bk__row--2">
+            <label class="bk">Date<input type="date" name="date" required></label>
+            <label class="bk">Adults<span class="stepper"><button type="button" data-stepper="builderAdults" data-d="-1">–</button><input id="builderAdults" name="adults" type="text" inputmode="numeric" value="2" readonly><button type="button" data-stepper="builderAdults" data-d="1">+</button></span></label>
+          </div>
+          <div class="bk__row--2">
+            <label class="bk">Children<span class="stepper"><button type="button" data-stepper="builderKids" data-d="-1">–</button><input id="builderKids" name="kids" type="text" inputmode="numeric" value="0" readonly><button type="button" data-stepper="builderKids" data-d="1">+</button></span></label>
+            <label class="bk">Phone<input name="phone" autocomplete="tel"></label>
+          </div>
+          <div class="bk__row--2">
+            <label class="bk">Name<input name="name" autocomplete="name" required></label>
+            <label class="bk">Email<input type="email" name="email" autocomplete="email" required></label>
+          </div>
+          <label class="bk">Anything else?<textarea name="notes" rows="2" placeholder="Special requests, occasions, pace…"></textarea></label>
+          <button class="btn btn--solid btn--block" type="submit">Request my private safari</button>
+          <p class="bk__note" id="builderNote">We reply within a few hours · no payment now.</p>
+        </form>
+      </aside>`;
+    document.body.appendChild(wrap);
+  }
+
+  /* =================================================================
+     DESERT BRAAI BOOKING — its own themed drawer, matching the
+     "A desert braai, done properly" night panel.
+     ================================================================= */
+  if (!$("#braaiModal")) {
+    const wrap = document.createElement("div");
+    wrap.className = "bookmodal bookmodal--braai"; wrap.id = "braaiModal"; wrap.setAttribute("aria-hidden", "true");
+    wrap.innerHTML = `
+      <div class="bookmodal__scrim" data-close></div>
+      <aside class="bookmodal__panel" role="dialog" aria-modal="true" aria-label="Add a desert braai">
+        <button class="bookmodal__x" data-close aria-label="Close">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
+        <div class="bookmodal__head">
+          <p class="eyebrow">— After the drive</p>
+          <h3 class="bookmodal__title">Reserve your desert braai</h3>
+          <p class="bookmodal__sub">Coals, a table in the sand, and someone else handling the setup.</p>
+        </div>
+        <form class="bkf" id="braaiForm" novalidate>
+          <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden"><label>Company<input name="_hp" tabindex="-1" autocomplete="off"></label></div>
+          <div class="bk__row--2">
+            <label class="bk">Date<input type="date" name="date" required></label>
+            <label class="bk">Time<input type="time" name="time" value="17:30"></label>
+          </div>
+          <div class="bk__row--2">
+            <label class="bk">Adults<span class="stepper"><button type="button" data-stepper="braaiAdults" data-d="-1">–</button><input id="braaiAdults" name="adults" type="text" inputmode="numeric" value="2" readonly><button type="button" data-stepper="braaiAdults" data-d="1">+</button></span></label>
+            <label class="bk">Children<span class="stepper"><button type="button" data-stepper="braaiKids" data-d="-1">–</button><input id="braaiKids" name="kids" type="text" inputmode="numeric" value="0" readonly><button type="button" data-stepper="braaiKids" data-d="1">+</button></span></label>
+          </div>
+          <div class="bk__row--2">
+            <label class="bk">Name<input name="name" autocomplete="name" required></label>
+            <label class="bk">Email<input type="email" name="email" autocomplete="email" required></label>
+          </div>
+          <label class="bk">Phone<input name="phone" autocomplete="tel"></label>
+          <label class="bk">Dietary needs or requests<textarea name="notes" rows="2" placeholder="Vegetarian, allergies, celebrations…"></textarea></label>
+          <button class="btn btn--solid btn--block" type="submit">Request my desert braai</button>
+          <p class="bk__note" id="braaiNote">We reply within a few hours · no payment now.</p>
+        </form>
+      </aside>`;
+    document.body.appendChild(wrap);
+  }
+
+  /* shared open/close for the builder + braai drawers (same mechanics as #bookModal) */
+  const sideModals = { builder: $("#builderModal"), braai: $("#braaiModal") };
+  const openSideModal = (key) => {
+    const m = sideModals[key]; if (!m) return;
+    m.classList.add("is-open"); m.setAttribute("aria-hidden", "false");
+    document.documentElement.style.overflow = "hidden";
+    lenis && lenis.stop();
+    setTimeout(() => m.querySelector("input,button.builder__pills, .bkf")?.focus?.(), 360);
+  };
+  const closeSideModal = (key) => {
+    const m = sideModals[key]; if (!m) return;
+    m.classList.remove("is-open"); m.setAttribute("aria-hidden", "true");
+    document.documentElement.style.overflow = "";
+    lenis && lenis.start();
+  };
+  document.addEventListener("click", (e) => {
+    const opener = e.target.closest("[data-open-modal]");
+    if (opener) { e.preventDefault(); openSideModal(opener.dataset.openModal); return; }
+    if (e.target.closest("#builderModal [data-close]")) closeSideModal("builder");
+    if (e.target.closest("#braaiModal [data-close]")) closeSideModal("braai");
+  });
+  addEventListener("keydown", (e) => { if (e.key === "Escape") { closeSideModal("builder"); closeSideModal("braai"); } });
+
+  /* generic +/- stepper wiring, shared by the builder + braai guest counts */
+  $$("[data-stepper]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const input = $("#" + btn.dataset.stepper);
+      if (!input) return;
+      const min = input.id.toLowerCase().includes("adults") ? 1 : 0;
+      input.value = Math.max(min, (+input.value || 0) + (+btn.dataset.d));
+    });
+  });
+
+  /* single-select pills (start time) + multi-select chips (route focus) */
+  $$("#builderStart button").forEach(b => b.addEventListener("click", () => {
+    $$("#builderStart button").forEach(x => x.classList.toggle("is-active", x === b));
+  }));
+  $$("#builderRoute button").forEach(b => b.addEventListener("click", () => b.classList.toggle("is-active")));
+
+  $("#builderForm")?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const d = Object.fromEntries(new FormData(e.target));
+    const start = $("#builderStart .is-active")?.dataset.val || "";
+    const route = $$("#builderRoute .is-active").map(b => b.dataset.val).join(", ");
+    if (!d.name || !d.email || !d.date) { $("#builderNote").textContent = "Please add a date, your name and email."; return; }
+    const a = +$("#builderAdults").value, k = +$("#builderKids").value;
+    window.iasSaveLead?.({
+      source: "private-builder", name: d.name, email: d.email, phone: d.phone, country: d.country,
+      preferred_date: d.date, tour: "Private safari — " + (start || "flexible start"), message: d.notes, group_size: a + k,
+      _hp: d._hp, raw: { ...d, adults: a, kids: k, start, route },
+    });
+    let m = `PRIVATE SAFARI REQUEST — Infinite African Safaris%0A%0A`;
+    m += `Start: ${encodeURIComponent(start || "Flexible")}%0ARoute focus: ${encodeURIComponent(route || "Open to suggestions")}%0A`;
+    m += `Date: ${d.date}%0AGuests: ${a} adult${a>1?"s":""}${k?`, ${k} child${k>1?"ren":""}`:""}%0A`;
+    m += `Name: ${encodeURIComponent(d.name)}%0AEmail: ${encodeURIComponent(d.email)}%0A`;
+    m += `Phone: ${encodeURIComponent(d.phone||"-")}%0ANationality: ${encodeURIComponent(d.country||"-")}`;
+    if (d.notes) m += `%0ANotes: ${encodeURIComponent(d.notes)}`;
+    window.open(`https://wa.me/${CONTACT.whatsapp}?text=${m}`, "_blank");
+    const body = m.replace(/%0A/g, "\n").replace(/%20/g, " ");
+    $("#builderNote").innerHTML = `Thanks ${(d.name.split(" ")[0]||"")}! Opening WhatsApp — or <a href="mailto:${CONTACT.email}?subject=${encodeURIComponent("Private safari request — "+d.name)}&body=${encodeURIComponent(body)}" style="color:var(--khaki-deep);font-weight:600">send by email</a>.`;
+  });
+
+  $("#braaiForm")?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const d = Object.fromEntries(new FormData(e.target));
+    if (!d.name || !d.email || !d.date) { $("#braaiNote").textContent = "Please add a date, your name and email."; return; }
+    const a = +$("#braaiAdults").value, k = +$("#braaiKids").value;
+    window.iasSaveLead?.({
+      source: "braai", name: d.name, email: d.email, phone: d.phone, country: d.country,
+      preferred_date: d.date, tour: "Desert braai", message: d.notes, group_size: a + k,
+      _hp: d._hp, raw: { ...d, adults: a, kids: k },
+    });
+    let m = `DESERT BRAAI REQUEST — Infinite African Safaris%0A%0A`;
+    m += `Date: ${d.date}%0ATime: ${d.time}%0AGuests: ${a} adult${a>1?"s":""}${k?`, ${k} child${k>1?"ren":""}`:""}%0A`;
+    m += `Name: ${encodeURIComponent(d.name)}%0AEmail: ${encodeURIComponent(d.email)}%0A`;
+    m += `Phone: ${encodeURIComponent(d.phone||"-")}`;
+    if (d.notes) m += `%0ADietary/requests: ${encodeURIComponent(d.notes)}`;
+    window.open(`https://wa.me/${CONTACT.whatsapp}?text=${m}`, "_blank");
+    const body = m.replace(/%0A/g, "\n").replace(/%20/g, " ");
+    $("#braaiNote").innerHTML = `Thanks ${(d.name.split(" ")[0]||"")}! Opening WhatsApp — or <a href="mailto:${CONTACT.email}?subject=${encodeURIComponent("Desert braai request — "+d.name)}&body=${encodeURIComponent(body)}" style="color:#f0a45a;font-weight:600">send by email</a>.`;
+  });
 
   /* =================================================================
      INQUIRY FORM

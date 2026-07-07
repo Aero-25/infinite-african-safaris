@@ -741,6 +741,8 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .fab__inf{ width:clamp(84px,9.5vw,116px); height:auto; display:block; overflow:visible;
   filter:drop-shadow(0 14px 18px rgba(20,15,5,.28)); }
 .fab--inf:hover .fab__inf{ filter:drop-shadow(0 20px 26px rgba(20,15,5,.38)); }
+.fab__pulse{ animation:fabPulseTravel 2.6s linear infinite; }
+@keyframes fabPulseTravel{ to{ stroke-dashoffset:-100; } }
 
 .lightbox{ position:fixed; inset:0; z-index:150; background:rgba(8,16,20,.94); display:none; place-items:center; padding:4vw; }
 .lightbox.is-open{ display:grid; }
@@ -1101,6 +1103,57 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .cur--book{ background:rgba(255,255,255,.55); border-color:rgba(20,19,18,.12); box-shadow:inset 0 1px 0 rgba(255,255,255,.52); }
 .cur--book .cur__btn{ padding:.34rem .62rem; font-size:.82rem; }
 
+/* ---------- builder step label + pill/chip selectors (private safari + braai) ---------- */
+.bk__step{ font-family:var(--display); font-weight:800; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--khaki-deep); display:flex; align-items:center; gap:.5rem; }
+.bk__step b{ display:inline-grid; place-items:center; width:22px; height:22px; border-radius:50%; background:rgba(179,160,121,.18); font-size:.62rem; }
+.builder__pills, .builder__chips{ display:flex; flex-wrap:wrap; gap:.5rem; }
+.builder__pills button, .builder__chips button{
+  font-family:inherit; font-weight:600; font-size:.84rem; color:var(--txt); padding:.55rem 1rem; border-radius:100px;
+  border:1px solid rgba(20,19,18,.14); background:rgba(255,255,255,.6); transition:.22s var(--ease);
+}
+.builder__pills button:hover, .builder__chips button:hover{ border-color:var(--khaki-deep); transform:translateY(-2px); }
+.builder__pills button.is-active, .builder__chips button.is-active{
+  background:var(--ink); color:var(--paper); border-color:var(--ink); box-shadow:0 10px 20px -14px rgba(20,19,18,.5);
+}
+
+/* ---------- private safari builder (day theme) ---------- */
+.bookmodal--builder .bookmodal__panel{ background:linear-gradient(155deg,#fff8ea 0%, #f7ecd2 55%, #f0dfb8 100%); }
+.bookmodal--builder .bookmodal__title{ color:var(--ink); }
+.bookmodal--builder .bk__step{ color:#8a611f; }
+.bookmodal--builder .bk__step b{ background:rgba(184,134,61,.18); color:#8a611f; }
+
+/* ---------- desert braai (night theme) ---------- */
+.bookmodal--braai .bookmodal__panel{ background:radial-gradient(120% 100% at 25% 0%, #2b2419, var(--ink) 60%); border-color:rgba(255,255,255,.12); }
+.bookmodal--braai .bookmodal__panel::before{ display:none; }
+.bookmodal--braai .bookmodal__title, .bookmodal--braai .bookmodal__sub{ color:var(--paper); }
+.bookmodal--braai .bookmodal__sub{ color:rgba(243,232,214,.7); }
+.bookmodal--braai .bookmodal__head{ border-bottom-color:rgba(255,255,255,.12); }
+.bookmodal--braai .bookmodal__x{ color:var(--paper); }
+.bookmodal--braai .bookmodal__x:hover{ background:rgba(255,255,255,.14); }
+.bookmodal--braai .bk{ color:rgba(243,232,214,.62); }
+.bookmodal--braai .bk input, .bookmodal--braai .bk select, .bookmodal--braai .bk textarea{
+  color:var(--paper); background:rgba(255,255,255,.06); border-color:rgba(255,255,255,.16);
+}
+.bookmodal--braai .bk input:focus, .bookmodal--braai .bk select:focus, .bookmodal--braai .bk textarea:focus{
+  background:rgba(255,255,255,.1); border-color:#f0a45a; box-shadow:0 0 0 3px rgba(240,164,90,.2);
+}
+.bookmodal--braai .stepper{ border-color:rgba(255,255,255,.16); background:rgba(255,255,255,.06); }
+.bookmodal--braai .stepper button{ color:var(--paper); }
+.bookmodal--braai .stepper button:hover{ background:rgba(255,255,255,.1); }
+.bookmodal--braai .stepper input{ color:var(--paper); }
+.bookmodal--braai .bk__step{ color:#f0a45a; }
+.bookmodal--braai .bk__step b{ background:rgba(240,164,90,.18); color:#f0a45a; }
+.bookmodal--braai .bk__note{ color:rgba(243,232,214,.55); }
+.bookmodal--braai .builder__pills button, .bookmodal--braai .builder__chips button{
+  color:var(--paper); border-color:rgba(255,255,255,.16); background:rgba(255,255,255,.06);
+}
+.bookmodal--braai .builder__pills button:hover, .bookmodal--braai .builder__chips button:hover{ border-color:#f0a45a; }
+.bookmodal--braai .builder__pills button.is-active, .bookmodal--braai .builder__chips button.is-active{
+  background:#f0a45a; color:#2b2016; border-color:#f0a45a;
+}
+.bookmodal--braai .btn--solid{ background:linear-gradient(135deg,#e08a3e,#a85a2a); }
+.bookmodal--braai .btn--solid:hover{ background:linear-gradient(135deg,#f0a45a,#c06a2e); }
+
 /* =====================================================================
    REVIEWS PAGE — elegant, light, all quotes (masonry)
    ===================================================================== */
@@ -1251,4 +1304,6 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 @media (prefers-reduced-motion:reduce){
   *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
   [data-reveal]{ opacity:1; transform:none; }
+  /* deliberate brand marks, not incidental motion — keep these alive */
+  .fab__pulse{ animation-duration:2.6s !important; animation-iteration-count:infinite !important; }
 }
