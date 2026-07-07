@@ -695,6 +695,10 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .cf input, .cf select, .cf textarea{ font-family:inherit; font-size:1rem; font-weight:400; text-transform:none; letter-spacing:0; color:var(--txt); padding:.8rem .95rem; border:1px solid var(--line); border-radius:12px; background:var(--paper); transition:border .25s, box-shadow .25s, background .25s; }
 .cf input:focus, .cf select:focus, .cf textarea:focus{ outline:none; background:#fff; border-color:var(--khaki-deep); box-shadow:0 0 0 3px rgba(179,160,121,.25); }
 .cf__note{ text-align:center; font-size:.8rem; color:var(--txt-soft); margin-top:.9rem; }
+.cf .stepper{ width:100%; justify-content:space-between; border-color:var(--line); background:var(--paper); }
+.cf .stepper button{ color:var(--txt); }
+.cf .stepper button:hover{ background:rgba(20,19,18,.06); }
+.cf .stepper input{ color:var(--txt); width:100%; }
 @media (max-width:900px){
   .contact__card{ grid-template-columns:1fr; }
   .contact__map{ padding-top:1.4rem; }

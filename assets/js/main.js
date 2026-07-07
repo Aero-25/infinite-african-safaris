@@ -581,6 +581,7 @@
   stagger(".gallery__grid .gtile", 60);
   stagger(".policy__grid .pol", 50);
   stagger(".safari-grid .card", 60);
+  stagger(".contact__form > *", 60);
 
   /* =================================================================
      SIGNATURE PANELS — drifting dust (day) + rising embers (night)
@@ -1236,7 +1237,7 @@
     btn.addEventListener("click", () => {
       const input = $("#" + btn.dataset.stepper);
       if (!input) return;
-      const min = input.id.toLowerCase().includes("adults") ? 1 : 0;
+      const min = /kids|children/i.test(input.id) ? 0 : 1;
       input.value = Math.max(min, (+input.value || 0) + (+btn.dataset.d));
     });
   });
