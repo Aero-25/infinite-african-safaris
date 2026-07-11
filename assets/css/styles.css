@@ -377,10 +377,14 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .card{ position:relative; border-radius:var(--r); overflow:hidden; background:var(--ink); min-height:320px; display:flex; flex-direction:column; justify-content:flex-end; isolation:isolate; transition:transform .5s var(--ease), box-shadow .5s var(--ease); will-change:transform; }
 .card:hover{ box-shadow:0 40px 70px -40px rgba(20,19,18,.6); }
 
-/* Our Safaris — horizontal rail */
-.cards--rail{ display:flex; grid-template-columns:none; overflow-x:auto; scroll-snap-type:x mandatory; gap:1.3rem; padding:4px 4px 1.2rem; scrollbar-width:none; scroll-behavior:smooth; }
+/* Our Safaris — horizontal rail. Continuous auto-scroll + click-drag are
+   driven directly via scrollLeft in JS; mandatory scroll-snap used to fight
+   both (the arrow-click overshoot and every auto-advance tick each got
+   snap-corrected right after, which read as a jump), so it's off here. */
+.cards--rail{ display:flex; grid-template-columns:none; overflow-x:auto; gap:1.3rem; padding:4px 4px 1.2rem; scrollbar-width:none; cursor:grab; -webkit-overflow-scrolling:touch; }
 .cards--rail::-webkit-scrollbar{ display:none; }
-.cards--rail .card{ flex:0 0 clamp(320px,38vw,480px); scroll-snap-align:start; min-height:clamp(500px,64vh,640px); }
+.cards--rail.is-dragging{ cursor:grabbing; }
+.cards--rail .card{ flex:0 0 clamp(320px,38vw,480px); min-height:clamp(500px,64vh,640px); }
 /* rail fills the whole page width (full-bleed) while still scrolling */
 .exp .section__head{ max-width:none; }
 .exp .cards--rail{ max-width:none; margin-inline:calc(var(--pad) * -1); padding:4px var(--pad) 1.2rem; scroll-padding-inline:var(--pad); }
@@ -667,28 +671,26 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
    ===================================================================== */
 /* one unified card: dark channels panel (with map inset) beside a clean form */
 .contact{ background:var(--paper); }
-.contact__card{ max-width:var(--maxw); margin:0 auto; display:grid; grid-template-columns:.95fr 1.05fr;
-  border-radius:26px; overflow:hidden; background:#fff;
-  box-shadow:0 70px 130px -70px rgba(20,19,18,.55), 0 0 0 1px var(--line); }
-.contact__side{ background:radial-gradient(130% 110% at 15% 0%, #2c2822, var(--ink)); color:var(--paper);
-  padding:clamp(1.8rem,3.6vw,3rem); display:flex; flex-direction:column; }
-.contact__side .h2{ margin:.35rem 0 1rem; }
-.contact__preface{ color:rgba(243,232,214,.8); max-width:44ch; }
-.contact__direct{ list-style:none; margin:1.7rem 0 0; display:grid; gap:1rem; }
-.contact__direct li{ display:grid; gap:.15rem; padding-bottom:1rem; border-bottom:1px solid rgba(255,255,255,.1); }
-.contact__direct span{ font-size:.72rem; text-transform:uppercase; letter-spacing:.14em; color:var(--gold-soft); }
-.contact__direct a{ font-size:1.08rem; font-weight:500; overflow-wrap:break-word; transition:color .25s; }
-.contact__direct a:hover{ color:var(--gold-soft); }
-.contact__social{ display:flex; flex-wrap:wrap; gap:.55rem; margin-top:1.3rem; }
-.soc{ display:inline-flex; align-items:center; gap:.5rem; padding:.52rem .95rem; border:1px solid rgba(255,255,255,.2); border-radius:100px; font-size:.84rem; font-weight:500; transition:.25s; }
-.soc:hover{ background:var(--amber); border-color:var(--amber); color:#fff; transform:translateY(-2px); }
+/* plain two-column layout, no card/color-invert — info and form share the
+   same page background, separated only by breathing room and a hairline */
+.contact__grid{
+  max-width:var(--maxw); margin:0 auto;
+  display:grid; grid-template-columns:.85fr 1.15fr; gap:clamp(3rem,7vw,6rem);
+}
+.contact__info{ padding-top:.3rem; }
+.contact__info .h2{ margin:.35rem 0 1rem; }
+.contact__preface{ color:var(--txt-soft); max-width:42ch; }
+.contact__direct{ list-style:none; margin:1.8rem 0 0; display:grid; gap:1rem; max-width:40ch; padding-top:1.6rem; border-top:1px solid var(--line); }
+.contact__direct li{ display:grid; gap:.2rem; padding-bottom:1rem; border-bottom:1px solid var(--line); }
+.contact__direct span{ font-size:.72rem; text-transform:uppercase; letter-spacing:.14em; color:var(--khaki-deep); }
+.contact__direct a{ font-size:1.08rem; font-weight:500; color:var(--ink); overflow-wrap:break-word; transition:color .25s; }
+.contact__direct a:hover{ color:var(--khaki-deep); }
+.contact__social{ display:flex; flex-wrap:wrap; gap:.55rem; margin-top:1.6rem; }
+.soc{ display:inline-flex; align-items:center; gap:.5rem; padding:.52rem .95rem; border:1px solid var(--line); border-radius:100px; font-size:.84rem; font-weight:500; color:var(--ink); background:rgba(20,19,18,.02); transition:.25s; }
+.soc:hover{ background:var(--ink); border-color:var(--ink); color:var(--paper); transform:translateY(-2px); }
 .soc svg{ width:16px; height:16px; fill:currentColor; }
-.contact__map{ margin-top:auto; padding-top:1.6rem; }
-.contact__map iframe{ width:100%; aspect-ratio:16/9; border:0; display:block; border-radius:14px;
-  filter:grayscale(.35) contrast(1.05) brightness(.96); box-shadow:0 24px 44px -30px rgba(0,0,0,.8); }
 
-.contact__form{ background:#fff; color:var(--txt); padding:clamp(1.8rem,3.6vw,3rem); position:relative;
-  display:flex; flex-direction:column; justify-content:center; }
+.contact__form{ position:relative; }
 .cf__row{ display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
 .cf{ display:flex; flex-direction:column; gap:.4rem; font-size:.78rem; font-weight:600; letter-spacing:.05em; color:var(--txt-soft); text-transform:uppercase; margin-bottom:1.05rem; }
 .cf input, .cf select, .cf textarea{ font-family:inherit; font-size:1rem; font-weight:400; text-transform:none; letter-spacing:0; color:var(--txt); padding:.8rem .95rem; border:1px solid var(--line); border-radius:12px; background:var(--paper); transition:border .25s, box-shadow .25s, background .25s; }
@@ -698,10 +700,6 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .cf .stepper button{ color:var(--txt); }
 .cf .stepper button:hover{ background:rgba(20,19,18,.06); }
 .cf .stepper input{ color:var(--txt); width:100%; }
-@media (max-width:900px){
-  .contact__card{ grid-template-columns:minmax(0,1fr); }
-  .contact__map{ padding-top:1.4rem; }
-}
 
 /* =====================================================================
    FOOTER
@@ -1291,6 +1289,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
   .nav.is-menu .cur{ border-color:rgba(20,19,18,.18); }
   .policy__grid{ grid-template-columns:minmax(0,1fr); }
   .cf__row{ grid-template-columns:minmax(0,1fr); }
+  .contact__direct{ max-width:none; }
   .bk__row--2{ grid-template-columns:minmax(0,1fr); }
   .bkf .bk__row--2{ grid-template-columns:minmax(0,1fr); }
   .safari-break{ align-items:flex-start; flex-direction:column; gap:.45rem; }

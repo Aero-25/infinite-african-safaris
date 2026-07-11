@@ -303,10 +303,12 @@
   const rotor = $("#rotor"), cyl = $("#cyl");
   if (rotor && cyl) {
     const pool = HERO_POOL.map(p => ({ url: p.url || IMG(p.id, 700), cap: p.cap }));
-    const N = Math.max(13, pool.length);          // panels on the cylinder (denser than the photo pool)
+    // exactly one panel per photo — anything denser than the pool forces
+    // duplicates onto the wall (13 slots, 8 photos = guaranteed repeats
+    // visible at once), which is the opposite of what we want here.
+    const N = pool.length;
     const step = 360 / N;
     let radius = 560;                              // recomputed by sizeUp()
-    let nextIdx = N % pool.length;                 // next photo to feed in
 
     // build panels
     const panels = [];
@@ -320,9 +322,9 @@
       cap.className = "panel__cap";
       el.append(img, cap);
       rotor.appendChild(el);
-      const item = pool[i % pool.length];
+      const item = pool[i];
       img.src = item.url; cap.textContent = item.cap;
-      panels.push({ el, img, cap, angle: i * step, refreshed: false });
+      panels.push({ el, img, cap, angle: i * step });
     }
 
     const sizeUp = () => {
@@ -365,19 +367,12 @@
       }
       rotor.style.transform = `translateZ(${-radius}px) rotateY(${rot}deg)`;
 
-      // per-panel: face detection + feed new photos while hidden at the back
+      // per-panel: just face detection now — every panel keeps its own
+      // fixed photo for good (see N above), so there's nothing to refresh
       panels.forEach(p => {
-        let world = ((rot + p.angle) % 360 + 360) % 360;   // 0..360
+        const world = ((rot + p.angle) % 360 + 360) % 360;   // 0..360
         const front = Math.abs(((world + 180) % 360) - 180) < step / 2;
         p.el.classList.toggle("is-front", front);
-        const atBack = world > 150 && world < 210;
-        if (atBack && !p.refreshed) {
-          const item = pool[nextIdx]; nextIdx = (nextIdx + 1) % pool.length;
-          p.img.classList.remove("is-loaded");
-          p.img.src = item.url; p.cap.textContent = item.cap;
-          p.refreshed = true;
-        }
-        if (!atBack) p.refreshed = false;
       });
       requestAnimationFrame(frame);
     };
@@ -762,30 +757,93 @@
     }
   }
 
-  /* Our Safaris rail arrows */
+  /* Our Safaris rail — continuous right-to-left auto-drift, plus a
+     click-and-drag carousel with momentum on release. Everything moves
+     the same way: direct scrollLeft writes each frame, so nothing here
+     ever fights scroll-snap (removed) or fires two competing animations
+     at once, which is what made the old interval + overshoot jumpy. */
   const rail = $("#tourCards");
-  const scrollRail = (dir) => {
-    if (!rail) return;
-    const card = rail.querySelector(".card");
-    const w = card ? card.offsetWidth + 21 : 320;
-    rail.scrollBy({ left: dir * w * 1.15, behavior: "smooth" });
-  };
-  $("#railPrev")?.addEventListener("click", () => { scrollRail(-1); bumpRailAuto(); });
-  $("#railNext")?.addEventListener("click", () => { scrollRail(1); bumpRailAuto(); });
-
-  /* rail auto-scroll: always advances one card at a time and loops back
-     to the start — a manual arrow click just resets the timer so it
-     doesn't immediately fight the click. */
-  let railTimer = null, bumpRailAuto = () => {};
   if (rail) {
-    const advance = () => {
-      const atEnd = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 8;
-      if (atEnd) rail.scrollTo({ left: 0, behavior: "smooth" });
-      else scrollRail(1);
+    const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+    const SPEED = 34;                     // px/s ambient drift
+    const maxScroll = () => rail.scrollWidth - rail.clientWidth;
+
+    let paused = false, resumeTimer = null;
+    let dragging = false, dragMoved = false, dragX = 0, dragScroll = 0;
+    let lastDragX = 0, lastDragT = 0, vel = 0;
+    let looping = false, last = 0;
+
+    const pause = (ms = 2600) => {
+      paused = true;
+      clearTimeout(resumeTimer);
+      resumeTimer = setTimeout(() => { paused = false; }, ms);
     };
-    const start = () => { if (railTimer) clearInterval(railTimer); railTimer = setInterval(advance, 4000); };
-    bumpRailAuto = () => { start(); };
-    start();
+
+    const tick = (t) => {
+      if (!last) last = t;
+      const dt = Math.min((t - last) / 1000, 0.05); last = t;
+
+      if (dragging) {
+        // position is driven directly by pointermove below
+      } else if (Math.abs(vel) > 2) {
+        // momentum coast after a drag release
+        const max = maxScroll();
+        rail.scrollLeft = clamp(rail.scrollLeft - vel * dt, 0, max);
+        vel *= 0.94;
+        if (rail.scrollLeft <= 0 || rail.scrollLeft >= max) vel = 0;
+      } else if (!paused && !looping) {
+        const max = maxScroll();
+        if (max > 4) {
+          const next = rail.scrollLeft + SPEED * dt;
+          if (next >= max) {
+            looping = true;
+            rail.scrollTo({ left: 0, behavior: "smooth" });
+            setTimeout(() => { looping = false; }, 700);
+          } else {
+            rail.scrollLeft = next;
+          }
+        }
+      }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+
+    const scrollRail = (dir) => {
+      const card = rail.querySelector(".card");
+      const w = card ? card.offsetWidth + 21 : 320;
+      rail.scrollBy({ left: dir * w, behavior: "smooth" });
+    };
+    $("#railPrev")?.addEventListener("click", () => { pause(); scrollRail(-1); });
+    $("#railNext")?.addEventListener("click", () => { pause(); scrollRail(1); });
+
+    rail.addEventListener("pointerdown", (e) => {
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      dragging = true; dragMoved = false; vel = 0;
+      dragX = lastDragX = e.clientX; dragScroll = rail.scrollLeft; lastDragT = performance.now();
+      pause(4000);
+      rail.setPointerCapture(e.pointerId);
+      rail.classList.add("is-dragging");
+    });
+    rail.addEventListener("pointermove", (e) => {
+      if (!dragging) return;
+      const dx = e.clientX - dragX;
+      if (Math.abs(dx) > 4) dragMoved = true;
+      rail.scrollLeft = clamp(dragScroll - dx, 0, maxScroll());
+      const now = performance.now(), dtMs = now - lastDragT;
+      if (dtMs > 0) vel = ((e.clientX - lastDragX) / dtMs) * -1000; // px/s, matches scrollLeft sign
+      lastDragX = e.clientX; lastDragT = now;
+    });
+    const endDrag = () => { dragging = false; rail.classList.remove("is-dragging"); };
+    rail.addEventListener("pointerup", endDrag);
+    rail.addEventListener("pointercancel", endDrag);
+    rail.addEventListener("pointerleave", endDrag);
+    // swallow the click that follows a real drag so it doesn't open a card's modal
+    rail.addEventListener("click", (e) => { if (dragMoved) { e.preventDefault(); e.stopPropagation(); } }, true);
+
+    rail.addEventListener("wheel", () => pause(2600), { passive: true });
+    rail.addEventListener("touchstart", () => pause(4000), { passive: true });
+    rail.addEventListener("mouseenter", () => pause(3600000));
+    rail.addEventListener("mouseleave", () => { paused = false; });
   }
 
   /* nav state — the floating "shrink to pill" treatment is desktop-only;
