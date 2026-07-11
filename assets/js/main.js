@@ -326,7 +326,10 @@
     }
 
     const sizeUp = () => {
-      const pw = parseFloat(getComputedStyle(cyl).getPropertyValue("--pw")) || 240;
+      // --pw is often a clamp()/vw expression: getComputedStyle on the custom
+      // property returns that raw expression (not resolved to px), so read the
+      // panel's actual computed width instead — it has width:var(--pw) applied.
+      const pw = parseFloat(getComputedStyle(panels[0].el).width) || 240;
       // radius so panels tile the cylinder with a comfortable gap
       const mult = innerWidth <= 760 ? 1.06 : 1.04;   // small gap between panels on every screen
       radius = Math.round((pw / 2) / Math.tan((Math.PI / N)) * mult);
