@@ -788,9 +788,10 @@
     start();
   }
 
-  /* nav state */
+  /* nav state — the floating "shrink to pill" treatment is desktop-only;
+     on mobile it clips the currency switcher, so the header stays put */
   const nav = $("#nav");
-  addEventListener("scroll", () => nav.classList.toggle("is-stuck", scrollY > 40), { passive: true });
+  addEventListener("scroll", () => nav.classList.toggle("is-stuck", innerWidth > 760 && scrollY > 40), { passive: true });
 
   /* burger */
   const burger = $("#burger"), links = $("#navLinks");
@@ -928,7 +929,7 @@
     wrap.className = "bookmodal"; wrap.id = "bookModal"; wrap.setAttribute("aria-hidden", "true");
     wrap.innerHTML = `
       <div class="bookmodal__scrim" data-close></div>
-      <aside class="bookmodal__panel" role="dialog" aria-modal="true" aria-label="Book a safari">
+      <aside class="bookmodal__panel" data-lenis-prevent role="dialog" aria-modal="true" aria-label="Book a safari">
         <button class="bookmodal__x" data-close aria-label="Close">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         </button>
@@ -1065,7 +1066,7 @@
     wrap.className = "tourmodal"; wrap.id = "tourModal"; wrap.setAttribute("aria-hidden", "true");
     wrap.innerHTML = `
       <div class="tourmodal__scrim" data-close></div>
-      <div class="tourmodal__panel" role="dialog" aria-modal="true" aria-label="Tour details">
+      <div class="tourmodal__panel" data-lenis-prevent role="dialog" aria-modal="true" aria-label="Tour details">
         <button class="tourmodal__x" data-close aria-label="Close">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         </button>
@@ -1125,7 +1126,7 @@
     wrap.className = "bookmodal bookmodal--builder"; wrap.id = "builderModal"; wrap.setAttribute("aria-hidden", "true");
     wrap.innerHTML = `
       <div class="bookmodal__scrim" data-close></div>
-      <aside class="bookmodal__panel" role="dialog" aria-modal="true" aria-label="Plan a private safari">
+      <aside class="bookmodal__panel" data-lenis-prevent role="dialog" aria-modal="true" aria-label="Plan a private safari">
         <button class="bookmodal__x" data-close aria-label="Close">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         </button>
@@ -1185,7 +1186,7 @@
     wrap.className = "bookmodal bookmodal--braai"; wrap.id = "braaiModal"; wrap.setAttribute("aria-hidden", "true");
     wrap.innerHTML = `
       <div class="bookmodal__scrim" data-close></div>
-      <aside class="bookmodal__panel" role="dialog" aria-modal="true" aria-label="Add a desert braai">
+      <aside class="bookmodal__panel" data-lenis-prevent role="dialog" aria-modal="true" aria-label="Add a desert braai">
         <button class="bookmodal__x" data-close aria-label="Close">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         </button>
