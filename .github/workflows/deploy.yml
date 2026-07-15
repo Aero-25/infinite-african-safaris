@@ -15,9 +15,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Build public site bundle
+        shell: bash
+        run: |
+          mkdir -p dist
+          cp index.html safaris.html gallery.html reviews.html contact.html robots.txt sitemap.xml _redirects dist/
+          cp -R assets dist/assets
+          rm -f dist/assets/img/README.txt
+
       - name: Publish to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy . --project-name=infinite-african-safaris --branch=main
+          command: pages deploy dist --project-name=infinite-african-safaris --branch=main

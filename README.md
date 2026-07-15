@@ -37,9 +37,9 @@ To use real media, drop files into `assets/img/` and `assets/video/`, then:
 
 ## Going live
 The form and tour builder open WhatsApp / the visitor's email app pre-filled.
-To collect submissions on a server instead, point the form in `assets/js/main.js`
+To collect submissions on a server instead, point the form in `assets/js/site.js`
 at a service like Formspree. The **client photo album** is ready to connect to your
-gallery host (e.g. Pixieset / Google Photos) — wire it in `clientForm` in `main.js`.
+gallery host (e.g. Pixieset / Google Photos) — wire it in `clientForm` in `site.js`.
 
 ## Deploy
 Any static host works (Cloudflare Pages, Netlify, GitHub Pages). No build command;

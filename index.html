@@ -15,15 +15,18 @@
   <meta property="og:title" content="Infinite African Safaris — Where the dunes meet the ocean" />
   <meta property="og:description" content="Small-group 4x4 safaris, marine cruises and kayaking adventures from Walvis Bay, Namibia. Guided by locals." />
   <meta property="og:url" content="https://infiniteafricansafaris.com/" />
-  <meta property="og:image" content="https://uksddraybxgpgnhocqyc.supabase.co/storage/v1/object/public/media/hero/sunset.webp" />
-  <meta property="og:image:alt" content="Namib dunes meeting the Atlantic at Sandwich Harbour, Namibia" />
+  <meta property="og:image" content="https://infiniteafricansafaris.com/assets/img/gallery/infinite-088.jpg" />
+  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:width" content="1280" />
+  <meta property="og:image:height" content="636" />
+  <meta property="og:image:alt" content="Guests on a Sandwich Harbour dune above the Atlantic coast" />
   <meta property="og:locale" content="en_US" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Infinite African Safaris — Where the dunes meet the ocean" />
   <meta name="twitter:description" content="Small-group 4x4 safaris, marine cruises and kayaking from Walvis Bay, Namibia." />
-  <meta name="twitter:image" content="https://uksddraybxgpgnhocqyc.supabase.co/storage/v1/object/public/media/hero/sunset.webp" />
+  <meta name="twitter:image" content="https://infiniteafricansafaris.com/assets/img/gallery/infinite-088.jpg" />
 
-  <link rel="icon" type="image/png" href="https://uksddraybxgpgnhocqyc.supabase.co/storage/v1/object/public/media/Infinity.png" />
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Outfit:wght@300;400;500;600;700&family=Tangerine:wght@700&display=swap" rel="stylesheet" />
@@ -32,12 +35,12 @@
   <link rel="preconnect" href="https://uksddraybxgpgnhocqyc.supabase.co" crossorigin />
   <link rel="dns-prefetch" href="https://unpkg.com" />
   <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
+  <link rel="preload" as="image" fetchpriority="high" href="https://uksddraybxgpgnhocqyc.supabase.co/storage/v1/object/public/media/hero/dune.webp" />
   <link rel="preload" as="image" fetchpriority="high" href="https://uksddraybxgpgnhocqyc.supabase.co/storage/v1/object/public/media/logos/big-logo.webp" />
 
-  <link rel="stylesheet" href="assets/css/styles.css?v=20260715-tour-buttons" />
+  <link rel="stylesheet" href="assets/css/site.css?v=20260715-launch-2" />
 
-  <!-- Structured data: helps Google show your rating, price, location & offers.
-       NOTE: update aggregateRating below to your REAL Google/GetYourGuide numbers before going live. -->
+  <!-- Structured business and tour data for search engines. -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -47,7 +50,7 @@
     "description": "Small-group 4x4 safaris, marine cruises and kayaking adventures from Walvis Bay, Namibia. Guided by locals.",
     "url": "https://infiniteafricansafaris.com/",
     "logo": "https://uksddraybxgpgnhocqyc.supabase.co/storage/v1/object/public/media/logos/big-logo.webp",
-    "image": "https://uksddraybxgpgnhocqyc.supabase.co/storage/v1/object/public/media/hero/sunset.webp",
+    "image": "https://infiniteafricansafaris.com/assets/img/gallery/infinite-088.jpg",
     "telephone": "+264817269221",
     "email": "info@infiniteafricansafaris.com",
     "priceRange": "$$",
@@ -68,11 +71,6 @@
     "sameAs": [
       "https://wa.me/264817269221"
     ],
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "reviewCount": "27"
-    },
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
       "name": "Safaris & experiences",
@@ -89,10 +87,11 @@
   </script>
 </head>
 <body>
+  <a class="skip-link" href="#top">Skip to content</a>
   <!-- ============ PRELOADER ============ -->
   <div class="preloader" id="preloader" aria-hidden="true">
     <div class="preloader__inner">
-      <img src="https://uksddraybxgpgnhocqyc.supabase.co/storage/v1/object/public/media/logos/big-logo.webp" alt="Infinite African Safaris" class="preloader__logo" fetchpriority="high" decoding="async"
+      <img src="https://uksddraybxgpgnhocqyc.supabase.co/storage/v1/object/public/media/logos/big-logo.webp" alt="Infinite African Safaris" class="preloader__logo" width="600" height="400" fetchpriority="high" decoding="async"
            onerror="document.getElementById('preloader').classList.add('logo-missing')" />
       <div class="preloader__fallback">
         <svg viewBox="0 0 100 50" class="infinity" aria-hidden="true">
@@ -108,7 +107,7 @@
   <header class="nav" id="nav">
     <a href="#top" class="nav__brand" aria-label="Infinite African Safaris — home">
       <span class="nav__emblem" aria-hidden="true">
-        <img src="https://uksddraybxgpgnhocqyc.supabase.co/storage/v1/object/public/media/logos/small-logo.webp" alt="" class="nav__emblemimg"
+        <img src="https://uksddraybxgpgnhocqyc.supabase.co/storage/v1/object/public/media/logos/small-logo.webp" alt="" class="nav__emblemimg" width="400" height="267"
              onerror="this.closest('.nav__brand').classList.add('mark-missing')" />
         <svg class="nav__emblemsvg" viewBox="0 0 100 50"><path d="M50,25 C50,8 25,8 25,25 C25,42 50,42 50,25 C50,8 75,8 75,25 C75,42 50,42 50,25" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>
       </span>
@@ -124,16 +123,16 @@
       <a href="safaris.html">Safaris</a>
       <a href="reviews.html">Reviews</a>
       <a href="contact.html">Contact</a>
-      <a href="#book" class="nav__cta" data-book>Book a Safari</a>
+      <a href="contact.html#inquiryForm" class="nav__cta" data-book>Book a Safari</a>
     </nav>
 
     <div class="nav__tools">
       <div class="cur" id="curSwitch" role="group" aria-label="Currency">
-        <button data-cur="NAD" class="cur__btn is-active">N$</button>
-        <button data-cur="EUR" class="cur__btn">€</button>
-        <button data-cur="USD" class="cur__btn">$</button>
+        <button type="button" data-cur="NAD" class="cur__btn is-active">N$</button>
+        <button type="button" data-cur="EUR" class="cur__btn">€</button>
+        <button type="button" data-cur="USD" class="cur__btn">$</button>
       </div>
-      <button class="nav__burger" id="burger" aria-label="Menu" aria-expanded="false">
+      <button type="button" class="nav__burger" id="burger" aria-label="Menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
     </div>
@@ -188,7 +187,7 @@
           <p class="eyebrow">— Our safaris</p>
           <h2 class="h2">Curated adventures</h2>
           <div class="section__note section__note--currency">
-            <span>Discover the essence of Walvis Bay. Prices in <b id="curName">Namibian Dollar</b>.</span>
+            <span>Discover the essence of Walvis Bay. Prices in <b id="curName">Namibian Dollar</b>. EUR/USD conversions are approximate; final prices are confirmed in NAD.</span>
             <div class="cur cur--section" role="group" aria-label="Currency">
               <button type="button" data-cur="NAD" class="cur__btn">N$</button>
               <button type="button" data-cur="EUR" class="cur__btn">€</button>
@@ -197,8 +196,8 @@
           </div>
         </div>
         <div class="rail__arrows" data-reveal>
-          <button class="rail__arrow" id="railPrev" aria-label="Previous safaris">←</button>
-          <button class="rail__arrow" id="railNext" aria-label="Next safaris">→</button>
+          <button type="button" class="rail__arrow" id="railPrev" aria-label="Previous safaris">←</button>
+          <button type="button" class="rail__arrow" id="railNext" aria-label="Next safaris">→</button>
         </div>
       </div>
 
@@ -228,7 +227,7 @@
             <p class="sig__eyebrow">— Private rhythm</p>
             <h3 class="sig__title">Build the day<br>around <em>the light</em></h3>
             <p class="sig__lead">Pick the pace: early dunes, lagoon stops, wildlife detours, long photo pauses, or a softer family-friendly route.</p>
-            <div class="sig__chips" aria-label="Private safari options">
+            <div class="sig__chips">
               <span>Dunes</span><span>Ocean</span><span>Wildlife</span><span>Sunset</span><span>Private vehicle</span>
             </div>
             <ol class="sig__steps">
@@ -242,7 +241,7 @@
 
         <div class="sig-social" data-reveal>
           <span>Follow the trail</span>
-          <div class="sig-social__links" id="signatureSocial" aria-label="Social links"></div>
+          <nav class="sig-social__links" id="signatureSocial" aria-label="Social links"></nav>
         </div>
 
         <!-- NIGHT — fire-lit, after dark -->
@@ -256,7 +255,7 @@
             <p class="sig__eyebrow sig__eyebrow--night">— After the drive</p>
             <h3 class="sig__title sig__title--night">A desert braai,<br><em>done properly</em></h3>
             <p class="sig__lead sig__lead--night">Trade the rush for coals, stories and a table in the sand. We handle the setup; you settle into the evening.</p>
-            <div class="sig__chips sig__chips--night" aria-label="Desert braai options">
+            <div class="sig__chips sig__chips--night">
               <span>Fire</span><span>Table</span><span>Local cuts</span><span>Stories</span>
             </div>
             <ol class="sig__steps sig__steps--night">
@@ -282,7 +281,7 @@
               </video>
             </div>
             <span class="film__veil" aria-hidden="true"></span>
-            <button class="film__sound" id="filmSound" aria-label="Turn sound on" aria-pressed="false">
+            <button type="button" class="film__sound" id="filmSound" aria-label="Turn sound on" aria-pressed="false">
               <svg class="film__ic-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9l5 6M21 9l-5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
               <svg class="film__ic-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a5 5 0 010 7M18.7 6a9 9 0 010 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
             </button>
@@ -297,11 +296,13 @@
       </div>
     </section>
 
+  </main>
+
   <!-- ============ NEXT-LEVEL FOOTER : THE DEPARTURE LOUNGE ============ -->
   <footer class="megafoot" id="contact">
     <!-- elephant family silhouette -->
     <div class="skyline" aria-hidden="true">
-      <img class="skyline__herd" src="assets/img/elephants.png" alt="" loading="lazy" />
+      <img class="skyline__herd" src="assets/img/elephants.png" alt="" width="1412" height="343" loading="lazy" />
     </div>
 
     <!-- columns -->
@@ -312,7 +313,7 @@
         <div class="footer__social" id="footerSocial"><!-- injected --></div>
       </div>
       <nav class="mf-col" aria-label="Footer">
-        <h4>Explore</h4>
+        <h3>Explore</h3>
         <a href="index.html#about">About</a>
         <a href="safaris.html">Our safaris</a>
         <a href="gallery.html">Gallery</a>
@@ -320,14 +321,14 @@
         <a href="contact.html">Contact</a>
       </nav>
       <div class="mf-col">
-        <h4>Find us</h4>
+        <h3>Find us</h3>
         <a href="tel:+264817269221">+264 81 726 9221</a>
         <a href="mailto:info@infiniteafricansafaris.com">info@infiniteafricansafaris.com</a>
         <a href="https://www.google.com/maps/search/Flamingo+Villas+Walvis+Bay+Namibia" target="_blank" rel="noopener">Flamingo Villas, Walvis Bay</a>
         <p>P.O. Box 4145, Namibia</p>
       </div>
       <div class="mf-col">
-        <h4>Registered &amp; insured</h4>
+        <h3>Registered &amp; insured</h3>
         <p>Company Reg. 2026/04002</p>
         <p>VAT Reg. 16132448</p>
         <p>NTB Reg. TSO01779</p>
@@ -345,11 +346,11 @@
   </a>
 
   <!-- Lightbox -->
-  <div class="lightbox" id="lightbox" aria-hidden="true">
-    <button class="lightbox__close" id="lbClose" aria-label="Close">✕</button>
-    <button class="lightbox__nav lightbox__nav--prev" id="lbPrev" aria-label="Previous">‹</button>
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Safari gallery viewer" aria-hidden="true" inert>
+    <button type="button" class="lightbox__close" id="lbClose" aria-label="Close">✕</button>
+    <button type="button" class="lightbox__nav lightbox__nav--prev" id="lbPrev" aria-label="Previous">‹</button>
     <figure class="lightbox__fig" id="lbFig"></figure>
-    <button class="lightbox__nav lightbox__nav--next" id="lbNext" aria-label="Next">›</button>
+    <button type="button" class="lightbox__nav lightbox__nav--next" id="lbNext" aria-label="Next">›</button>
   </div>
 
   <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer></script>
@@ -357,6 +358,6 @@
   <script src="assets/js/config.js" defer></script>
   <script src="assets/js/integrations.js" defer></script>
   <script src="assets/js/data.js" defer></script>
-  <script src="assets/js/main.js?v=20260715-dietary-fields" defer></script>
+  <script src="assets/js/site.js?v=20260715-launch-2" defer></script>
 </body>
 </html>
