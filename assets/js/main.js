@@ -821,13 +821,15 @@
       dragging = true; dragMoved = false; vel = 0;
       dragX = lastDragX = e.clientX; dragScroll = rail.scrollLeft; lastDragT = performance.now();
       pause(4000);
-      rail.setPointerCapture(e.pointerId);
-      rail.classList.add("is-dragging");
     });
     rail.addEventListener("pointermove", (e) => {
       if (!dragging) return;
       const dx = e.clientX - dragX;
-      if (Math.abs(dx) > 4) dragMoved = true;
+      if (Math.abs(dx) > 4 && !dragMoved) {
+        dragMoved = true;
+        rail.setPointerCapture(e.pointerId);
+        rail.classList.add("is-dragging");
+      }
       rail.scrollLeft = clamp(dragScroll - dx, 0, maxScroll());
       const now = performance.now(), dtMs = now - lastDragT;
       if (dtMs > 0) vel = ((e.clientX - lastDragX) / dtMs) * -1000; // px/s, matches scrollLeft sign
@@ -1015,6 +1017,7 @@
             <label class="bk">Phone<input name="phone" autocomplete="tel"></label>
             <label class="bk">Nationality<input name="country"></label>
           </div>
+          <label class="bk">Dietary requirements<textarea name="dietary" rows="2" placeholder="Vegetarian, vegan, halal, allergies — leave blank if none"></textarea></label>
           <label class="bk">Requests<textarea name="notes" rows="2" placeholder="Anything special?"></textarea></label>
           <div class="book__total">
             <div class="book__total-l">
@@ -1085,6 +1088,13 @@
     el.value = Math.max(min, (+el.value || 0) + (+b.dataset.d));
     renderBooking();
   }));
+  const leadMessage = (message = "", dietary = "") => {
+    const parts = [];
+    if (message.trim()) parts.push(message.trim());
+    if (dietary.trim()) parts.push(`Dietary requirements: ${dietary.trim()}`);
+    return parts.join("\n\n") || null;
+  };
+
   // pre-select a tour when "Add +" / booking links pass a hash like #book?tour=
   $("#bookForm")?.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -1096,7 +1106,7 @@
     // Save the booking request to Supabase (no-op until configured)
     window.iasSaveLead?.({
       source: "booking", name: d.name, email: d.email, phone: d.phone, country: d.country,
-      preferred_date: d.date, tour: t.name, message: d.notes, group_size: a + k,
+      preferred_date: d.date, tour: t.name, message: leadMessage(d.notes, d.dietary), group_size: a + k,
       _hp: d._hp, raw: { ...d, adults: a, kids: k, tour_id: t.id, estimated_total: total },
     });
     let m = `BOOKING REQUEST — Infinite African Safaris%0A%0A`;
@@ -1105,6 +1115,7 @@
     if (total) m += `Estimated total: ${fmt(total).replace(/ /g,"%20")}%0A`;
     m += `Name: ${encodeURIComponent(d.name)}%0AEmail: ${encodeURIComponent(d.email)}%0A`;
     m += `Phone: ${encodeURIComponent(d.phone||"-")}%0ANationality: ${encodeURIComponent(d.country||"-")}`;
+    m += `%0ADietary requirements: ${encodeURIComponent(d.dietary||"Not specified")}`;
     if (d.notes) m += `%0ARequests: ${encodeURIComponent(d.notes)}`;
     window.open(`https://wa.me/${CONTACT.whatsapp}?text=${m}`, "_blank");
     const body = m.replace(/%0A/g, "\n").replace(/%20/g, " ");
@@ -1227,6 +1238,7 @@
             <label class="bk">Name<input name="name" autocomplete="name" required></label>
             <label class="bk">Email<input type="email" name="email" autocomplete="email" required></label>
           </div>
+          <label class="bk">Dietary requirements<textarea name="dietary" rows="2" placeholder="Vegetarian, vegan, halal, allergies — leave blank if none"></textarea></label>
           <label class="bk">Anything else?<textarea name="notes" rows="2" placeholder="Special requests, occasions, pace…"></textarea></label>
           <button class="btn btn--solid btn--block" type="submit">Request my private safari</button>
           <p class="bk__note" id="builderNote">We reply within a few hours · no payment now.</p>
@@ -1268,7 +1280,8 @@
             <label class="bk">Email<input type="email" name="email" autocomplete="email" required></label>
           </div>
           <label class="bk">Phone<input name="phone" autocomplete="tel"></label>
-          <label class="bk">Dietary needs or requests<textarea name="notes" rows="2" placeholder="Vegetarian, allergies, celebrations…"></textarea></label>
+          <label class="bk">Dietary requirements<textarea name="dietary" rows="2" placeholder="Vegetarian, vegan, halal, allergies — leave blank if none"></textarea></label>
+          <label class="bk">Other requests<textarea name="notes" rows="2" placeholder="Celebrations, setup, or anything else…"></textarea></label>
           <button class="btn btn--solid btn--block" type="submit">Request my desert braai</button>
           <p class="bk__note" id="braaiNote">We reply within a few hours · no payment now.</p>
         </form>
@@ -1324,7 +1337,7 @@
     const a = +$("#builderAdults").value, k = +$("#builderKids").value;
     window.iasSaveLead?.({
       source: "private-builder", name: d.name, email: d.email, phone: d.phone, country: d.country,
-      preferred_date: d.date, tour: "Private safari — " + (start || "flexible start"), message: d.notes, group_size: a + k,
+      preferred_date: d.date, tour: "Private safari — " + (start || "flexible start"), message: leadMessage(d.notes, d.dietary), group_size: a + k,
       _hp: d._hp, raw: { ...d, adults: a, kids: k, start, route },
     });
     let m = `PRIVATE SAFARI REQUEST — Infinite African Safaris%0A%0A`;
@@ -1332,6 +1345,7 @@
     m += `Date: ${d.date}%0AGuests: ${a} adult${a>1?"s":""}${k?`, ${k} child${k>1?"ren":""}`:""}%0A`;
     m += `Name: ${encodeURIComponent(d.name)}%0AEmail: ${encodeURIComponent(d.email)}%0A`;
     m += `Phone: ${encodeURIComponent(d.phone||"-")}%0ANationality: ${encodeURIComponent(d.country||"-")}`;
+    m += `%0ADietary requirements: ${encodeURIComponent(d.dietary||"Not specified")}`;
     if (d.notes) m += `%0ANotes: ${encodeURIComponent(d.notes)}`;
     window.open(`https://wa.me/${CONTACT.whatsapp}?text=${m}`, "_blank");
     const body = m.replace(/%0A/g, "\n").replace(/%20/g, " ");
@@ -1345,14 +1359,15 @@
     const a = +$("#braaiAdults").value, k = +$("#braaiKids").value;
     window.iasSaveLead?.({
       source: "braai", name: d.name, email: d.email, phone: d.phone, country: d.country,
-      preferred_date: d.date, tour: "Desert braai", message: d.notes, group_size: a + k,
+      preferred_date: d.date, tour: "Desert braai", message: leadMessage(d.notes, d.dietary), group_size: a + k,
       _hp: d._hp, raw: { ...d, adults: a, kids: k },
     });
     let m = `DESERT BRAAI REQUEST — Infinite African Safaris%0A%0A`;
     m += `Date: ${d.date}%0ATime: ${d.time}%0AGuests: ${a} adult${a>1?"s":""}${k?`, ${k} child${k>1?"ren":""}`:""}%0A`;
     m += `Name: ${encodeURIComponent(d.name)}%0AEmail: ${encodeURIComponent(d.email)}%0A`;
     m += `Phone: ${encodeURIComponent(d.phone||"-")}`;
-    if (d.notes) m += `%0ADietary/requests: ${encodeURIComponent(d.notes)}`;
+    m += `%0ADietary requirements: ${encodeURIComponent(d.dietary||"Not specified")}`;
+    if (d.notes) m += `%0AOther requests: ${encodeURIComponent(d.notes)}`;
     window.open(`https://wa.me/${CONTACT.whatsapp}?text=${m}`, "_blank");
     const body = m.replace(/%0A/g, "\n").replace(/%20/g, " ");
     $("#braaiNote").innerHTML = `Thanks ${(d.name.split(" ")[0]||"")}! Opening WhatsApp — or <a href="mailto:${CONTACT.email}?subject=${encodeURIComponent("Desert braai request — "+d.name)}&body=${encodeURIComponent(body)}" style="color:#f0a45a;font-weight:600">send by email</a>.`;
@@ -1368,10 +1383,10 @@
     // Save the lead to Supabase (no-op until configured) — never blocks the email handoff
     window.iasSaveLead?.({
       source: "contact", name: d.name, email: d.email, country: d.country,
-      group_size: d.size, preferred_date: d.date, tour: d.interest, message: d.message,
+      group_size: d.size, preferred_date: d.date, tour: d.interest, message: leadMessage(d.message, d.dietary),
       _hp: d._hp, raw: d,
     });
-    let body = `Name: ${d.name}\nEmail: ${d.email}\nCountry: ${d.country||"-"}\nGroup size: ${d.size||"-"}\nDate: ${d.date||"-"}\nInterested in: ${d.interest||"-"}\n\n${d.message||""}`;
+    let body = `Name: ${d.name}\nEmail: ${d.email}\nCountry: ${d.country||"-"}\nGroup size: ${d.size||"-"}\nDate: ${d.date||"-"}\nInterested in: ${d.interest||"-"}\nDietary requirements: ${d.dietary||"Not specified"}\n\n${d.message||""}`;
     location.href = `mailto:${CONTACT.email}?subject=${encodeURIComponent("Website enquiry — "+d.name)}&body=${encodeURIComponent(body)}`;
     $("#formNote").textContent = "Opening your email app… or message us on WhatsApp.";
   });

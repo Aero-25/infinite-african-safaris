@@ -404,8 +404,19 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .card__price small{ display:block; font-size:.72rem; color:rgba(243,232,214,.65); letter-spacing:.04em; }
 .card__add{ font-size:.85rem; font-weight:600; color:var(--gold-soft); border:1.4px solid currentColor; border-radius:100px; padding:.45em 1em; transition:.3s; }
 .card__add:hover{ background:var(--amber); color:#fff; border-color:var(--amber); }
-.card__more{ display:inline-block; font-size:.82rem; font-weight:600; color:var(--gold-soft); text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(233,197,131,.4); margin:-.3rem 0 1rem; transition:.2s; }
-.card__more:hover{ text-decoration-color:currentColor; }
+.card__more{
+  display:inline-flex; align-items:center; justify-content:center; gap:.45rem; width:max-content;
+  min-height:38px; padding:.58em 1.05em; margin:-.25rem 0 1rem;
+  border:1.4px solid currentColor; border-radius:100px;
+  background:rgba(8,20,25,.34); color:var(--gold-soft);
+  font-size:.82rem; font-weight:600; line-height:1;
+  -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px);
+  transition:background .25s, color .25s, border-color .25s, transform .25s var(--ease);
+}
+.card__more::after{ content:"\2192"; font-size:1rem; line-height:1; transition:transform .25s var(--ease); }
+.card__more:hover{ background:var(--gold-soft); color:var(--ink); border-color:var(--gold-soft); transform:translateY(-2px); }
+.card__more:hover::after{ transform:translateX(3px); }
+.card__more:focus-visible{ outline-color:var(--gold-soft); }
 
 /* ---------- tour detail modal ("Learn more") ---------- */
 .tourmodal{ position:fixed; inset:0; z-index:170; display:none; }
