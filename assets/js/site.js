@@ -373,8 +373,13 @@
       const el = document.createElement("div");
       el.className = "panel";
       const img = document.createElement("img");
-      img.loading = i < 2 ? "eager" : "lazy";
-      if (i < 2) img.fetchPriority = "high";
+      // Every face must be ready before rotation brings it to the front.
+      // These eight hero WebPs are already small, so eager loading avoids a
+      // blank panel without imposing the cost of the full gallery.
+      img.loading = "eager";
+      // The wheel turns toward the last panels first, so prioritise both the
+      // initial face and the next two faces entering from the left.
+      if (i < 2 || i >= N - 2) img.fetchPriority = "high";
       img.decoding = "async"; img.alt = "";
       img.onload = () => img.classList.add("is-loaded");
       const cap = document.createElement("span");
@@ -399,30 +404,50 @@
     sizeUp();
     addEventListener("resize", sizeUp);
 
-    const IDLE = reduce ? 0 : 0.18; // motion preference disables automatic spin
-    let rot = 0;                 // current rotation
-    let vel = IDLE;              // current spin speed
-    let dragging = false, lastX = 0, dragVel = 0;
+    // Degrees per second keeps the wheel speed consistent on 60/120/144 Hz
+    // screens. A complete photo advances to the centre about every 3.3s.
+    const AUTO_SPEED = reduce ? 0 : 13.5;
+    let rot = 0;
+    let vel = AUTO_SPEED;
+    let dragging = false, lastX = 0, lastDragAt = 0;
 
     // pointer drag to spin
-    cyl.addEventListener("pointerdown", (e) => { dragging = true; lastX = e.clientX; dragVel = 0; cyl.setPointerCapture(e.pointerId); });
+    cyl.addEventListener("pointerdown", (e) => {
+      dragging = true;
+      lastX = e.clientX;
+      lastDragAt = performance.now();
+      vel = 0;
+      cyl.setPointerCapture(e.pointerId);
+    });
     cyl.addEventListener("pointermove", (e) => {
       if (!dragging) return;
-      const dx = e.clientX - lastX; lastX = e.clientX;
-      dragVel = dx * 0.25; rot += dragVel;
+      const now = performance.now();
+      const dx = e.clientX - lastX;
+      const dt = Math.max(8, now - lastDragAt);
+      const delta = dx * 0.28;
+      lastX = e.clientX;
+      lastDragAt = now;
+      rot += delta;
+      vel = (delta / dt) * 1000;
     });
-    const endDrag = () => { dragging = false; };
+    const endDrag = (e) => {
+      if (!dragging) return;
+      dragging = false;
+      if (e && cyl.hasPointerCapture?.(e.pointerId)) cyl.releasePointerCapture(e.pointerId);
+    };
     cyl.addEventListener("pointerup", endDrag);
     cyl.addEventListener("pointercancel", endDrag);
-    cyl.addEventListener("pointerleave", endDrag);
+    cyl.addEventListener("lostpointercapture", endDrag);
 
-    const frame = () => {
-      if (dragging) {
-        // follow the drag
-      } else {
-        vel += (IDLE - vel) * 0.04;  // always ease back to the automatic spin
-        rot += vel + dragVel;
-        dragVel *= 0.92;                              // momentum decay
+    let previousFrame = performance.now();
+    const frame = (now) => {
+      // Clamp long gaps after a background tab resumes so the wheel never jumps.
+      const dt = Math.min(Math.max((now - previousFrame) / 1000, 0), .05);
+      previousFrame = now;
+      if (!dragging) {
+        // Keep drag momentum, then smoothly settle back into automatic rotation.
+        vel += (AUTO_SPEED - vel) * Math.min(1, dt * 2.4);
+        rot += vel * dt;
       }
       rotor.style.transform = `translateZ(${-radius}px) rotateY(${rot}deg)`;
 
@@ -1642,7 +1667,8 @@
       if ($(".hero__kicker")) gsap.from(".hero__kicker", { opacity: 0, y: 16, duration: .9, delay: 1.25 });
       if ($(".hero__title")) gsap.from(".hero__title", { opacity: 0, y: 28, duration: 1.1, ease: "power3.out", delay: 1.35 });
       if ($(".hero__sub")) gsap.from(".hero__sub", { opacity: 0, y: 16, duration: .9, delay: 1.55 });
-      if ($(".panel")) gsap.from(".panel", { opacity: 0, scale: .8, stagger: .05, duration: 1, ease: "power2.out", delay: 1.6 });
+      // Hero panels already fade in as their images decode. Animating their
+      // opacity here after window.load would make the running wheel vanish.
     }
   });
 })();
