@@ -404,15 +404,33 @@
     sizeUp();
     addEventListener("resize", sizeUp);
 
-    // Degrees per second keeps the wheel speed consistent on 60/120/144 Hz
-    // screens. A complete photo advances to the centre about every 3.3s.
-    const AUTO_SPEED = reduce ? 0 : 13.5;
+    // A true continuous 3D rotation: one new face reaches the centre every
+    // 2.5 seconds. The owner requires this signature motion even when the OS
+    // requests reduced motion, so a dedicated pause control is provided.
+    const AUTO_SPEED = 18;
+    const pauseBtn = $("#cylPause");
     let rot = 0;
     let vel = AUTO_SPEED;
+    let paused = false;
     let dragging = false, lastX = 0, lastDragAt = 0;
+
+    const renderPause = () => {
+      if (!pauseBtn) return;
+      pauseBtn.setAttribute("aria-pressed", String(paused));
+      pauseBtn.setAttribute("aria-label", paused ? "Resume rotating gallery" : "Pause rotating gallery");
+      const glyph = $("span", pauseBtn);
+      if (glyph) glyph.textContent = paused ? "▶" : "Ⅱ";
+    };
+    pauseBtn?.addEventListener("click", () => {
+      paused = !paused;
+      if (paused) vel = 0;
+      renderPause();
+    });
+    renderPause();
 
     // pointer drag to spin
     cyl.addEventListener("pointerdown", (e) => {
+      if (!e.isPrimary || e.button !== 0 || e.target.closest("button")) return;
       dragging = true;
       lastX = e.clientX;
       lastDragAt = performance.now();
@@ -428,7 +446,7 @@
       lastX = e.clientX;
       lastDragAt = now;
       rot += delta;
-      vel = (delta / dt) * 1000;
+      vel = Math.max(-140, Math.min(140, (delta / dt) * 1000));
     });
     const endDrag = (e) => {
       if (!dragging) return;
@@ -444,11 +462,13 @@
       // Clamp long gaps after a background tab resumes so the wheel never jumps.
       const dt = Math.min(Math.max((now - previousFrame) / 1000, 0), .05);
       previousFrame = now;
-      if (!dragging) {
+      if (!dragging && !paused) {
         // Keep drag momentum, then smoothly settle back into automatic rotation.
-        vel += (AUTO_SPEED - vel) * Math.min(1, dt * 2.4);
+        const blend = 1 - Math.exp(-dt * 2.4);
+        vel += (AUTO_SPEED - vel) * blend;
         rot += vel * dt;
       }
+      if (Math.abs(rot) > 36000) rot %= 360;
       rotor.style.transform = `translateZ(${-radius}px) rotateY(${rot}deg)`;
 
       // per-panel: just face detection now — every panel keeps its own
@@ -456,6 +476,8 @@
       panels.forEach(p => {
         const world = ((rot + p.angle) % 360 + 360) % 360;   // 0..360
         const front = Math.abs(((world + 180) % 360) - 180) < step / 2;
+        const facing = Math.max(0, Math.cos(world * Math.PI / 180));
+        p.el.style.setProperty("--shade", (0.42 * (1 - facing)).toFixed(3));
         p.el.classList.toggle("is-front", front);
       });
       requestAnimationFrame(frame);

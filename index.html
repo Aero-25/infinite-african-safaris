@@ -38,7 +38,7 @@
   <link rel="preload" as="image" fetchpriority="high" href="https://uksddraybxgpgnhocqyc.supabase.co/storage/v1/object/public/media/hero/dune.webp" />
   <link rel="preload" as="image" fetchpriority="high" href="https://uksddraybxgpgnhocqyc.supabase.co/storage/v1/object/public/media/logos/big-logo.webp" />
 
-  <link rel="stylesheet" href="assets/css/site.css?v=20260715-wheel-1" />
+  <link rel="stylesheet" href="assets/css/site.css?v=20260715-wheel-2" />
 
   <!-- Structured business and tour data for search engines. -->
   <script type="application/ld+json">
@@ -144,11 +144,12 @@
       <h1 class="sr-only">Infinite African Safaris — small-group desert and ocean tours from Walvis Bay, Namibia</h1>
 
       <!-- The signature: a concave wall of photos that rotates and refreshes -->
-      <div class="cyl" id="cyl" aria-label="Rotating gallery of Namibian experiences" role="img">
+      <section class="cyl" id="cyl" aria-label="Rotating gallery of Namibian experiences" aria-roledescription="3D photo carousel">
         <div class="cyl__rotor" id="rotor"><!-- panels injected --></div>
         <div class="cyl__fade cyl__fade--l" aria-hidden="true"></div>
         <div class="cyl__fade cyl__fade--r" aria-hidden="true"></div>
-      </div>
+        <button class="cyl__pause" id="cylPause" type="button" aria-pressed="false" aria-label="Pause rotating gallery"><span aria-hidden="true">Ⅱ</span></button>
+      </section>
 
     </section>
 
@@ -292,7 +293,7 @@
             <p class="film__lead">Dunes spilling into the Atlantic, seals at the bow, dust and gold light.</p>
             <span class="film__cue">Keep scrolling ↓</span>
           </div>
-        </div>
+          </div>
       </div>
     </section>
 
@@ -358,6 +359,6 @@
   <script src="assets/js/config.js" defer></script>
   <script src="assets/js/integrations.js" defer></script>
   <script src="assets/js/data.js" defer></script>
-  <script src="assets/js/site.js?v=20260715-wheel-1" defer></script>
+  <script src="assets/js/site.js?v=20260715-wheel-2" defer></script>
 </body>
 </html>
