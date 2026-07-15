@@ -883,7 +883,8 @@
     const maxScroll = () => rail.scrollWidth - rail.clientWidth;
 
     let paused = false, resumeTimer = null;
-    let dragging = false, dragMoved = false, dragX = 0, dragScroll = 0;
+    let tracking = false, dragging = false, dragMoved = false, dragAxis = null;
+    let activePointer = null, dragX = 0, dragY = 0, dragScroll = 0;
     let lastDragX = 0, lastDragT = 0, vel = 0;
     let looping = false, last = 0;
 
@@ -931,28 +932,55 @@
     $("#railNext")?.addEventListener("click", () => { pause(); scrollRail(1); });
 
     rail.addEventListener("pointerdown", (e) => {
-      if (e.pointerType === "mouse" && e.button !== 0) return;
-      dragging = true; dragMoved = false; vel = 0;
-      dragX = lastDragX = e.clientX; dragScroll = rail.scrollLeft; lastDragT = performance.now();
+      if (!e.isPrimary || activePointer != null || (e.pointerType === "mouse" && e.button !== 0)) return;
+      tracking = true; dragging = false; dragMoved = false; dragAxis = null; vel = 0;
+      activePointer = e.pointerId;
+      dragX = lastDragX = e.clientX; dragY = e.clientY;
+      dragScroll = rail.scrollLeft; lastDragT = performance.now();
       pause(4000);
     });
     rail.addEventListener("pointermove", (e) => {
-      if (!dragging) return;
+      if (!tracking || e.pointerId !== activePointer) return;
       const dx = e.clientX - dragX;
-      if (Math.abs(dx) > 4 && !dragMoved) {
+      const dy = e.clientY - dragY;
+      if (!dragAxis) {
+        const ax = Math.abs(dx), ay = Math.abs(dy);
+        if (Math.max(ax, ay) < 7) return;
+
+        // A vertical swipe belongs to the page. Do not capture it or write
+        // scrollLeft just because a finger has a few pixels of sideways jitter.
+        if (e.pointerType !== "mouse" && ay > ax * 1.15) {
+          dragAxis = "y";
+          tracking = false;
+          vel = 0;
+          return;
+        }
+        // Wait through an ambiguous diagonal until one direction wins.
+        if (e.pointerType !== "mouse" && ax <= ay * 1.15) return;
+
+        dragAxis = "x";
+        dragging = true;
         dragMoved = true;
         rail.setPointerCapture(e.pointerId);
         rail.classList.add("is-dragging");
       }
+      if (dragAxis !== "x") return;
       rail.scrollLeft = clamp(dragScroll - dx, 0, maxScroll());
       const now = performance.now(), dtMs = now - lastDragT;
       if (dtMs > 0) vel = ((e.clientX - lastDragX) / dtMs) * -1000; // px/s, matches scrollLeft sign
       lastDragX = e.clientX; lastDragT = now;
     });
-    const endDrag = () => { dragging = false; rail.classList.remove("is-dragging"); };
+    const endDrag = (e) => {
+      if (activePointer != null && e?.pointerId != null && e.pointerId !== activePointer) return;
+      tracking = false; dragging = false; dragAxis = null; activePointer = null;
+      rail.classList.remove("is-dragging");
+    };
     rail.addEventListener("pointerup", endDrag);
-    rail.addEventListener("pointercancel", endDrag);
-    rail.addEventListener("pointerleave", endDrag);
+    rail.addEventListener("pointercancel", (e) => { vel = 0; endDrag(e); });
+    rail.addEventListener("lostpointercapture", endDrag);
+    rail.addEventListener("pointerleave", (e) => {
+      if (e.pointerType === "mouse" && !rail.hasPointerCapture(e.pointerId)) endDrag(e);
+    });
     // swallow the click that follows a real drag so it doesn't open a card's modal
     rail.addEventListener("click", (e) => { if (dragMoved) { e.preventDefault(); e.stopPropagation(); } }, true);
 
