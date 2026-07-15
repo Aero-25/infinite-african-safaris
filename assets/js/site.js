@@ -117,7 +117,7 @@
     const CAT = {
       "sh-half":"desert","sh-sunset":"desert","sh-full":"desert",
       "moon":"desert","sossus":"desert","spitz":"desert","sh-dune":"combo",
-      "cruise":"ocean","kayak":"ocean","fishing":"ocean","cruise-sh":"combo","kayak-sh":"combo",
+      "cruise":"ocean","kayak":"ocean","cruise-sh":"combo","kayak-sh":"combo",
     };
     const isCombo = (t) => (CAT[t.id] || "desert") === "combo";
     const cardHTML = (t) => `
