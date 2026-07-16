@@ -110,11 +110,11 @@ const POLICIES = [
   { t:"Acceptance of terms", b:"Confirming a booking means the client, agent or representative accepts all rates, payment terms and cancellation policies set out here." },
 ];
 
-/* --- Social links: drop in the real URLs ----------------------------- */
+/* --- Social links ----------------------------------------------------- */
 const SOCIALS = [
   { key:"whatsapp",    label:"WhatsApp",    url:"https://wa.me/264817269221" },
-  { key:"instagram",   label:"Instagram",   url:"#" },
-  { key:"facebook",    label:"Facebook",    url:"#" },
+  { key:"instagram",   label:"Instagram",   url:"https://www.instagram.com/infiniteafricansafaris/" },
+  { key:"facebook",    label:"Facebook",    url:"https://www.facebook.com/people/Infinite-African-Safaris/61576546264285/" },
 ];
 
 const CONTACT = { whatsapp: "264817269221", email: "info@infiniteafricansafaris.com" };
