@@ -1418,4 +1418,13 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 @media (prefers-reduced-motion:reduce){
   *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
   [data-reveal]{ opacity:1; transform:none; }
+  /* This moving khaki trace is the infinity chat button's core affordance.
+     Keep it running while all non-essential page animation stays reduced. */
+  .fab__pulse{
+    animation-name:fabPulseTravel !important;
+    animation-duration:2.6s !important;
+    animation-timing-function:linear !important;
+    animation-iteration-count:infinite !important;
+    animation-play-state:running !important;
+  }
 }
