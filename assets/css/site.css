@@ -1217,10 +1217,39 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 }
 
 /* ---------- private safari builder (day theme) ---------- */
-.bookmodal--builder .bookmodal__panel{ background:linear-gradient(155deg,#fff8ea 0%, #f7ecd2 55%, #f0dfb8 100%); }
-.bookmodal--builder .bookmodal__title{ color:var(--ink); }
+.bookmodal--builder .bookmodal__panel{
+  width:min(610px, calc(100% - clamp(28px,4vw,52px)));
+  padding-bottom:max(clamp(1.45rem,3vw,2.15rem), env(safe-area-inset-bottom));
+  background:linear-gradient(155deg,#fffaf0 0%, #f8edda 52%, #eedcaf 100%);
+  overscroll-behavior-y:contain; scroll-padding-top:1rem;
+}
+.bookmodal--builder .bookmodal__head{ margin-bottom:1rem; }
+.bookmodal--builder .bookmodal__title{ color:var(--ink); font-size:clamp(1.75rem,3vw,2.2rem); }
+.bookmodal--builder .bookmodal__sub{ max-width:54ch; line-height:1.55; }
 .bookmodal--builder .bk__step{ color:#8a611f; }
 .bookmodal--builder .bk__step b{ background:rgba(184,134,61,.18); color:#8a611f; }
+.builder__section{
+  min-inline-size:0; margin:0; padding:clamp(1rem,2.2vw,1.25rem); display:grid; gap:1rem;
+  border:1px solid rgba(138,97,31,.16); border-radius:18px;
+  background:rgba(255,255,255,.42); box-shadow:inset 0 1px 0 rgba(255,255,255,.72);
+  transition:border-color .25s, background .25s, box-shadow .25s;
+}
+.builder__section:focus-within{ border-color:rgba(138,97,31,.4); background:rgba(255,255,255,.55); box-shadow:0 16px 34px -30px rgba(58,42,18,.7), inset 0 1px 0 rgba(255,255,255,.8); }
+.builder__section > .bk__step{ width:auto; padding:0 .35rem; margin-left:-.35rem; }
+.builder__fieldgroup{ display:grid; gap:.55rem; }
+.builder__label{
+  display:flex; align-items:baseline; justify-content:space-between; gap:.8rem;
+  font-size:.74rem; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--txt-soft);
+}
+.builder__label small{ font-size:.72rem; font-weight:400; letter-spacing:0; text-transform:none; }
+.builder__grid--2{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:.8rem; }
+.bookmodal--builder .bk > small{ margin-top:-.18rem; font-size:.72rem; line-height:1.35; color:rgba(76,68,55,.72); }
+.bookmodal--builder .bk textarea{ resize:vertical; line-height:1.45; }
+.bookmodal--builder .builder__brief textarea{ min-height:132px; }
+.bookmodal--builder .builder__pills button, .bookmodal--builder .builder__chips button{ white-space:normal; line-height:1.15; }
+.bookmodal--builder .builder__pills button:focus-visible, .bookmodal--builder .builder__chips button:focus-visible{ outline:3px solid rgba(138,97,31,.28); outline-offset:2px; }
+.bookmodal--builder .form-consent{ margin-top:.2rem; }
+.bookmodal--builder .btn--block{ min-height:52px; white-space:normal; line-height:1.2; }
 
 /* ---------- desert braai (night theme) ---------- */
 .bookmodal--braai .bookmodal__panel{ background:radial-gradient(120% 100% at 25% 0%, #2b2419, var(--ink) 60%); border-color:rgba(255,255,255,.12); }
@@ -1405,6 +1434,16 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
   .bpick__list{ grid-template-columns:minmax(0,1fr); }
   .nav__word{ display:none; }
   .nav__emblem{ height:80px; margin-block:-30px; }
+  .bookmodal--builder .bookmodal__panel{
+    top:8px; right:8px; bottom:8px; width:calc(100% - 16px); padding:1.1rem;
+    border-radius:22px;
+  }
+  .bookmodal--builder .bookmodal__panel::before{ border-radius:21px 21px 36% 36%; }
+  .builder__grid--2{ grid-template-columns:minmax(0,1fr); }
+  .builder__guest-grid{ grid-template-columns:minmax(0,1fr) minmax(0,1fr); }
+  .builder__section{ padding:.95rem; border-radius:15px; }
+  .bookmodal--builder .builder__pills, .bookmodal--builder .builder__chips{ gap:.4rem; }
+  .bookmodal--builder .builder__pills button, .bookmodal--builder .builder__chips button{ min-height:42px; padding:.5rem .72rem; font-size:.8rem; }
 }
 @media (max-width:360px){
   .nav__tools > .cur{ display:none; }

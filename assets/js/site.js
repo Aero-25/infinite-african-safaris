@@ -1401,64 +1401,110 @@
   addEventListener("keydown", (e) => { if (e.key === "Escape") closeTourModal(); });
 
   /* =================================================================
-     PRIVATE SAFARI BUILDER — its own themed drawer, matching the
-     "Build the day around the light" panel (pick a start, shape the
-     route, then the usual date/guests/contact details).
+     CUSTOM TOUR BUILDER — a guided brief for a genuinely tailor-made
+     route, followed by trip basics and contact details.
      ================================================================= */
   if (!$("#builderModal")) {
     const wrap = document.createElement("div");
     wrap.className = "bookmodal bookmodal--builder"; wrap.id = "builderModal"; wrap.setAttribute("aria-hidden", "true"); wrap.inert = true;
     wrap.innerHTML = `
       <div class="bookmodal__scrim" data-close></div>
-      <aside class="bookmodal__panel" data-lenis-prevent role="dialog" aria-modal="true" aria-label="Plan a private safari">
+      <aside class="bookmodal__panel" data-lenis-prevent role="dialog" aria-modal="true" aria-label="Create your own tour">
         <button class="bookmodal__x" data-close aria-label="Close">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         </button>
         <div class="bookmodal__head">
-          <p class="eyebrow">— Private rhythm</p>
-          <h3 class="bookmodal__title">Design your day</h3>
-          <p class="bookmodal__sub">Tell us the rhythm you want — we'll shape a private route around it.</p>
+          <p class="eyebrow">— Tailor-made safari</p>
+          <h3 class="bookmodal__title">Create your own tour</h3>
+          <p class="bookmodal__sub">Share the places, wildlife and moments you have in mind. We'll turn your ideas into a private route and tailored quote.</p>
         </div>
         <form class="bkf" id="builderForm">
           <div class="hp-field" aria-hidden="true"><label>Company<input type="text" name="_hp" tabindex="-1" autocomplete="off"></label></div>
-          <div>
-            <p class="bk__step"><b>01</b> Choose your start</p>
-            <div class="builder__pills" id="builderStart" role="radiogroup" aria-label="Preferred start">
-              <button type="button" data-val="Sunrise">Sunrise</button>
-              <button type="button" data-val="Mid-morning">Mid-morning</button>
-              <button type="button" data-val="Golden hour">Golden hour</button>
+          <fieldset class="builder__section">
+            <legend class="bk__step"><b>01</b> Dream it</legend>
+            <label class="bk">Where would you like to go?
+              <small>Specific places, regions, or “not sure yet” are all welcome.</small>
+              <textarea name="places" rows="2" maxlength="240" placeholder="e.g. Sandwich Harbour, Pelican Point, Moon Valley — or surprise me"></textarea>
+            </label>
+            <label class="bk builder__brief">What would you love to see and do?
+              <small>Describe your ideal tour in your own words.</small>
+              <textarea name="wishlist" rows="5" maxlength="700" required placeholder="Tell us what an unforgettable trip looks like — wildlife, landscapes, photography, activities, quiet stops, a celebration, or anything you do not want to miss."></textarea>
+            </label>
+          </fieldset>
+          <fieldset class="builder__section">
+            <legend class="bk__step"><b>02</b> Shape the experience</legend>
+            <div class="builder__fieldgroup">
+              <p class="builder__label">What are you drawn to? <small>Choose any</small></p>
+              <div class="builder__chips" id="builderRoute" role="group" aria-label="Interests — choose any">
+                <button type="button" data-val="Dunes & desert" aria-pressed="false">Dunes & desert</button>
+                <button type="button" data-val="Ocean & coast" aria-pressed="false">Ocean & coast</button>
+                <button type="button" data-val="Wildlife" aria-pressed="false">Wildlife</button>
+                <button type="button" data-val="Photography" aria-pressed="false">Photography</button>
+                <button type="button" data-val="Local culture" aria-pressed="false">Local culture</button>
+                <button type="button" data-val="Adventure" aria-pressed="false">Adventure</button>
+                <button type="button" data-val="Food & braai" aria-pressed="false">Food & braai</button>
+              </div>
             </div>
-          </div>
-          <div>
-            <p class="bk__step"><b>02</b> Shape the route</p>
-            <div class="builder__chips" id="builderRoute" aria-label="Route focus — choose any">
-              <button type="button" data-val="Dunes">Dunes</button>
-              <button type="button" data-val="Ocean">Ocean</button>
-              <button type="button" data-val="Wildlife">Wildlife</button>
-              <button type="button" data-val="Culture">Culture</button>
+            <div class="builder__fieldgroup">
+              <p class="builder__label">Preferred start</p>
+              <div class="builder__pills" id="builderStart" role="radiogroup" aria-label="Preferred start">
+                <button type="button" role="radio" aria-checked="false" data-val="Sunrise">Sunrise</button>
+                <button type="button" role="radio" aria-checked="false" data-val="Morning">Morning</button>
+                <button type="button" role="radio" aria-checked="false" data-val="Afternoon">Afternoon</button>
+                <button type="button" role="radio" aria-checked="false" data-val="Golden hour">Golden hour</button>
+                <button type="button" role="radio" aria-checked="true" class="is-active" data-val="Flexible">Flexible</button>
+              </div>
             </div>
-          </div>
-          <div>
-            <p class="bk__step"><b>03</b> Your details</p>
-          </div>
-          <div class="bk__row--2">
-            <label class="bk">Date<input type="date" name="date" required></label>
-            <div class="bk"><span>Adults</span><span class="stepper"><button type="button" data-stepper="builderAdults" data-d="-1">–</button><input id="builderAdults" name="adults" type="text" inputmode="numeric" value="2" readonly><button type="button" data-stepper="builderAdults" data-d="1">+</button></span></div>
-          </div>
-          <div class="bk__row--2">
-            <div class="bk"><span>Children</span><span class="stepper"><button type="button" data-stepper="builderKids" data-d="-1">–</button><input id="builderKids" name="kids" type="text" inputmode="numeric" value="0" readonly><button type="button" data-stepper="builderKids" data-d="1">+</button></span></div>
-            <label class="bk">Phone<input type="tel" name="phone" autocomplete="tel"></label>
-          </div>
-          <div class="bk__row--2">
-            <label class="bk">Name<input type="text" name="name" autocomplete="name" required></label>
-            <label class="bk">Email<input type="email" name="email" autocomplete="email" required></label>
-          </div>
-          <label class="bk">Dietary requirements<textarea name="dietary" rows="2" placeholder="Vegetarian, vegan, halal, allergies — leave blank if none"></textarea></label>
-          <label class="bk">Anything else?<textarea name="notes" rows="2" placeholder="Special requests, occasions, pace…"></textarea></label>
-          <label class="form-consent"><input type="checkbox" name="consent" value="yes" required><span>I agree that Infinite African Safaris may use these details, including any dietary or allergy information, to respond and arrange my request.</span></label>
+            <div class="builder__grid--2">
+              <label class="bk">Tour length
+                <select name="duration">
+                  <option value="Flexible">Flexible</option>
+                  <option value="3–4 hours">3–4 hours</option>
+                  <option value="Half day">Half day</option>
+                  <option value="Full day">Full day</option>
+                  <option value="Two or more days">Two or more days</option>
+                </select>
+              </label>
+              <label class="bk">Preferred pace
+                <select name="pace">
+                  <option value="Balanced">Balanced</option>
+                  <option value="Relaxed">Relaxed & unhurried</option>
+                  <option value="Active">Active & adventurous</option>
+                  <option value="Photography-led">Photography-led</option>
+                  <option value="Family-friendly">Family-friendly</option>
+                </select>
+              </label>
+            </div>
+          </fieldset>
+          <fieldset class="builder__section">
+            <legend class="bk__step"><b>03</b> Plan the basics</legend>
+            <div class="builder__grid--2">
+              <label class="bk">Preferred date <small>Optional if your dates are flexible</small><input type="date" name="date"></label>
+              <label class="bk">Pickup or starting point <small>A hotel, cruise terminal, or “not sure”</small><input type="text" name="pickup" maxlength="160" placeholder="e.g. Walvis Bay hotel"></label>
+            </div>
+            <div class="builder__grid--2 builder__guest-grid">
+              <div class="bk"><span>Adults</span><span class="stepper"><button type="button" data-stepper="builderAdults" data-d="-1" aria-controls="builderAdults" aria-label="Remove an adult">–</button><input id="builderAdults" name="adults" type="text" inputmode="numeric" value="2" aria-label="Number of adults" readonly><button type="button" data-stepper="builderAdults" data-d="1" aria-controls="builderAdults" aria-label="Add an adult">+</button><output class="sr-only" data-stepper-status="builderAdults" aria-live="polite">2 adults selected</output></span></div>
+              <div class="bk"><span>Children</span><span class="stepper"><button type="button" data-stepper="builderKids" data-d="-1" aria-controls="builderKids" aria-label="Remove a child">–</button><input id="builderKids" name="kids" type="text" inputmode="numeric" value="0" aria-label="Number of children" readonly><button type="button" data-stepper="builderKids" data-d="1" aria-controls="builderKids" aria-label="Add a child">+</button><output class="sr-only" data-stepper-status="builderKids" aria-live="polite">0 children selected</output></span></div>
+            </div>
+          </fieldset>
+          <fieldset class="builder__section">
+            <legend class="bk__step"><b>04</b> Your details</legend>
+            <div class="builder__grid--2">
+              <label class="bk">Name<input type="text" name="name" autocomplete="name" required></label>
+              <label class="bk">Email<input type="email" name="email" autocomplete="email" required></label>
+            </div>
+            <div class="builder__grid--2">
+              <label class="bk">Phone / WhatsApp<input type="tel" name="phone" autocomplete="tel"></label>
+              <label class="bk">Country / nationality<input type="text" name="country" autocomplete="country-name"></label>
+            </div>
+            <label class="bk">Dietary requirements<textarea name="dietary" rows="2" maxlength="300" placeholder="Vegetarian, vegan, halal, allergies — leave blank if none"></textarea></label>
+            <label class="bk">Accessibility or mobility needs<textarea name="accessibility" rows="2" maxlength="300" placeholder="Anything we should consider when choosing the route or vehicle"></textarea></label>
+            <label class="bk">Anything else?<textarea name="notes" rows="3" maxlength="300" placeholder="A special occasion, must-have, something to avoid, or another request"></textarea></label>
+          </fieldset>
+          <label class="form-consent"><input type="checkbox" name="consent" value="yes" required><span>I agree that Infinite African Safaris may use these details, including any dietary, allergy, accessibility or mobility information, to respond and arrange my request.</span></label>
           <p class="data-use-link"><a href="contact.html#data-use" target="_blank" rel="noopener">How we use your information</a></p>
-          <button class="btn btn--solid btn--block" type="submit">Request my private safari</button>
-          <p class="bk__note" id="builderNote" role="status" aria-live="polite">We reply within a few hours · no payment now.</p>
+          <button class="btn btn--solid btn--block" type="submit">Continue to WhatsApp with my ideas</button>
+          <p class="bk__note" id="builderNote" role="status" aria-live="polite">Your brief opens ready to send · we’ll reply with route ideas and a tailored quote · no payment now.</p>
         </form>
       </aside>`;
     document.body.appendChild(wrap);
@@ -1513,9 +1559,10 @@
   const openSideModal = (key) => {
     const m = sideModals[key]; if (!m) return;
     m.inert = false; m.classList.add("is-open"); m.setAttribute("aria-hidden", "false");
+    m.querySelector(".bookmodal__panel")?.scrollTo({ top: 0 });
     document.documentElement.style.overflow = "hidden";
     lenis && lenis.stop();
-    openDialogFocus(m, key === "builder" ? "#builderStart button" : 'input[name="date"]');
+    openDialogFocus(m, key === "builder" ? 'textarea[name="places"]' : 'input[name="date"]');
   };
   const closeSideModal = (key) => {
     const m = sideModals[key]; if (!m?.classList.contains("is-open")) return;
@@ -1539,43 +1586,105 @@
       const input = $("#" + btn.dataset.stepper);
       if (!input) return;
       const min = /kids|children/i.test(input.id) ? 0 : 1;
-      input.value = Math.max(min, (+input.value || 0) + (+btn.dataset.d));
+      input.value = Math.min(99, Math.max(min, (+input.value || 0) + (+btn.dataset.d)));
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+      const status = document.querySelector(`[data-stepper-status="${input.id}"]`);
+      if (status) {
+        const count = +input.value;
+        const guests = /kids|children/i.test(input.id)
+          ? `${count} ${count === 1 ? "child" : "children"}`
+          : `${count} adult${count === 1 ? "" : "s"}`;
+        status.textContent = `${guests} selected`;
+      }
     });
   });
 
-  /* single-select pills (start time) + multi-select chips (route focus) */
-  $$("#builderStart button").forEach(b => b.addEventListener("click", () => {
-    $$("#builderStart button").forEach(x => x.classList.toggle("is-active", x === b));
+  /* accessible single-select start time + multi-select interest chips */
+  const builderStartButtons = $$("#builderStart button");
+  const chooseBuilderStart = (button, moveFocus = false) => {
+    builderStartButtons.forEach(item => {
+      const selected = item === button;
+      item.classList.toggle("is-active", selected);
+      item.setAttribute("aria-checked", String(selected));
+      item.tabIndex = selected ? 0 : -1;
+    });
+    if (moveFocus) button.focus();
+  };
+  builderStartButtons.forEach((button, index) => {
+    button.addEventListener("click", () => chooseBuilderStart(button));
+    button.addEventListener("keydown", (e) => {
+      if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) return;
+      e.preventDefault();
+      const delta = /Right|Down/.test(e.key) ? 1 : -1;
+      chooseBuilderStart(builderStartButtons[(index + delta + builderStartButtons.length) % builderStartButtons.length], true);
+    });
+  });
+  const initialBuilderStart = $("#builderStart .is-active") || builderStartButtons[0];
+  if (initialBuilderStart) chooseBuilderStart(initialBuilderStart);
+  $$("#builderRoute button").forEach(button => button.addEventListener("click", () => {
+    const selected = !button.classList.contains("is-active");
+    button.classList.toggle("is-active", selected);
+    button.setAttribute("aria-pressed", String(selected));
   }));
-  $$("#builderRoute button").forEach(b => b.addEventListener("click", () => b.classList.toggle("is-active")));
 
-  $("#builderForm")?.addEventListener("submit", (e) => {
+  const builderForm = $("#builderForm");
+  builderForm?.addEventListener("invalid", () => {
+    $("#builderNote").textContent = "Please complete the highlighted field so we can shape your tour.";
+  }, true);
+  builderForm?.addEventListener("submit", (e) => {
     e.preventDefault();
-    const d = Object.fromEntries(new FormData(e.target));
-    const start = $("#builderStart .is-active")?.dataset.val || "";
-    const route = $$("#builderRoute .is-active").map(b => b.dataset.val).join(", ");
-    if (!d.name || !d.email || !d.date || d.consent !== "yes") { $("#builderNote").textContent = "Please add a date, your name and email, and confirm data use."; return; }
+    const d = Object.fromEntries([...new FormData(e.target)].map(([key, value]) => [key, typeof value === "string" ? value.trim() : value]));
+    const start = $("#builderStart .is-active")?.dataset.val || "Flexible";
+    const interests = $$("#builderRoute .is-active").map(button => button.dataset.val);
+    const wishlist = (d.wishlist || "").trim();
+    if (!wishlist || !d.name || !d.email || d.consent !== "yes") {
+      $("#builderNote").textContent = "Please describe your ideal tour, add your name and email, and confirm data use.";
+      return;
+    }
     const a = +$("#builderAdults").value, k = +$("#builderKids").value;
+    const planningMessage = [
+      `Places: ${(d.places || "Open to recommendations").trim()}`,
+      `Tour vision: ${wishlist}`,
+      `Interests: ${interests.join(", ") || "Open to suggestions"}`,
+      `Start: ${start}`,
+      `Length: ${d.duration || "Flexible"}`,
+      `Pace: ${d.pace || "Balanced"}`,
+      `Pickup: ${(d.pickup || "Not decided").trim()}`,
+      d.accessibility ? `Accessibility or mobility needs: ${d.accessibility.trim()}` : "",
+      d.notes ? `Other requests: ${d.notes.trim()}` : "",
+    ].filter(Boolean).join("\n");
     window.iasSaveLead?.({
       source: "private-builder", name: d.name, email: d.email, phone: d.phone, country: d.country,
-      preferred_date: d.date, tour: "Private safari — " + (start || "flexible start"), message: leadMessage(d.notes, d.dietary), group_size: a + k,
-      _hp: d._hp, raw: { ...d, adults: a, kids: k, start, route },
+      preferred_date: d.date, tour: "Custom private safari", message: leadMessage(planningMessage, d.dietary), group_size: a + k,
+      _hp: d._hp, raw: { ...d, adults: a, kids: k, start, interests },
     });
     const lines = [
-      "PRIVATE SAFARI REQUEST — Infinite African Safaris", "",
-      `Start: ${start || "Flexible"}`, `Route focus: ${route || "Open to suggestions"}`,
-      `Date: ${d.date}`, `Guests: ${a} adult${a>1?"s":""}${k?`, ${k} child${k>1?"ren":""}`:""}`,
+      "CREATE YOUR OWN TOUR — Infinite African Safaris", "",
+      "THE TOUR I HAVE IN MIND",
+      `Where I would like to go: ${(d.places || "Open to recommendations").trim()}`,
+      `What I would love to see and do: ${wishlist}`,
+      `Interests: ${interests.join(", ") || "Open to suggestions"}`, "",
+      "TRIP STYLE",
+      `Preferred start: ${start}`,
+      `Tour length: ${d.duration || "Flexible"}`,
+      `Pace: ${d.pace || "Balanced"}`, "",
+      "TRIP BASICS",
+      `Preferred date: ${d.date || "Flexible / not decided"}`,
+      `Pickup or starting point: ${(d.pickup || "Not decided").trim()}`,
+      `Guests: ${a} adult${a !== 1 ? "s" : ""}${k ? `, ${k} child${k > 1 ? "ren" : ""}` : ""}`, "",
+      "CONTACT & REQUIREMENTS",
       `Name: ${d.name}`, `Email: ${d.email}`,
-      `Phone: ${d.phone||"-"}`, `Nationality: ${d.country||"-"}`,
-      `Dietary requirements: ${d.dietary||"Not specified"}`,
+      `Phone / WhatsApp: ${d.phone || "-"}`, `Country / nationality: ${d.country || "-"}`,
+      `Dietary requirements: ${d.dietary || "Not specified"}`,
+      `Accessibility or mobility needs: ${d.accessibility || "Not specified"}`,
     ];
-    if (d.notes) lines.push(`Notes: ${d.notes}`);
+    if (d.notes) lines.push(`Anything else: ${d.notes}`);
     const body = lines.join("\n");
     window.open(`https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(body)}`, "_blank", "noopener");
     setHandoffNote(
       "#builderNote",
       d.name,
-      `mailto:${CONTACT.email}?subject=${encodeURIComponent("Private safari request — "+d.name)}&body=${encodeURIComponent(body)}`,
+      `mailto:${CONTACT.email}?subject=${encodeURIComponent("Custom tour request — "+d.name)}&body=${encodeURIComponent(body)}`,
       "var(--khaki-deep)"
     );
   });
