@@ -615,14 +615,16 @@
     // and starting playback. Every test where JS instead called .play()
     // imperatively (regardless of load()/preload timing) eventually stalled
     // the timeline permanently at readyState HAVE_CURRENT_DATA — so this
-    // section no longer touches playback at all, only the mute toggle.
+    // section keeps native autoplay configured without invoking play().
     const vid = $("#filmVideo");
     const sound = $("#filmSound");
-    if (reduce && vid) {
-      vid.pause();
-      vid.removeAttribute("autoplay");
-      vid.controls = true;
-      if (sound) sound.hidden = true;
+    if (vid) {
+      vid.autoplay = true;
+      vid.loop = true;
+      vid.defaultMuted = true;
+      vid.muted = true;
+      vid.playsInline = true;
+      vid.controls = false;
     }
     sound?.addEventListener("click", (e) => {
       e.preventDefault(); e.stopPropagation();
