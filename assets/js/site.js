@@ -1069,18 +1069,35 @@
     links.setAttribute("aria-hidden", String(closedOnMobile));
   };
   const setMenu = (open) => {
+    const wasOpen = links.classList.contains("is-open");
+    const returnFocus = wasOpen && (links.contains(document.activeElement) || document.activeElement === burger);
     const active = innerWidth <= NAV_MOBILE_MAX && Boolean(open);
     links.classList.toggle("is-open", active);
     nav.classList.toggle("is-menu", active);
     burger.setAttribute("aria-expanded", String(active));
+    burger.setAttribute("aria-label", active ? "Close menu" : "Open menu");
     syncMenuA11y();
     document.documentElement.style.overflow = active ? "hidden" : "";
     if (lenis) active ? lenis.stop() : lenis.start();
+    if (!active && returnFocus) burger.focus({ preventScroll: true });
   };
   syncMenuA11y();
   burger?.addEventListener("click", () => setMenu(!links.classList.contains("is-open")));
   $$("#navLinks a").forEach(a => a.addEventListener("click", () => setMenu(false)));
-  addEventListener("keydown", (e) => { if (e.key === "Escape" && links.classList.contains("is-open")) setMenu(false); });
+  addEventListener("keydown", (e) => {
+    if (!links.classList.contains("is-open")) return;
+    if (e.key === "Escape") { e.preventDefault(); setMenu(false); return; }
+    if (e.key !== "Tab") return;
+    const menuItems = [burger, ...$$('a[href], button:not([disabled])', links)]
+      .filter(item => item && item.getClientRects().length && getComputedStyle(item).visibility !== "hidden");
+    if (!menuItems.length) return;
+    const current = menuItems.indexOf(document.activeElement);
+    const next = current < 0
+      ? 0
+      : (current + (e.shiftKey ? -1 : 1) + menuItems.length) % menuItems.length;
+    e.preventDefault();
+    menuItems[next].focus({ preventScroll: true });
+  });
   addEventListener("resize", () => {
     syncNavState();
     if (innerWidth > NAV_MOBILE_MAX && links.classList.contains("is-open")) setMenu(false);
