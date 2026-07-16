@@ -33,6 +33,7 @@ const HERO_POOL = [
   { url: heroImg("gecko"),     cap: "Desert geckos" },
   { url: heroImg("jakkals"),   cap: "Jackals" },
   { url: heroImg("birds"),     cap: "Birdlife" },
+  { url: `${MEDIA}about/pink%20lake.png`, cap: "Pink salt lake" },
 ];
 
 /* --- Tours / experiences (adult/child in NAD; null = "On request") ----
