@@ -881,16 +881,25 @@
   const rail = $("#tourCards");
   if (rail) {
     const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
-    const SPEED = 34;                     // px/s ambient drift
+    const SPEED = 18;                     // px/s slow ambient drift
     const maxScroll = () => rail.scrollWidth - rail.clientWidth;
 
-    let paused = false, resumeTimer = null;
+    let paused = false, focusPaused = false, userPaused = false, resumeTimer = null;
     let tracking = false, dragging = false, dragMoved = false, dragAxis = null;
     let activePointer = null, dragX = 0, dragY = 0, dragScroll = 0;
     let lastDragX = 0, lastDragT = 0, vel = 0;
-    let looping = false, last = 0;
+    let looping = false, loopStarted = 0, last = 0, driftPosition = rail.scrollLeft;
+
+    const cancelLoop = () => {
+      if (!looping) return;
+      looping = false;
+      rail.scrollTo({ left: rail.scrollLeft, behavior: "auto" });
+      driftPosition = rail.scrollLeft;
+    };
 
     const pause = (ms = 2600) => {
+      cancelLoop();
+      vel = 0;
       paused = true;
       clearTimeout(resumeTimer);
       resumeTimer = setTimeout(() => { paused = false; }, ms);
@@ -902,22 +911,39 @@
 
       if (dragging) {
         // position is driven directly by pointermove below
+        driftPosition = rail.scrollLeft;
       } else if (Math.abs(vel) > 2) {
         // momentum coast after a drag release
         const max = maxScroll();
         rail.scrollLeft = clamp(rail.scrollLeft + vel * dt, 0, max);
-        vel *= 0.94;
+        driftPosition = rail.scrollLeft;
+        vel *= Math.pow(0.94, dt * 60);
         if (rail.scrollLeft <= 0 || rail.scrollLeft >= max) vel = 0;
-      } else if (!reduce && !paused && !looping) {
+      } else if (looping) {
+        driftPosition = rail.scrollLeft;
+        if (rail.scrollLeft <= 1 || t - loopStarted > 2200) {
+          if (rail.scrollLeft > 1) rail.scrollTo({ left: 0, behavior: "auto" });
+          driftPosition = rail.scrollLeft;
+          looping = false;
+        }
+      } else if (paused || focusPaused || userPaused) {
+        // Keep the fractional drift origin aligned while a user-controlled
+        // scroll, smooth arrow jump, or end-to-start loop is in progress.
+        driftPosition = rail.scrollLeft;
+      } else {
         const max = maxScroll();
         if (max > 4) {
-          const next = rail.scrollLeft + SPEED * dt;
+          // scrollLeft is integer-rounded in some browsers. Retaining our own
+          // float prevents a 0.3px frame step from being discarded forever.
+          if (Math.abs(driftPosition - rail.scrollLeft) > 2) driftPosition = rail.scrollLeft;
+          const next = driftPosition + SPEED * dt;
           if (next >= max) {
             looping = true;
+            loopStarted = t;
             rail.scrollTo({ left: 0, behavior: "smooth" });
-            setTimeout(() => { looping = false; }, 700);
           } else {
-            rail.scrollLeft = next;
+            driftPosition = next;
+            rail.scrollLeft = driftPosition;
           }
         }
       }
@@ -932,6 +958,26 @@
     };
     $("#railPrev")?.addEventListener("click", () => { pause(); scrollRail(-1); });
     $("#railNext")?.addEventListener("click", () => { pause(); scrollRail(1); });
+    const railPause = $("#railPause");
+    const renderRailPause = () => {
+      if (!railPause) return;
+      railPause.textContent = userPaused ? "▶" : "Ⅱ";
+      railPause.setAttribute("aria-pressed", String(userPaused));
+      railPause.setAttribute("aria-label", userPaused ? "Resume automatic safari scroll" : "Pause automatic safari scroll");
+    };
+    railPause?.addEventListener("click", () => {
+      userPaused = !userPaused;
+      if (userPaused) {
+        cancelLoop();
+        vel = 0;
+      } else {
+        clearTimeout(resumeTimer);
+        paused = false;
+        last = performance.now();
+      }
+      renderRailPause();
+    });
+    renderRailPause();
 
     rail.addEventListener("pointerdown", (e) => {
       if (!e.isPrimary || activePointer != null || (e.pointerType === "mouse" && e.button !== 0)) return;
@@ -988,8 +1034,13 @@
 
     rail.addEventListener("wheel", () => pause(2600), { passive: true });
     rail.addEventListener("touchstart", () => pause(4000), { passive: true });
-    rail.addEventListener("mouseenter", () => pause(3600000));
-    rail.addEventListener("mouseleave", () => { paused = false; });
+    rail.addEventListener("focusin", () => { focusPaused = true; cancelLoop(); });
+    rail.addEventListener("focusout", (e) => {
+      if (!rail.contains(e.relatedTarget) && !e.relatedTarget?.closest?.(dialogSelector)) focusPaused = false;
+    });
+    document.addEventListener("focusin", (e) => {
+      if (focusPaused && !rail.contains(e.target) && !e.target.closest?.(dialogSelector)) focusPaused = false;
+    });
   }
 
   /* nav state — the floating "shrink to pill" treatment is desktop-only;
