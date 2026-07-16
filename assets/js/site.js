@@ -884,10 +884,12 @@
     const SPEED = 18;                     // px/s slow ambient drift
     const maxScroll = () => rail.scrollWidth - rail.clientWidth;
 
-    let paused = false, focusPaused = false, userPaused = false, resumeTimer = null;
-    let tracking = false, dragging = false, dragMoved = false, dragAxis = null;
+    let paused = false, focusPaused = false, touchPaused = false, resumeTimer = null;
+    let tracking = false, dragging = false, dragAxis = null;
     let activePointer = null, dragX = 0, dragY = 0, dragScroll = 0;
     let lastDragX = 0, lastDragT = 0, vel = 0;
+    let suppressClickUntil = 0;
+    let touchStartX = 0, touchStartY = 0, touchStartScroll = 0, touchMoved = false;
     let looping = false, loopStarted = 0, last = 0, driftPosition = rail.scrollLeft;
 
     const cancelLoop = () => {
@@ -926,7 +928,7 @@
           driftPosition = rail.scrollLeft;
           looping = false;
         }
-      } else if (paused || focusPaused || userPaused) {
+      } else if (paused || focusPaused || touchPaused) {
         // Keep the fractional drift origin aligned while a user-controlled
         // scroll, smooth arrow jump, or end-to-start loop is in progress.
         driftPosition = rail.scrollLeft;
@@ -958,57 +960,24 @@
     };
     $("#railPrev")?.addEventListener("click", () => { pause(); scrollRail(-1); });
     $("#railNext")?.addEventListener("click", () => { pause(); scrollRail(1); });
-    const railPause = $("#railPause");
-    const renderRailPause = () => {
-      if (!railPause) return;
-      railPause.textContent = userPaused ? "▶" : "Ⅱ";
-      railPause.setAttribute("aria-pressed", String(userPaused));
-      railPause.setAttribute("aria-label", userPaused ? "Resume automatic safari scroll" : "Pause automatic safari scroll");
-    };
-    railPause?.addEventListener("click", () => {
-      userPaused = !userPaused;
-      if (userPaused) {
-        cancelLoop();
-        vel = 0;
-      } else {
-        clearTimeout(resumeTimer);
-        paused = false;
-        last = performance.now();
-      }
-      renderRailPause();
-    });
-    renderRailPause();
 
     rail.addEventListener("pointerdown", (e) => {
-      if (!e.isPrimary || activePointer != null || (e.pointerType === "mouse" && e.button !== 0)) return;
-      tracking = true; dragging = false; dragMoved = false; dragAxis = null; vel = 0;
+      if (!e.isPrimary || e.pointerType !== "mouse" || activePointer != null || e.button !== 0) return;
+      tracking = true; dragging = false; dragAxis = null; vel = 0; suppressClickUntil = 0;
       activePointer = e.pointerId;
       dragX = lastDragX = e.clientX; dragY = e.clientY;
       dragScroll = rail.scrollLeft; lastDragT = performance.now();
       pause(4000);
     });
     rail.addEventListener("pointermove", (e) => {
-      if (!tracking || e.pointerId !== activePointer) return;
+      if (e.pointerType !== "mouse" || !tracking || e.pointerId !== activePointer) return;
       const dx = e.clientX - dragX;
       const dy = e.clientY - dragY;
       if (!dragAxis) {
         const ax = Math.abs(dx), ay = Math.abs(dy);
         if (Math.max(ax, ay) < 7) return;
-
-        // A vertical swipe belongs to the page. Do not capture it or write
-        // scrollLeft just because a finger has a few pixels of sideways jitter.
-        if (e.pointerType !== "mouse" && ay > ax * 1.15) {
-          dragAxis = "y";
-          tracking = false;
-          vel = 0;
-          return;
-        }
-        // Wait through an ambiguous diagonal until one direction wins.
-        if (e.pointerType !== "mouse" && ax <= ay * 1.15) return;
-
         dragAxis = "x";
         dragging = true;
-        dragMoved = true;
         rail.setPointerCapture(e.pointerId);
         rail.classList.add("is-dragging");
       }
@@ -1019,21 +988,63 @@
       lastDragX = e.clientX; lastDragT = now;
     });
     const endDrag = (e) => {
-      if (activePointer != null && e?.pointerId != null && e.pointerId !== activePointer) return;
+      if (e?.pointerType && e.pointerType !== "mouse") return;
+      if (activePointer == null || (e?.pointerId != null && e.pointerId !== activePointer)) return;
+      const didDrag = dragging;
       tracking = false; dragging = false; dragAxis = null; activePointer = null;
       rail.classList.remove("is-dragging");
+      if (didDrag) suppressClickUntil = performance.now() + 650;
     };
     rail.addEventListener("pointerup", endDrag);
     rail.addEventListener("pointercancel", (e) => { vel = 0; endDrag(e); });
-    rail.addEventListener("lostpointercapture", endDrag);
+    rail.addEventListener("lostpointercapture", (e) => { if (e.target === rail) endDrag(e); });
     rail.addEventListener("pointerleave", (e) => {
       if (e.pointerType === "mouse" && !rail.hasPointerCapture(e.pointerId)) endDrag(e);
     });
-    // swallow the click that follows a real drag so it doesn't open a card's modal
-    rail.addEventListener("click", (e) => { if (dragMoved) { e.preventDefault(); e.stopPropagation(); } }, true);
+    // Swallow only the pointer click immediately following a real drag. Keyboard
+    // clicks have detail === 0 and must always remain available.
+    rail.addEventListener("click", (e) => {
+      if (e.detail !== 0 && performance.now() < suppressClickUntil) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }, true);
 
     rail.addEventListener("wheel", () => pause(2600), { passive: true });
-    rail.addEventListener("touchstart", () => pause(4000), { passive: true });
+    // Phones and tablets use their native horizontal scroller. This preserves
+    // Safari/Chrome momentum and lets the browser arbitrate horizontal card
+    // swipes versus vertical page swipes without fragile pointer-capture handoffs.
+    rail.addEventListener("touchstart", (e) => {
+      const touch = e.touches[0];
+      if (!touch) return;
+      touchPaused = true;
+      cancelLoop();
+      vel = 0;
+      clearTimeout(resumeTimer);
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+      touchStartScroll = rail.scrollLeft;
+      touchMoved = false;
+      suppressClickUntil = 0;
+    }, { passive: true });
+    rail.addEventListener("touchmove", (e) => {
+      const touch = e.touches[0];
+      if (!touch) return;
+      const dx = touch.clientX - touchStartX;
+      const dy = touch.clientY - touchStartY;
+      if (Math.abs(rail.scrollLeft - touchStartScroll) > 4 ||
+          (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy))) touchMoved = true;
+    }, { passive: true });
+    const endTouch = (e) => {
+      if (e.touches?.length || !touchPaused) return;
+      if (touchMoved || Math.abs(rail.scrollLeft - touchStartScroll) > 4) {
+        suppressClickUntil = performance.now() + 650;
+      }
+      touchPaused = false;
+      pause(1800);
+    };
+    rail.addEventListener("touchend", endTouch, { passive: true });
+    rail.addEventListener("touchcancel", endTouch, { passive: true });
     rail.addEventListener("focusin", () => { focusPaused = true; cancelLoop(); });
     rail.addEventListener("focusout", (e) => {
       if (!rail.contains(e.relatedTarget) && !e.relatedTarget?.closest?.(dialogSelector)) focusPaused = false;

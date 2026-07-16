@@ -418,7 +418,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
    driven directly via scrollLeft in JS; mandatory scroll-snap used to fight
    both (the arrow-click overshoot and every auto-advance tick each got
    snap-corrected right after, which read as a jump), so it's off here. */
-.cards--rail{ display:flex; grid-template-columns:none; overflow-x:auto; overflow-y:hidden; gap:1.3rem; padding:4px 4px 1.2rem; scrollbar-width:none; cursor:grab; -webkit-overflow-scrolling:touch; touch-action:pan-y pinch-zoom; overscroll-behavior-x:contain; }
+.cards--rail{ display:flex; grid-template-columns:none; overflow-x:auto; overflow-y:hidden; gap:1.3rem; padding:4px 4px 1.2rem; scrollbar-width:none; cursor:grab; -webkit-overflow-scrolling:touch; touch-action:auto; overscroll-behavior-x:contain; }
 .cards--rail::-webkit-scrollbar{ display:none; }
 .cards--rail.is-dragging{ cursor:grabbing; }
 .cards--rail .card{ flex:0 0 clamp(320px,38vw,480px); min-height:clamp(500px,64vh,640px); }
@@ -428,8 +428,6 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .rail__arrows{ display:flex; gap:.6rem; align-self:flex-end; }
 .rail__arrow{ width:48px; height:48px; border-radius:50%; border:1.5px solid var(--line); color:var(--ink); font-size:1.15rem; display:grid; place-items:center; transition:.25s; }
 .rail__arrow:hover{ background:var(--ink); color:var(--paper); border-color:var(--ink); transform:translateY(-2px); }
-.rail__pause{ font-size:.92rem; letter-spacing:-.12em; padding-right:.12em; }
-.rail__pause[aria-pressed="true"]{ background:var(--ink); color:var(--paper); border-color:var(--ink); font-size:.8rem; letter-spacing:0; padding-right:0; }
 .card__scene{ position:absolute; inset:0; z-index:-2; transition:transform .8s var(--ease); }
 .card__scene img{ width:100%; height:100%; object-fit:cover; }
 .card:hover .card__scene{ transform:scale(1.07); }
