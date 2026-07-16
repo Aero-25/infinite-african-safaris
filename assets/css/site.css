@@ -285,7 +285,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .hero--bare{ justify-content:flex-start; min-height:100svh; padding-block:clamp(92px,11vh,124px) clamp(40px,8vh,90px); padding-inline:0; }
 .hero--bare .cyl{ margin-top:0; }
 @media (min-width:761px){
-  .hero--bare .cyl{ transform:translateY(-10px); }
+  .hero--bare .cyl{ transform:translateY(-15px); }
 }
 @media (min-width:1025px){
   .hero--bare .cyl{
