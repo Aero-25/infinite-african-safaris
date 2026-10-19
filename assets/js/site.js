@@ -375,7 +375,7 @@
       el.className = "panel";
       const img = document.createElement("img");
       // Every face must be ready before rotation brings it to the front.
-      // The hero WebPs are small (~30 KB), so eager loading avoids a
+      // These eight hero WebPs are already small, so eager loading avoids a
       // blank panel without imposing the cost of the full gallery.
       img.loading = "eager";
       // The wheel turns toward the last panels first, so prioritise both the
@@ -1269,7 +1269,7 @@
           <label class="bk">Dietary requirements<textarea name="dietary" rows="2" placeholder="Vegetarian, vegan, halal, allergies — leave blank if none"></textarea></label>
           <label class="bk">Requests<textarea name="notes" rows="2" placeholder="Anything special?"></textarea></label>
           <label class="form-consent"><input type="checkbox" name="consent" value="yes" required><span>I agree that Infinite African Safaris may use these details, including any dietary or allergy information, to respond and arrange my request.</span></label>
-          <p class="data-use-link"><a href="/contact#data-use" target="_blank" rel="noopener">How we use your information</a></p>
+          <p class="data-use-link"><a href="contact.html#data-use" target="_blank" rel="noopener">How we use your information</a></p>
           <div class="book__total">
             <div class="book__total-l">
               <span>Estimated total</span>
@@ -1383,7 +1383,7 @@
     const a = +$("#bookAdults").value, k = +$("#bookKids").value;
     if (a + k < t.min) { $("#bookNote").textContent = `This safari requires at least ${t.min} guests.`; return; }
     const total = t.adult == null ? null : t.adult * a + t.child * k;
-    // Save the booking request to the lead database (fire-and-forget)
+    // Save the booking request to Supabase (no-op until configured)
     window.iasSaveLead?.({
       source: "booking", name: d.name, email: d.email, phone: d.phone, country: d.country,
       preferred_date: d.date, tour: t.name, message: leadMessage(d.notes, d.dietary), group_size: a + k,
@@ -1582,7 +1582,7 @@
             <label class="bk">Anything else?<textarea name="notes" rows="3" maxlength="300" placeholder="A special occasion, must-have, something to avoid, or another request"></textarea></label>
           </fieldset>
           <label class="form-consent"><input type="checkbox" name="consent" value="yes" required><span>I agree that Infinite African Safaris may use these details, including any dietary, allergy, accessibility or mobility information, to respond and arrange my request.</span></label>
-          <p class="data-use-link"><a href="/contact#data-use" target="_blank" rel="noopener">How we use your information</a></p>
+          <p class="data-use-link"><a href="contact.html#data-use" target="_blank" rel="noopener">How we use your information</a></p>
           <button class="btn btn--solid btn--block" type="submit">Continue to WhatsApp with my ideas</button>
           <p class="bk__note" id="builderNote" role="status" aria-live="polite">Your brief opens ready to send · we’ll reply with route ideas and a tailored quote · no payment now.</p>
         </form>
@@ -1626,7 +1626,7 @@
           <label class="bk">Dietary requirements<textarea name="dietary" rows="2" placeholder="Vegetarian, vegan, halal, allergies — leave blank if none"></textarea></label>
           <label class="bk">Other requests<textarea name="notes" rows="2" placeholder="Celebrations, setup, or anything else…"></textarea></label>
           <label class="form-consent"><input type="checkbox" name="consent" value="yes" required><span>I agree that Infinite African Safaris may use these details, including any dietary or allergy information, to respond and arrange my request.</span></label>
-          <p class="data-use-link"><a href="/contact#data-use" target="_blank" rel="noopener">How we use your information</a></p>
+          <p class="data-use-link"><a href="contact.html#data-use" target="_blank" rel="noopener">How we use your information</a></p>
           <button class="btn btn--solid btn--block" type="submit">Request my desert braai</button>
           <p class="bk__note" id="braaiNote" role="status" aria-live="polite">We reply within a few hours · no payment now.</p>
         </form>
@@ -1805,7 +1805,7 @@
     e.preventDefault();
     const f = e.target, d = Object.fromEntries(new FormData(f));
     if (!d.name || !d.email || d.consent !== "yes") { $("#formNote").textContent = "Please add your name and email and confirm data use."; return; }
-    // Save the lead to the lead database — never blocks the email handoff
+    // Save the lead to Supabase (no-op until configured) — never blocks the email handoff
     window.iasSaveLead?.({
       source: "contact", name: d.name, email: d.email, country: d.country,
       group_size: d.size, preferred_date: d.date, tour: d.interest, message: leadMessage(d.message, d.dietary),

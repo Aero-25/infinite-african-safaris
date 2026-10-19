@@ -1,12 +1,13 @@
 /* =====================================================================
    Infinite African Safaris — integration config
-   Fill these in to switch on analytics.
+   Fill these in to switch on analytics + lead capture.
    The site works fine with the placeholders left as-is (they just no-op).
    ===================================================================== */
 window.IAS_CONFIG = {
-  /* Lead capture — Cloudflare Pages Function that saves enquiries to D1.
-     Lives in functions/api/lead.js; same origin, so no keys are needed. */
-  LEAD_ENDPOINT: "/api/lead",
+  /* Supabase — Infinite African Safaris project (media + lead capture).
+     The publishable key is designed to be exposed in the browser. */
+  SUPABASE_URL: "https://uksddraybxgpgnhocqyc.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_1ANExQt3gLWcntZ-ngl12Q_Wu5RRB0G",
 
   /* Google Analytics 4 — Admin → Data streams → your web stream → Measurement ID */
   GA_MEASUREMENT_ID: "G-XXXXXXXXXX",

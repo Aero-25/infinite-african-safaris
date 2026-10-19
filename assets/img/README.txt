@@ -1,15 +1,19 @@
-IMAGE FOLDERS  (this file is not published)
-=============
+PLACE YOUR LOGO FILES HERE
+==========================
 
-logos/          small-logo.webp (header + browser tab), big-logo.webp (loading screen)
-hero/           rotating photo wall on the homepage — 760x950 portrait WebP
-cards/          tour card photos — about 1000px wide WebP
-photos/         gallery photos, full size for the lightbox — 1800px WebP
-photos/thumb/   the same gallery photos at 960px for the grid (same file name)
-gallery/        earlier gallery photos (JPEG)
-about/          homepage section photos
-feature/        "Create a tour around you" photo on the homepage
-elephants.png   footer silhouette
+logo-full.png   →  the BIG logo (infinity + elephant + dunes + wordmark).
+                   Shown on the loading screen when the site opens.
 
-Every image is wired up in assets/js/data.js (hero, tours, gallery) or
-directly in index.html. Keep photos as WebP and under ~300 KB each.
+logo-mark.png   →  the SMALL logo (infinity emblem only, no text).
+                   Shown in the header next to the wordmark.
+
+Save them with EXACTLY those file names in this folder
+(assets/img/). They'll appear automatically.
+
+Until the files are added, the site shows a drawn infinity fallback
+so nothing looks broken.
+
+Tip: a transparent-background PNG looks best for the header mark.
+
+You can also drop tour photos here (e.g. sandwich-harbour.jpg) and
+point to them from assets/js/data.js — see the main README.md.

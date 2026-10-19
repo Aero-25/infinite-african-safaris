@@ -18,10 +18,11 @@ const CURRENCY = {
 
 /* --- The rotating hero photo wall. Add/replace freely. ----------------
    Use full URLs in `url`, or an Unsplash id in `id`.                    */
-/* All media is self-hosted in assets/ and served by Cloudflare Pages.
-   Hero panels are 760×950 portrait WebP crops (~50-150 KB each).        */
+/* Logos, tour cards, about images and the showreel are on Supabase Storage
+   (Infinite African Safaris project). The hero wall and gallery photos live
+   with the site in assets/img/ (760×950 WebP for the hero, ~20-50 KB each). */
+const MEDIA = "https://uksddraybxgpgnhocqyc.supabase.co/storage/v1/object/public/media/";
 const heroImg = (name) => `assets/img/hero/${name}.webp`;
-const card = (name) => `assets/img/cards/${name}.webp`;
 const galleryImg = (name) => `assets/img/gallery/${name}.jpg`;
 const pad3 = (n) => String(n).padStart(3, "0");
 const HERO_POOL = [
@@ -41,37 +42,37 @@ const HERO_POOL = [
    scene = built-in fallback artwork. img = the photo actually shown.    */
 const TOURS = [
   { id:"sh-half",   name:"Half-Day Sandwich Harbour", adult:2500, child:1250, hours:"4 hours", min:2, feature:true,
-    scene:"dune", img:card("sandwich-harbour"),
+    scene:"dune", img:`${MEDIA}cards/sandwich-harbour.webp`,
     blurb:"Drive the towering dunes where the desert pours straight into the Atlantic." },
   { id:"sh-sunset", name:"Sunset Sandwich Harbour",   adult:3500, child:1750, hours:"4 hours", min:2, feature:true,
-    scene:"sunrise", img:card("sunset-sandwich-harbour"),
+    scene:"sunrise", img:`${MEDIA}Sunset%20SW.png`,
     blurb:"Golden hour on the dunes — the coast set alight as the sun drops into the sea." },
   { id:"sh-full",   name:"Full-Day Sandwich Harbour", adult:3500, child:1750, hours:"6 hours", min:2, feature:true,
-    scene:"sunrise", img:card("full-day-sandwich-harbour"),
+    scene:"sunrise", img:`${MEDIA}Full%20day.png`,
     blurb:"The complete Sandwich Harbour day: dunes, lagoon, wildlife and a long lunch." },
   { id:"cruise",    name:"Marine Boat Cruise",        adult:1500, child:750,  hours:"3 hours", min:2, feature:true,
-    scene:"ocean", img:card("marine-cruise"),
+    scene:"ocean", img:`${MEDIA}cards/marine-cruise.webp`,
     blurb:"Dolphins, seals and pelicans on a relaxed cruise across Walvis Bay." },
   { id:"kayak",     name:"Kayaking · Pelican Point Seal Colony", adult:1500, child:750, hours:"3 hours", min:2, feature:true,
-    scene:"kayak", img:card("pelican-point-seals"),
+    scene:"kayak", img:`${MEDIA}cards/pelican-point-seals.webp`,
     blurb:"Paddle among thousands of Cape fur seals at the Pelican Point colony." },
   { id:"moon",      name:"Moon Landscape · Moonvalley & Welwitschia", adult:2000, child:1000, hours:"5 hours", min:2, feature:true,
-    scene:"moon", img:card("moon-landscape-welwitschia"),
+    scene:"moon", img:"https://images.pexels.com/photos/34780180/pexels-photo-34780180.jpeg",
     blurb:"Lunar valleys and ancient Welwitschia plants on a desert geology tour." },
   { id:"sh-dune",   name:"Sandwich Harbour & Dune Boarding Combo", adult:3500, child:1750, hours:"6 hours", min:2,
-    scene:"dune", img:card("guests-sliding-down-dune"),
+    scene:"dune", img:"assets/img/cards/guests-sliding-down-dune.webp",
     blurb:"Big dunes by day, board down them by afternoon. The full sand experience." },
   { id:"cruise-sh", name:"Marine Cruise & Sandwich Harbour Combo", adult:4000, child:2250, hours:"7+ hours", min:2,
-    scene:"ocean", img:card("sandwich-harbour-dunes-meet-ocean"),
+    scene:"ocean", img:"assets/img/cards/sandwich-harbour-dunes-meet-ocean.webp",
     blurb:"Ocean wildlife in the morning, dune adventure after lunch — the best of both." },
   { id:"kayak-sh",  name:"Kayaking & Sandwich Harbour Combo", adult:4000, child:2250, hours:"7+ hours", min:2,
-    scene:"kayak", img:card("cape-fur-seal-beach"),
+    scene:"kayak", img:"assets/img/cards/cape-fur-seal-beach.webp",
     blurb:"Seals at sunrise, dunes by afternoon. A complete coast-to-desert day." },
   { id:"sossus",    name:"Sossusvlei & Deadvlei",     adult:null, child:null, hours:"On request", min:2,
-    scene:"sunrise", img:card("sossusvlei-deadvlei"),
+    scene:"sunrise", img:"https://images.pexels.com/photos/14032289/pexels-photo-14032289.jpeg",
     blurb:"The world's tallest dunes and the haunting white pan of Deadvlei." },
   { id:"spitz",     name:"Spitzkoppe",                adult:null, child:null, hours:"On request", min:2,
-    scene:"savanna", img:card("spitzkoppe"),
+    scene:"savanna", img:"https://images.pexels.com/photos/35298609/pexels-photo-35298609.jpeg",
     blurb:"Ancient granite peaks, rock art and some of Namibia's darkest skies." },
 ];
 
