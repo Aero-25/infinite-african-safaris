@@ -1,0 +1,16 @@
+{
+  "name": "infinite-african-safaris",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/build.mjs && wrangler pages dev",
+    "deploy": "node scripts/build.mjs && wrangler pages deploy",
+    "db:init": "wrangler d1 execute ias-leads --remote --file=db/schema.sql",
+    "db:init:local": "wrangler d1 execute ias-leads --local --file=db/schema.sql",
+    "leads": "wrangler d1 execute ias-leads --remote --command \"SELECT created_at, source, name, email, phone, tour, preferred_date, group_size FROM leads ORDER BY created_at DESC LIMIT 50\""
+  },
+  "devDependencies": {
+    "wrangler": "^4.151.1"
+  }
+}

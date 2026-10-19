@@ -11,21 +11,56 @@ jobs:
     permissions:
       contents: read
       deployments: write
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build public site bundle
-        shell: bash
-        run: |
-          mkdir -p dist
-          cp index.html safaris.html gallery.html reviews.html contact.html robots.txt sitemap.xml _redirects dist/
-          cp -R assets dist/assets
-          rm -f dist/assets/img/README.txt
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
 
+      - name: Install
+        run: npm ci
+
+      - name: Build public site bundle
+        run: npm run build
+
+      # Finds (or creates on first run) the "ias-leads" D1 database, applies
+      # db/schema.sql and writes its id into wrangler.toml for this deploy.
+      # If the token can't manage D1 the site still deploys: forms keep handing
+      # off to WhatsApp/email, enquiries just aren't stored.
+      - name: Prepare lead database (D1)
+        id: d1
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          api="https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/d1/database"
+          auth="Authorization: Bearer $CLOUDFLARE_API_TOKEN"
+          id=$(curl -fsS -H "$auth" "$api?name=ias-leads" | jq -r '.result[] | select(.name=="ias-leads") | .uuid' | head -n1)
+          if [ -z "$id" ]; then
+            id=$(curl -fsS -X POST -H "$auth" -H "Content-Type: application/json" -d '{"name":"ias-leads"}' "$api" | jq -r '.result.uuid')
+            echo "Created D1 database ias-leads ($id)"
+          fi
+          test -n "$id" && test "$id" != "null"
+          sed -i "s/^database_id = .*/database_id = \"$id\"/" wrangler.toml
+          npx wrangler d1 execute ias-leads --remote --file=db/schema.sql
+
+      - name: Deploy without lead storage (D1 unavailable)
+        if: steps.d1.outcome == 'failure'
+        run: |
+          echo "::warning::D1 not available to this API token - deploying without lead storage."
+          sed -i '/^\[\[d1_databases\]\]/,$d' wrangler.toml
+
+      # Uses wrangler.toml (project name, output dir, D1 binding) and uploads functions/ too.
       - name: Publish to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=infinite-african-safaris --branch=main
+          packageManager: npm
+          command: pages deploy --branch=main
