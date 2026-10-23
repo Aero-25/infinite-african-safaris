@@ -222,7 +222,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 
 /* the rotating cylinder */
 .cyl{
-  --pw:340px; --ph:500px;
+  --pw:340px; --ph:500px;   /* 0.68 = the 816×1200 hero photos; every breakpoint keeps this ratio */
   position:relative; z-index:2; width:100%; flex:1;
   min-height:clamp(420px,64vh,720px);
   margin-top:clamp(10px,2vh,30px);
@@ -289,16 +289,17 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 }
 @media (min-width:1025px){
   .hero--bare .cyl{
-    --pw:clamp(460px,40vw,820px);
-    --ph:clamp(600px,86vh,860px);
+    /* frame keeps the hero photos' 816:1200 shape so nothing is cropped */
+    --pw:min(clamp(460px,40vw,820px), calc(clamp(600px,86vh,860px) * 0.68));
+    --ph:calc(var(--pw) / 0.68);
     min-height:clamp(620px,88vh,960px);
   }
   .hero--bare .cyl__fade{ width:clamp(40px,6vw,100px); }
 }
 @media (max-width:760px){
   .hero--bare .cyl{
-    --pw:clamp(250px,78vw,310px);
-    --ph:clamp(420px,62vh,540px);
+    --pw:min(clamp(250px,88vw,370px), calc(clamp(420px,62vh,540px) * 0.68));
+    --ph:calc(var(--pw) / 0.68);
     min-height:clamp(470px,70vh,640px);
     perspective:850px;
     perspective-origin:50% 50%;
@@ -1339,7 +1340,7 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
   .gtile:nth-child(1){ grid-column:span 2; grid-row:span 1; }
   .gtile:nth-child(6){ grid-column:span 1; }
   .mf-cols{ grid-template-columns:1fr 1fr; }
-  .cyl{ --pw:clamp(280px,38vw,360px); --ph:clamp(420px,60vh,540px); }
+  .cyl{ --pw:min(clamp(280px,38vw,360px), calc(clamp(420px,60vh,540px) * 0.68)); --ph:calc(var(--pw) / 0.68); }
   .datause__inner{ grid-template-columns:minmax(0,1fr); }
 }
 @media (max-width:1100px){
