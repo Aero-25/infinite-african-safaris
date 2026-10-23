@@ -18,7 +18,7 @@ const CURRENCY = {
 
 /* --- The rotating hero photo wall. Add/replace freely. ----------------
    Use full URLs in `url`, or an Unsplash id in `id`.                    */
-/* Logos, tour cards, about images and the showreel are on Supabase Storage
+/* Logos, three tour cards and the showreel are on Supabase Storage
    (Infinite African Safaris project). The hero wall and gallery photos live
    with the site in assets/img/ (816×1200 WebP for the hero, ~40-100 KB each). */
 const MEDIA = "https://uksddraybxgpgnhocqyc.supabase.co/storage/v1/object/public/media/";
@@ -46,10 +46,10 @@ const TOURS = [
     scene:"dune", img:`${MEDIA}cards/sandwich-harbour.webp`,
     blurb:"Drive the towering dunes where the desert pours straight into the Atlantic." },
   { id:"sh-sunset", name:"Sunset Sandwich Harbour",   adult:3500, child:2500, hours:"4 hours", min:2, feature:true,
-    scene:"sunrise", img:`${MEDIA}Sunset%20SW.png`,
+    scene:"sunrise", img:"assets/img/cards/sunset-sandwich-harbour.webp",
     blurb:"Golden hour on the dunes — the coast set alight as the sun drops into the sea." },
   { id:"sh-full",   name:"Full-Day Sandwich Harbour", adult:3500, child:2500, hours:"6 hours", min:2, feature:true,
-    scene:"sunrise", img:`${MEDIA}Full%20day.png`,
+    scene:"sunrise", img:"assets/img/cards/full-day-sandwich-harbour.webp",
     blurb:"The complete Sandwich Harbour day: dunes, lagoon, wildlife and a long lunch." },
   { id:"cruise",    name:"Marine Boat Cruise",        adult:1600, child:1000, hours:"3 hours", min:2, feature:true,
     scene:"ocean", img:`${MEDIA}cards/marine-cruise.webp`,
