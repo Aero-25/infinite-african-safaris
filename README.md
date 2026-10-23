@@ -44,3 +44,10 @@ gallery host (e.g. Pixieset / Google Photos) — wire it in `clientForm` in `sit
 ## Deploy
 Any static host works (Cloudflare Pages, Netlify, GitHub Pages). No build command;
 output directory is the project root.
+
+## Photo credits
+Three tour-card photos come from Wikimedia Commons under CC BY-SA and must keep
+the credit line in the footer of `index.html` and `safaris.html`:
+Moon Landscape (Lidine Mia, CC BY-SA 4.0), Deadvlei (Giles Laurent, CC BY-SA 4.0),
+Spitzkoppe (Daniel Kraft, CC BY-SA 3.0). Links are in `assets/js/data.js`.
+All other photos belong to Infinite African Safaris.

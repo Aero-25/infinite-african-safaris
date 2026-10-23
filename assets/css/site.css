@@ -824,6 +824,9 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
 .footer__social .soc{ color:var(--paper); border-color:rgba(243,232,214,.28); background:rgba(243,232,214,.06); }
 .footer__social .soc:hover{ background:var(--paper); border-color:var(--paper); color:var(--ink); }
 
+.mf-credits{ flex-basis:100%; font-size:.74rem; color:rgba(243,232,214,.42); }
+.mf-credits a{ text-decoration:underline; text-underline-offset:2px; }
+.mf-credits a:hover{ color:var(--khaki-soft); }
 .mf-bottom{ max-width:var(--maxw); margin:clamp(2rem,4vw,3rem) auto 0; padding:1.4rem var(--pad) 0; border-top:1px solid rgba(255,255,255,.1); display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; font-size:.8rem; color:rgba(243,232,214,.5); }
 
 /* =====================================================================

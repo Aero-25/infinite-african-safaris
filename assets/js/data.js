@@ -39,6 +39,13 @@ const HERO_POOL = [
   { url: heroImg("sea-of-dunes"),                cap: "The dunes" },
 ];
 
+/* Photo credits (Wikimedia Commons, CC BY-SA — keep the credit line in the footer):
+   moon-landscape-swakop-valley.webp  Lidine Mia, CC BY-SA 4.0
+     https://commons.wikimedia.org/wiki/File:Vall%C3%A9e_de_la_Lune_-_Namib-Naukluft_National_Park_04.jpg
+   deadvlei-camelthorn.webp           Giles Laurent, CC BY-SA 4.0
+     https://commons.wikimedia.org/wiki/File:054e_Dead_camel_thorn_tree_in_Deadvlei_Photo_by_Giles_Laurent.jpg
+   spitzkoppe-peak.webp               Daniel Kraft, CC BY-SA 3.0
+     https://commons.wikimedia.org/wiki/File:Spitzkoppe_Rock_Arch_Viewpoint.jpg                                */
 /* --- Tours / experiences (adult/child in NAD; null = "On request") ----
    scene = built-in fallback artwork. img = the photo actually shown.    */
 const TOURS = [
@@ -58,7 +65,7 @@ const TOURS = [
     scene:"kayak", img:`${MEDIA}cards/pelican-point-seals.webp`,
     blurb:"Paddle among thousands of Cape fur seals at the Pelican Point colony." },
   { id:"moon",      name:"Moon Landscape · Moonvalley & Welwitschia", adult:2000, child:1000, hours:"5 hours", min:2, feature:true,
-    scene:"moon", img:"https://images.pexels.com/photos/34780180/pexels-photo-34780180.jpeg",
+    scene:"moon", img:"assets/img/cards/moon-landscape-swakop-valley.webp",
     blurb:"Lunar valleys and ancient Welwitschia plants on a desert geology tour." },
   { id:"sh-dune",   name:"Sandwich Harbour & Dune Boarding Combo", adult:3500, child:1750, hours:"6 hours", min:2,
     scene:"dune", img:"assets/img/cards/guests-sliding-down-dune.webp",
@@ -70,10 +77,10 @@ const TOURS = [
     scene:"kayak", img:"assets/img/cards/cape-fur-seal-beach.webp",
     blurb:"Seals at sunrise, dunes by afternoon. A complete coast-to-desert day." },
   { id:"sossus",    name:"Sossusvlei & Deadvlei",     adult:null, child:null, hours:"On request", min:2,
-    scene:"sunrise", img:"https://images.pexels.com/photos/14032289/pexels-photo-14032289.jpeg",
+    scene:"sunrise", img:"assets/img/cards/deadvlei-camelthorn.webp",
     blurb:"The world's tallest dunes and the haunting white pan of Deadvlei." },
   { id:"spitz",     name:"Spitzkoppe",                adult:null, child:null, hours:"On request", min:2,
-    scene:"savanna", img:"https://images.pexels.com/photos/35298609/pexels-photo-35298609.jpeg",
+    scene:"savanna", img:"assets/img/cards/spitzkoppe-peak.webp",
     blurb:"Ancient granite peaks, rock art and some of Namibia's darkest skies." },
 ];
 
