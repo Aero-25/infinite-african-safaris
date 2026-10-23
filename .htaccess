@@ -19,6 +19,9 @@ Options -Indexes
   </FilesMatch>
 </IfModule>
 
+# Branded error page (served at the broken URL, so 404.html uses absolute asset paths).
+ErrorDocument 404 /404.html
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
 

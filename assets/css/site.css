@@ -670,6 +670,12 @@ button{ font-family:inherit; cursor:pointer; border:none; background:none; color
   text-align:center; overflow:hidden;
 }
 .pagehead__inner{ max-width:920px; margin:0 auto; position:relative; z-index:2; }
+.pagehead--404 .pagehead__inner{ max-width:62ch; }
+.pagehead--404 p{ margin-top:1rem; color:var(--txt-soft); }
+.notfound__actions{ display:flex; flex-wrap:wrap; gap:.8rem; justify-content:center; margin-top:1.8rem; }
+.notfound__links{ display:flex; flex-wrap:wrap; gap:.4rem 1.4rem; justify-content:center; margin-top:1.6rem; font-weight:600; }
+.notfound__links a{ padding:.5rem 0; border-bottom:2px solid var(--khaki); }
+.notfound__links a:hover{ color:var(--khaki-deep); border-color:var(--khaki-deep); }
 .pagehead h1{
   font-family:var(--display); font-weight:900; text-transform:uppercase;
   font-size:clamp(2.6rem,9vw,6rem); line-height:.9; letter-spacing:-.035em; color:var(--black);

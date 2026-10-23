@@ -19,7 +19,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p dist
-          cp index.html safaris.html gallery.html reviews.html contact.html robots.txt sitemap.xml _redirects dist/
+          cp index.html safaris.html gallery.html reviews.html contact.html 404.html robots.txt sitemap.xml _redirects dist/
           cp -R assets dist/assets
           rm -f dist/assets/img/README.txt
 
