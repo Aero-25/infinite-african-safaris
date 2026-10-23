@@ -20,9 +20,9 @@ const CURRENCY = {
    Use full URLs in `url`, or an Unsplash id in `id`.                    */
 /* Logos, tour cards, about images and the showreel are on Supabase Storage
    (Infinite African Safaris project). The hero wall and gallery photos live
-   with the site in assets/img/ (760×950 WebP for the hero, ~20-50 KB each). */
+   with the site in assets/img/ (816×1200 WebP for the hero, ~40-100 KB each). */
 const MEDIA = "https://uksddraybxgpgnhocqyc.supabase.co/storage/v1/object/public/media/";
-const heroImg = (name) => `assets/img/hero/${name}.webp`;
+const heroImg = (name) => `assets/img/hero/${name}.webp?v=2`;   // bump ?v= whenever a hero photo is replaced (images are cached 30 days)
 const galleryImg = (name) => `assets/img/gallery/${name}.jpg`;
 const pad3 = (n) => String(n).padStart(3, "0");
 const HERO_POOL = [
@@ -33,6 +33,7 @@ const HERO_POOL = [
   { url: heroImg("web-footed-gecko-close-up"),   cap: "Desert geckos" },
   { url: heroImg("sunset-clouds-dunes-ocean"),   cap: "Desert sunsets" },
   { url: heroImg("jackal-along-the-surf"),       cap: "Jackals" },
+  { url: heroImg("cape-fur-seal-beach"),         cap: "Cape fur seals" },
   { url: heroImg("pink-salt-pans"),              cap: "Pink salt pans" },
   { url: heroImg("pelican-in-flight"),           cap: "Birdlife" },
   { url: heroImg("sea-of-dunes"),                cap: "The dunes" },
